@@ -14,7 +14,7 @@
 <meta property="og:description" content="Rust 的基本借用规则对于正常的代码实现来说，Rust中要么一个可变借用，要么多个不可变借用 我们不能对一个不可变的值进行可变借用，这会破坏 Rust 的安全性保证，相反，你可以对一个可变值进行不可变借用。原因是：当值不可变时，可能会有多个不可变的引用指向它，此时若将其中一个修改为可变的，会造成可变引用与不可变引用共存的情况；而当值可变时，最多只会有一个可变引用指向它，将其修改为不可变，那么最终">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-19T07:46:10.000Z">
-<meta property="article:modified_time" content="2025-02-24T02:46:48.097Z">
+<meta property="article:modified_time" content="2025-02-24T08:02:31.575Z">
 <meta property="article:author" content="BoBoDai">
 <meta property="article:tag" content="rust圣经">
 <meta name="twitter:card" content="summary">
@@ -115,7 +115,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Rust-%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%80%9F%E7%94%A8%E8%A7%84%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">Rust 的基本借用规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Rust-%E4%B8%AD%E7%9A%84static-%E5%92%8C-const"><span class="toc-number">2.</span> <span class="toc-text">Rust 中的static 和 const</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%80%9F%E7%94%A8%E8%A7%84%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">Rust 的基本借用规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E4%B8%AD%E7%9A%84static-%E5%92%8C-const"><span class="toc-number">2.</span> <span class="toc-text">Rust 中的static 和 const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E4%B8%AD-Copy-%E5%92%8C-Clone-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.</span> <span class="toc-text">Rust 中 Copy 和 Clone 的区别</span></a></li></ol>
       </div>
     
   </span>
@@ -160,9 +160,9 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h3 id="Rust-的基本借用规则"><a href="#Rust-的基本借用规则" class="headerlink" title="Rust 的基本借用规则"></a>Rust 的基本借用规则</h3><p>对于正常的代码实现来说，Rust中要么一个可变借用，要么多个不可变借用</p>
+    <h2 id="Rust-的基本借用规则"><a href="#Rust-的基本借用规则" class="headerlink" title="Rust 的基本借用规则"></a>Rust 的基本借用规则</h2><p>对于正常的代码实现来说，Rust中要么一个可变借用，要么多个不可变借用</p>
 <p>我们不能对一个不可变的值进行可变借用，这会破坏 Rust 的安全性保证，相反，你可以对一个可变值进行不可变借用。<br>原因是：当值不可变时，可能会有多个不可变的引用指向它，此时若将其中一个修改为可变的，会造成可变引用与不可变引用共存的情况；而当值可变时，最多只会有一个可变引用指向它，将其修改为不可变，那么最终依然是只有一个不可变的引用指向它。</p>
-<h3 id="Rust-中的static-和-const"><a href="#Rust-中的static-和-const" class="headerlink" title="Rust 中的static 和 const"></a>Rust 中的static 和 const</h3><p>static 和 const 都用于定义全局值</p>
+<h2 id="Rust-中的static-和-const"><a href="#Rust-中的static-和-const" class="headerlink" title="Rust 中的static 和 const"></a>Rust 中的static 和 const</h2><p>static 和 const 都用于定义全局值</p>
 <ol>
 <li>可变性</li>
 </ol>
@@ -275,6 +275,102 @@
 <li>需要在局部作用域定义常量（比如函数内部）。</li>
 <li>推荐优先使用 const，只有在必须时才用 static！</li>
 </ul>
+<h2 id="Rust-中-Copy-和-Clone-的区别"><a href="#Rust-中-Copy-和-Clone-的区别" class="headerlink" title="Rust 中 Copy 和 Clone 的区别"></a>Rust 中 Copy 和 Clone 的区别</h2><p>Copy 和 Clone 都是用来表示类型如何被复制的特性</p>
+<ol>
+<li>语义和适用场景</li>
+</ol>
+<ul>
+<li>Copy：表示一个类型的值可以按位复制（bitwise copy），即直接复制值而不需要额外的资源分配。Copy<br>类型的值不会“所有权”转移，复制后原始值依然可以使用。常见于简单的、轻量级的类型，如整数类型、布尔值、字符等。</li>
+<li>Clone：表示一个类型的值可以通过显式调用 .clone() 方法来创建其<br>深拷贝。这个过程可能涉及到额外的资源分配，比如为堆上的数据分配新的内存。适用于需要“深拷贝”的类型，通常在拥有堆分配数据的类型中（如<br>String 或 Vec）会实现 Clone。</li>
+</ul>
+<ol start="2">
+<li>是否强制复制</li>
+</ol>
+<ul>
+<li>Copy：Copy 特性意味着该类型的值在赋值、函数传参等情况下会被自动按位复制，无需显式调用 clone()。Copy 类型的值直接以“按位拷贝”的方式进行复制。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let a: i32 = 42;</span><br><span class="line">    let b = a; // a 会被自动复制到 b，a 仍然有效</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, a); // a 仍然有效</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Clone：Clone 必须显式调用 .clone() 方法，只有当你明确需要深拷贝时才会发生。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let a = String::from(&quot;hello&quot;);</span><br><span class="line">    let b = a.clone(); // 使用 clone() 进行深拷贝，a 被转移，b 是独立的副本</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, a); // a 不能再使用，因为它的所有权被转移</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, b); // b 是有效的副本</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>性能开销</li>
+</ol>
+<ul>
+<li>Copy：由于是按位复制，没有额外的性能开销。它适用于存储在栈上的简单数据类型，不涉及堆内存分配。</li>
+<li>Clone：通常会涉及到内存分配和深拷贝，因此比 Copy 有更高的性能开销。对于堆分配的类型，如 String、Vec，clone() 会分配新内存并复制堆上的数据。</li>
+</ul>
+<ol start="4">
+<li>实现方式</li>
+</ol>
+<ul>
+<li>Copy：是一个 自动实现 的特性。只要类型满足按位复制的条件，Rust 会自动实现 Copy。例如，整数类型（i32、f64 等）和一些简单的结构体会自动实现<br>Copy。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#[derive(Copy, Clone)]  // 明确要求类型实现 `Copy` 和 `Clone`</span><br><span class="line">struct Point &#123;</span><br><span class="line">    x: i32,</span><br><span class="line">    y: i32,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let p1 = Point &#123; x: 1, y: 2 &#125;;</span><br><span class="line">    let p2 = p1;  // 按位复制，p1 仍然有效</span><br><span class="line">    println!(&quot;&#123;:?&#125;&quot;, p1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Clone：Clone 必须由类型显式实现。例如，String、Vec 等类型需要自己实现 clone() 方法，通常是进行深拷贝操作。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let s1 = String::from(&quot;hello&quot;);</span><br><span class="line">let s2 = s1.clone(); // 调用 clone() 来创建一个新对象</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>类型要求</li>
+</ol>
+<ul>
+<li>Copy：要求类型的值没有堆分配，也没有引用其他堆内存。如果类型涉及到堆分配或借用，它通常不能实现 Copy。<ul>
+<li>Copy 类型必须满足以下条件：<ul>
+<li>类型的所有字段也必须实现 Copy。</li>
+<li>类型的值可以按位复制。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Clone：不要求类型只能存储栈上的数据，可以是堆分配类型，甚至包含引用。Clone 实现可以根据需要对堆数据进行深拷贝。</li>
+</ul>
+<ol start="6">
+<li>总结：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Copy</th>
+<th>Clone</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>语义</td>
+<td>适用于按位复制，值可以自动复制</td>
+<td>适用于深拷贝，显式调用 .clone()</td>
+</tr>
+<tr>
+<td>自动性</td>
+<td>自动执行，无需调用方法</td>
+<td>必须显式调用 .clone()</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>低开销，按位复制</td>
+<td>较高开销，可能涉及内存分配和深拷贝</td>
+</tr>
+<tr>
+<td>实现方式</td>
+<td>由 Rust 自动实现，简单类型（如整数、浮点数）</td>
+<td>由类型自己实现 clone() 方法</td>
+</tr>
+<tr>
+<td>类型要求</td>
+<td>只适用于简单、没有堆分配的类型</td>
+<td>适用于复杂类型，包括堆分配数据</td>
+</tr>
+</tbody></table>
+<ul>
+<li>如果你的类型可以按位复制，并且不涉及堆内存分配（例如基础数据类型，如 i32、f64 等），那么可以实现 Copy，Rust 会自动进行按位复制。</li>
+<li>如果你的类型涉及堆内存或更复杂的数据结构（例如 String、Vec 等），你需要显式调用 .clone()，这时候它会通过深拷贝来创建副本，并且会有更高的性能开销。</li>
+</ul>
 
   </div>
 </article>
@@ -302,7 +398,7 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Rust-%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%80%9F%E7%94%A8%E8%A7%84%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">Rust 的基本借用规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Rust-%E4%B8%AD%E7%9A%84static-%E5%92%8C-const"><span class="toc-number">2.</span> <span class="toc-text">Rust 中的static 和 const</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%80%9F%E7%94%A8%E8%A7%84%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">Rust 的基本借用规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E4%B8%AD%E7%9A%84static-%E5%92%8C-const"><span class="toc-number">2.</span> <span class="toc-text">Rust 中的static 和 const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E4%B8%AD-Copy-%E5%92%8C-Clone-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.</span> <span class="toc-text">Rust 中 Copy 和 Clone 的区别</span></a></li></ol>
       </div>
     
 

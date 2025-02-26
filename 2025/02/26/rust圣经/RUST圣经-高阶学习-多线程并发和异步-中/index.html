@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="4 线程同步：锁、Condvar 和信号量在多线程编程中，同步性极其的重要，当你需要同时访问一个资源、控制不同线程的执行次序时，都需要使用到同步性。 在 Rust 中有多种方式可以实现同步性。在上一节中讲到的消息传递就是同步性的一种实现方式，例如我们可以通过消息传递来控制不同线程间的执行次序。还可以使用共享内存来实现同步性，例如通过锁和原子操作等并发原语来实现多个线程同时且安全地去访问一个资源。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RUST圣经-高阶学习-多线程并发和异步-中">
+<meta property="og:url" content="http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/index.html">
+<meta property="og:site_name" content="Cactus Hole">
+<meta property="og:description" content="4 线程同步：锁、Condvar 和信号量在多线程编程中，同步性极其的重要，当你需要同时访问一个资源、控制不同线程的执行次序时，都需要使用到同步性。 在 Rust 中有多种方式可以实现同步性。在上一节中讲到的消息传递就是同步性的一种实现方式，例如我们可以通过消息传递来控制不同线程间的执行次序。还可以使用共享内存来实现同步性，例如通过锁和原子操作等并发原语来实现多个线程同时且安全地去访问一个资源。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-02-26T05:36:49.000Z">
+<meta property="article:modified_time" content="2025-02-26T08:45:20.546Z">
+<meta property="article:author" content="BoBoDai">
+<meta property="article:tag" content="rust圣经">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>RUST圣经-高阶学习-多线程并发和异步-中</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/BoBoDai">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/02/21/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%8A/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&text=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&title=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&is_video=false&description=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RUST圣经-高阶学习-多线程并发和异步-中&body=Check out this article: http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&title=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&title=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&title=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&title=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&name=RUST圣经-高阶学习-多线程并发和异步-中&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&t=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%EF%BC%9A%E9%94%81%E3%80%81Condvar-%E5%92%8C%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">1.</span> <span class="toc-text">4 线程同步：锁、Condvar 和信号量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E8%AF%A5%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9"><span class="toc-number">2.</span> <span class="toc-text">4.1 该如何选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BA%92%E6%96%A5%E9%94%81-Mutex"><span class="toc-number">3.</span> <span class="toc-text">4.2 互斥锁 Mutex</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-1-%E5%8D%95%E7%BA%BF%E7%A8%8B%E4%B8%AD%E4%BD%BF%E7%94%A8-Mutex"><span class="toc-number">3.1.</span> <span class="toc-text">4.2.1 单线程中使用 Mutex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-2-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%AD%E4%BD%BF%E7%94%A8-Mutex"><span class="toc-number">3.2.</span> <span class="toc-text">4.2.2 多线程中使用 Mutex</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-1-%E6%97%A0%E6%B3%95%E8%BF%90%E8%A1%8C%E7%9A%84Rc"><span class="toc-number">3.2.1.</span> <span class="toc-text">4.2.2.1 无法运行的Rc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-2-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84-Arc"><span class="toc-number">3.2.2.</span> <span class="toc-text">4.2.2.2 多线程安全的 Arc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E5%8F%AF%E5%8F%98%E6%80%A7"><span class="toc-number">3.2.3.</span> <span class="toc-text">内部可变性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E5%B0%8F%E5%BF%83%E4%BD%BF%E7%94%A8%E7%9A%84-Mutex"><span class="toc-number">3.2.4.</span> <span class="toc-text">需要小心使用的 Mutex</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E6%AD%BB%E9%94%81"><span class="toc-number">4.</span> <span class="toc-text">4.3 死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-1-%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81"><span class="toc-number">5.</span> <span class="toc-text">4.3.1 单线程死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-2-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81"><span class="toc-number">6.</span> <span class="toc-text">4.3.2 多线程死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-3-try-lock"><span class="toc-number">7.</span> <span class="toc-text">4.3.3 try_lock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E8%AF%BB%E5%86%99%E9%94%81-RwLock"><span class="toc-number">8.</span> <span class="toc-text">4.4 读写锁 RwLock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-Mutex-%E8%BF%98%E6%98%AF-RwLock"><span class="toc-number">9.</span> <span class="toc-text">4.5 Mutex 还是 RwLock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-%E4%B8%89%E6%96%B9%E5%BA%93%E6%8F%90%E4%BE%9B%E7%9A%84%E9%94%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">10.</span> <span class="toc-text">4.6 三方库提供的锁实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-7-%E7%94%A8%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F-Condvar-%E6%8E%A7%E5%88%B6%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5"><span class="toc-number">11.</span> <span class="toc-text">4.7 用条件变量(Condvar)控制线程的同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-8-%E4%BF%A1%E5%8F%B7%E9%87%8F-Semaphore"><span class="toc-number">12.</span> <span class="toc-text">4.8 信号量 Semaphore</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%EF%BC%9AAtomic-%E5%8E%9F%E5%AD%90%E7%B1%BB%E5%9E%8B%E4%B8%8E%E5%86%85%E5%AD%98%E9%A1%BA%E5%BA%8F"><span class="toc-number">13.</span> <span class="toc-text">5 线程同步：Atomic 原子类型与内存顺序</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        RUST圣经-高阶学习-多线程并发和异步-中
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">BoBoDai</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-02-26T05:36:49.000Z" class="dt-published" itemprop="datePublished">2025-02-26</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/rust%E5%9C%A3%E7%BB%8F/" rel="tag">rust圣经</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="4-线程同步：锁、Condvar-和信号量"><a href="#4-线程同步：锁、Condvar-和信号量" class="headerlink" title="4 线程同步：锁、Condvar 和信号量"></a>4 线程同步：锁、Condvar 和信号量</h2><p>在多线程编程中，同步性极其的重要，当你需要同时访问一个资源、控制不同线程的执行次序时，都需要使用到同步性。</p>
+<p>在 Rust 中有多种方式可以实现同步性。在上一节中讲到的消息传递就是同步性的一种实现方式，例如我们可以通过消息传递来控制不同线程间的执行次序。还可以使用共享内存来实现同步性，例如通过锁和原子操作等并发原语来实现多个线程同时且安全地去访问一个资源。</p>
+<h2 id="4-1-该如何选择"><a href="#4-1-该如何选择" class="headerlink" title="4.1 该如何选择"></a>4.1 该如何选择</h2><p>共享内存可以说是同步的灵魂，因为消息传递的底层实际上也是通过共享内存来实现，两者的区别如下：</p>
+<ul>
+<li>共享内存相对消息传递能节省多次内存拷贝的成本</li>
+<li>共享内存的实现简洁的多</li>
+<li>共享内存的锁竞争更多</li>
+</ul>
+<p>消息传递适用的场景很多，我们下面列出了几个主要的使用场景:</p>
+<ul>
+<li>需要可靠和简单的(简单不等于简洁)实现时</li>
+<li>需要模拟现实世界，例如用消息去通知某个目标执行相应的操作时</li>
+<li>需要一个任务处理流水线(管道)时，等等</li>
+</ul>
+<p>而使用共享内存(并发原语)的场景往往就比较简单粗暴：需要简洁的实现以及更高的性能时。</p>
+<p>总之，消息传递类似一个单所有权的系统：一个值同时只能有一个所有者，如果另一个线程需要该值的所有权，需要将所有权通过消息传递进行转移。而共享内存类似于一个多所有权的系统：多个线程可以同时访问同一个值。</p>
+<h2 id="4-2-互斥锁-Mutex"><a href="#4-2-互斥锁-Mutex" class="headerlink" title="4.2 互斥锁 Mutex"></a>4.2 互斥锁 Mutex</h2><p>既然是共享内存，那并发原语自然是重中之重，先来一起看看皇冠上的明珠: 互斥锁Mutex(mutual exclusion 的缩写)。</p>
+<p>Mutex让多个线程并发的访问同一个值变成了排队访问：同一时间，只允许一个线程A访问该值，其它线程需要等待A访问完成后才能继续。</p>
+<h3 id="4-2-1-单线程中使用-Mutex"><a href="#4-2-1-单线程中使用-Mutex" class="headerlink" title="4.2.1 单线程中使用 Mutex"></a>4.2.1 单线程中使用 Mutex</h3><p>先来看看单线程中Mutex该如何使用:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">use std::sync::Mutex;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    // 使用`Mutex`结构体的关联函数创建新的互斥锁实例</span><br><span class="line">    let m = Mutex::new(5);</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        // 获取锁，然后deref为`m`的引用</span><br><span class="line">        // lock返回的是Result</span><br><span class="line">        let mut num = m.lock().unwrap();</span><br><span class="line">        *num = 6;</span><br><span class="line">        // 锁自动被drop</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    println!(&quot;m = &#123;:?&#125;&quot;, m);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>和Box类似，数据被Mutex所拥有，要访问内部的数据，需要使用方法m.lock()向m申请一个锁, 该方法会阻塞当前线程，直到获取到锁，因此当多个线程同时访问该数据时，只有一个线程能获取到锁，其它线程只能阻塞着等待，这样就保证了数据能被安全的修改！</p>
+<p>m.lock()方法也有可能报错，例如当前正在持有锁的线程panic了。在这种情况下，其它线程不可能再获得锁，因此lock方法会返回一个错误。</p>
+<p>因为Mutex<T>是一个智能指针，准确的说是m.lock()返回一个智能指针MutexGuard<T>:</p>
+<ul>
+<li>它实现了Deref特征，会被自动解引用后获得一个引用类型，该引用指向Mutex内部的数据</li>
+<li>它还实现了Drop特征，在超出作用域后，自动释放锁，以便其它线程能继续获取锁</li>
+</ul>
+<p>正因为智能指针的使用，使得我们无需任何操作就能获取其中的数据。</p>
+<p>如果释放锁，你需要做的仅仅是做好锁的作用域管理，例如上述代码的内部花括号使用，建议读者尝试下去掉内部的花括号，然后再次尝试获取第二个锁num1，看看会发生什么，友情提示：不会报错，但是主线程会永远阻塞，因为不幸发生了死锁。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">use std::sync::Mutex;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let m = Mutex::new(5);</span><br><span class="line"></span><br><span class="line">    let mut num = m.lock().unwrap();</span><br><span class="line">    *num = 6;</span><br><span class="line">    // 锁还没有被 drop 就尝试申请下一个锁，导致主线程阻塞</span><br><span class="line">    // drop(num); // 手动 drop num ，可以让 num1 申请到下个锁</span><br><span class="line">    let mut num1 = m.lock().unwrap();</span><br><span class="line">    *num1 = 7;</span><br><span class="line">    // drop(num1); // 手动 drop num1 ，观察打印结果的不同</span><br><span class="line"></span><br><span class="line">    println!(&quot;m = &#123;:?&#125;&quot;, m);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-2-多线程中使用-Mutex"><a href="#4-2-2-多线程中使用-Mutex" class="headerlink" title="4.2.2 多线程中使用 Mutex"></a>4.2.2 多线程中使用 Mutex</h3><p>如何在多线程下使用Mutex来访问同一个资源.</p>
+<h4 id="4-2-2-1-无法运行的Rc"><a href="#4-2-2-1-无法运行的Rc" class="headerlink" title="4.2.2.1 无法运行的Rc"></a>4.2.2.1 无法运行的Rc<T></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">use std::rc::Rc;</span><br><span class="line">use std::sync::Mutex;</span><br><span class="line">use std::thread;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    // 通过`Rc`实现`Mutex`的多所有权</span><br><span class="line">    let counter = Rc::new(Mutex::new(0));</span><br><span class="line">    let mut handles = vec![];</span><br><span class="line"></span><br><span class="line">    for _ in 0..10 &#123;</span><br><span class="line">        let counter = Rc::clone(&amp;counter);</span><br><span class="line">        // 创建子线程，并将`Mutex`的所有权拷贝传入到子线程中</span><br><span class="line">        let handle = thread::spawn(move || &#123;</span><br><span class="line">            let mut num = counter.lock().unwrap();</span><br><span class="line"></span><br><span class="line">            *num += 1;</span><br><span class="line">        &#125;);</span><br><span class="line">        handles.push(handle);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 等待所有子线程完成</span><br><span class="line">    for handle in handles &#123;</span><br><span class="line">        handle.join().unwrap();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 输出最终的计数结果</span><br><span class="line">    println!(&quot;Result: &#123;&#125;&quot;, *counter.lock().unwrap());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于子线程需要通过move拿走锁的所有权，因此我们需要使用多所有权来保证每个线程都拿到数据的独立所有权，恰好智能指针Rc<T>可以做到(上面代码会报错！</p>
+<p>以上代码实现了在多线程中计数的功能，由于多个线程都需要去修改该计数器，因此我们需要使用锁来保证同一时间只有一个线程可以修改计数器，否则会导致脏数据：想象一下 A 线程和 B 线程同时拿到计数器，获取了当前值1, 并且同时对其进行了修改，最后值变成2, 毕竟正确的值是3，因为两个线程各自加 1。</p>
+<h4 id="4-2-2-2-多线程安全的-Arc"><a href="#4-2-2-2-多线程安全的-Arc" class="headerlink" title="4.2.2.2 多线程安全的 Arc"></a>4.2.2.2 多线程安全的 Arc<T></h4><p>Arc<T>，得益于它的内部计数器是多线程安全的，因此可以在多线程环境中使用:</p>
+<p>将Rc换成Arc就可以正常使用了</p>
+<h4 id="内部可变性"><a href="#内部可变性" class="headerlink" title="内部可变性"></a>内部可变性</h4><p>Rust中Rc<T>和RefCell<T>的结合，可以实现单线程的内部可变性。</p>
+<p>现在我们又有了新的武器，由于Mutex<T>可以支持修改内部数据，当结合Arc<T>一起使用时，可以实现多线程的内部可变性。</p>
+<p>简单总结下：Rc<T>&#x2F;RefCell<T>用于单线程内部可变性， Arc<T>&#x2F;Mutex<T>用于多线程内部可变性。</p>
+<h4 id="需要小心使用的-Mutex"><a href="#需要小心使用的-Mutex" class="headerlink" title="需要小心使用的 Mutex"></a>需要小心使用的 Mutex</h4><ul>
+<li>在使用数据前必须先获取锁</li>
+<li>在数据使用完成后，必须及时的释放锁，比如文章开头的例子，使用内部语句块的目的就是为了及时的释放锁</li>
+</ul>
+<p>对于其它语言，忘记释放锁是经常发生的，虽然 Rust 通过智能指针的drop机制帮助我们避免了这一点，但是由于不及时释放锁导致的性能问题也是常见的。</p>
+<p>正因为这种困难性，导致很多用户都热衷于使用消息传递的方式来实现同步，例如 Go 语言直接把channel内置在语言特性中，甚至还有无锁的语言，例如erlang，完全使用Actor模型，依赖消息传递来完成共享和同步。幸好 Rust 的类型系统、所有权机制、智能指针等可以很好的帮助我们减轻使用锁时的负担。</p>
+<p>另一个值的注意的是在使用Mutex<T>时，Rust 无法帮我们避免所有的逻辑错误，例如在之前章节，我们提到过使用Rc<T>可能会导致循环引用的问题。类似的，Mutex<T>也存在使用上的风险，例如创建死锁(deadlock)：当一个操作试图锁住两个资源，然后两个线程各自获取其中一个锁，并试图获取另一个锁时，就会造成死锁。</p>
+<h2 id="4-3-死锁"><a href="#4-3-死锁" class="headerlink" title="4.3 死锁"></a>4.3 死锁</h2><p>Rust 中有多种方式可以创建死锁，了解这些方式有助于你提前规避可能的风险。</p>
+<h2 id="4-3-1-单线程死锁"><a href="#4-3-1-单线程死锁" class="headerlink" title="4.3.1 单线程死锁"></a>4.3.1 单线程死锁</h2><p>这种死锁比较容易规避，但是当代码复杂后还是有可能遇到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">use std::sync::Mutex;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let data = Mutex::new(0);</span><br><span class="line">    let d1 = data.lock();</span><br><span class="line">    let d2 = data.lock();</span><br><span class="line">&#125; // d1锁在此处释放</span><br></pre></td></tr></table></figure>
+
+<p>只要你在另一个锁还未被释放时去申请新的锁，就会触发，当代码复杂后，这种情况可能就没有那么显眼。</p>
+<h2 id="4-3-2-多线程死锁"><a href="#4-3-2-多线程死锁" class="headerlink" title="4.3.2 多线程死锁"></a>4.3.2 多线程死锁</h2><p>当我们拥有两个锁，且两个线程各自使用了其中一个锁，然后试图去访问另一个锁时，就可能发生死锁：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">use std::&#123;sync::&#123;Mutex, MutexGuard&#125;, thread&#125;;</span><br><span class="line">use std::thread::sleep;</span><br><span class="line">use std::time::Duration;</span><br><span class="line"></span><br><span class="line">use lazy_static::lazy_static;</span><br><span class="line">lazy_static! &#123;</span><br><span class="line">    static ref MUTEX1: Mutex&lt;i64&gt; = Mutex::new(0);</span><br><span class="line">    static ref MUTEX2: Mutex&lt;i64&gt; = Mutex::new(0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    // 存放子线程的句柄</span><br><span class="line">    let mut children = vec![];</span><br><span class="line">    for i_thread in 0..2 &#123;</span><br><span class="line">        children.push(thread::spawn(move || &#123;</span><br><span class="line">            for _ in 0..1 &#123;</span><br><span class="line">                // 线程1</span><br><span class="line">                if i_thread % 2 == 0 &#123;</span><br><span class="line">                    // 锁住MUTEX1</span><br><span class="line">                    let guard: MutexGuard&lt;i64&gt; = MUTEX1.lock().unwrap();</span><br><span class="line"></span><br><span class="line">                    println!(&quot;线程 &#123;&#125; 锁住了MUTEX1，接着准备去锁MUTEX2 !&quot;, i_thread);</span><br><span class="line"></span><br><span class="line">                    // 当前线程睡眠一小会儿，等待线程2锁住MUTEX2</span><br><span class="line">                    sleep(Duration::from_millis(10));</span><br><span class="line"></span><br><span class="line">                    // 去锁MUTEX2</span><br><span class="line">                    let guard = MUTEX2.lock().unwrap();</span><br><span class="line">                // 线程2</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    // 锁住MUTEX2</span><br><span class="line">                    let _guard = MUTEX2.lock().unwrap();</span><br><span class="line"></span><br><span class="line">                    println!(&quot;线程 &#123;&#125; 锁住了MUTEX2, 准备去锁MUTEX1&quot;, i_thread);</span><br><span class="line"></span><br><span class="line">                    let _guard = MUTEX1.lock().unwrap();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 等子线程完成</span><br><span class="line">    for child in children &#123;</span><br><span class="line">        let _ = child.join();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    println!(&quot;死锁没有发生&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的描述中，我们用了”可能”二字，原因在于死锁在这段代码中不是必然发生的，总有一次运行你能看到最后一行打印输出。这是由于子线程的初始化顺序和执行速度并不确定，我们无法确定哪个线程中的锁先被执行，因此也无法确定两个线程对锁的具体使用顺序。</p>
+<p>但是，可以简单的说明下死锁发生的必然条件：线程 1 锁住了MUTEX1并且线程2锁住了MUTEX2，然后线程 1 试图去访问MUTEX2，同时线程2试图去访问MUTEX1，就会死锁。 因为线程 2 需要等待线程 1 释放MUTEX1后，才会释放MUTEX2，而与此同时，线程 1 需要等待线程 2 释放MUTEX2后才能释放MUTEX1，这种情况造成了两个线程都无法释放对方需要的锁，最终死锁。</p>
+<p>那么为何某些时候，死锁不会发生？原因很简单，线程 2 在线程 1 锁MUTEX1之前，就已经全部执行完了，随之线程 2 的MUTEX2和MUTEX1被全部释放，线程 1 对锁的获取将不再有竞争者。 同理，线程 1 若全部被执行完，那线程 2 也不会被锁，因此我们在线程 1 中间加一个睡眠，增加死锁发生的概率。如果你在线程 2 中同样的位置也增加一个睡眠，那死锁将必然发生!</p>
+<h2 id="4-3-3-try-lock"><a href="#4-3-3-try-lock" class="headerlink" title="4.3.3 try_lock"></a>4.3.3 try_lock</h2><p>与lock方法不同，try_lock会尝试去获取一次锁，如果无法获取会返回一个错误，因此不会发生阻塞:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">use std::&#123;sync::&#123;Mutex, MutexGuard&#125;, thread&#125;;</span><br><span class="line">use std::thread::sleep;</span><br><span class="line">use std::time::Duration;</span><br><span class="line"></span><br><span class="line">use lazy_static::lazy_static;</span><br><span class="line">lazy_static! &#123;</span><br><span class="line">    static ref MUTEX1: Mutex&lt;i64&gt; = Mutex::new(0);</span><br><span class="line">    static ref MUTEX2: Mutex&lt;i64&gt; = Mutex::new(0);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    // 存放子线程的句柄</span><br><span class="line">    let mut children = vec![];</span><br><span class="line">    for i_thread in 0..2 &#123;</span><br><span class="line">        children.push(thread::spawn(move || &#123;</span><br><span class="line">            for _ in 0..1 &#123;</span><br><span class="line">                // 线程1</span><br><span class="line">                if i_thread % 2 == 0 &#123;</span><br><span class="line">                    // 锁住MUTEX1</span><br><span class="line">                    let guard: MutexGuard&lt;i64&gt; = MUTEX1.lock().unwrap();</span><br><span class="line"></span><br><span class="line">                    println!(&quot;线程 &#123;&#125; 锁住了MUTEX1，接着准备去锁MUTEX2 !&quot;, i_thread);</span><br><span class="line"></span><br><span class="line">                    // 当前线程睡眠一小会儿，等待线程2锁住MUTEX2</span><br><span class="line">                    sleep(Duration::from_millis(10));</span><br><span class="line"></span><br><span class="line">                    // 去锁MUTEX2</span><br><span class="line">                    let guard = MUTEX2.try_lock();</span><br><span class="line">                    println!(&quot;线程 &#123;&#125; 获取 MUTEX2 锁的结果: &#123;:?&#125;&quot;, i_thread, guard);</span><br><span class="line">                // 线程2</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    // 锁住MUTEX2</span><br><span class="line">                    let _guard = MUTEX2.lock().unwrap();</span><br><span class="line"></span><br><span class="line">                    println!(&quot;线程 &#123;&#125; 锁住了MUTEX2, 准备去锁MUTEX1&quot;, i_thread);</span><br><span class="line">                    sleep(Duration::from_millis(10));</span><br><span class="line">                    let guard = MUTEX1.try_lock();</span><br><span class="line">                    println!(&quot;线程 &#123;&#125; 获取 MUTEX1 锁的结果: &#123;:?&#125;&quot;, i_thread, guard);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 等子线程完成</span><br><span class="line">    for child in children &#123;</span><br><span class="line">        let _ = child.join();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    println!(&quot;死锁没有发生&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将lock替换成try_lock，与之前的结果不同，这段代码将不会再有死锁发生：</p>
+<p>当try_lock失败时，会报出一个错误:Err(“WouldBlock”)，接着线程中的剩余代码会继续执行，不会被阻塞。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一个有趣的命名规则：在 Rust 标准库中，使用try_xxx都会尝试进行一次操作，如果无法完成，就立即返回，不会发生阻塞。例如消息传递章节中的try_recv以及本章节中的try_lock</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-4-读写锁-RwLock"><a href="#4-4-读写锁-RwLock" class="headerlink" title="4.4 读写锁 RwLock"></a>4.4 读写锁 RwLock</h2><p>Mutex会对每次读写都进行加锁，但某些时候，我们需要大量的并发读，Mutex就无法满足需求了，此时就可以使用RwLock:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">use std::sync::RwLock;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let lock = RwLock::new(5);</span><br><span class="line"></span><br><span class="line">    // 同一时间允许多个读</span><br><span class="line">    &#123;</span><br><span class="line">        let r1 = lock.read().unwrap();</span><br><span class="line">        let r2 = lock.read().unwrap();</span><br><span class="line">        assert_eq!(*r1, 5);</span><br><span class="line">        assert_eq!(*r2, 5);</span><br><span class="line">    &#125; // 读锁在此处被drop</span><br><span class="line"></span><br><span class="line">    // 同一时间只允许一个写</span><br><span class="line">    &#123;</span><br><span class="line">        let mut w = lock.write().unwrap();</span><br><span class="line">        *w += 1;</span><br><span class="line">        assert_eq!(*w, 6);</span><br><span class="line"></span><br><span class="line">        // 以下代码会阻塞发生死锁，因为读和写不允许同时存在</span><br><span class="line">        // 写锁w直到该语句块结束才被释放，因此下面的读锁依然处于`w`的作用域中</span><br><span class="line">        // let r1 = lock.read();</span><br><span class="line">        // println!(&quot;&#123;:?&#125;&quot;,r1);</span><br><span class="line">    &#125;// 写锁在此处被drop</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>RwLock在使用上和Mutex区别不大，只有在多个读的情况下不阻塞程序，其他如读写、写读、写写情况下均会对后获取锁的操作进行阻塞。</p>
+<p>也可以使用try_write和try_read来尝试进行一次写&#x2F;读，若失败则返回错误:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Err(&quot;WouldBlock&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>简单总结下RwLock:</p>
+<ul>
+<li>同时允许多个读，但最多只能有一个写</li>
+<li>读和写不能同时存在</li>
+<li>读可以使用read、try_read，写write、try_write, 在实际项目中，try_xxx会安全的多</li>
+</ul>
+<h2 id="4-5-Mutex-还是-RwLock"><a href="#4-5-Mutex-还是-RwLock" class="headerlink" title="4.5 Mutex 还是 RwLock"></a>4.5 Mutex 还是 RwLock</h2><p>简单性上Mutex完胜，因为使用RwLock你得操心几个问题：</p>
+<ul>
+<li>读和写不能同时发生，如果使用try_xxx解决，就必须做大量的错误处理和失败重试机制</li>
+<li>当读多写少时，写操作可能会因为一直无法获得锁导致连续多次失败(writer starvation)</li>
+<li>RwLock 其实是操作系统提供的，实现原理要比Mutex复杂的多，因此单就锁的性能而言，比不上原生实现的Mutex</li>
+</ul>
+<p>再来简单总结下两者的使用场景：</p>
+<ul>
+<li>追求高并发读取时，使用RwLock，因为Mutex一次只允许一个线程去读取</li>
+<li>如果要保证写操作的成功性，使用Mutex</li>
+<li>不知道哪个合适，统一使用Mutex</li>
+</ul>
+<p>RwLock虽然看上去貌似提供了高并发读取的能力，但这个不能说明它的性能比Mutex高，事实上Mutex性能要好不少，后者唯一的问题也仅仅在于不能并发读取。</p>
+<p>一个常见的、错误的使用RwLock的场景就是使用HashMap进行简单读写，因为HashMap的读和写都非常快，RwLock的复杂实现和相对低的性能反而会导致整体性能的降低，因此一般来说更适合使用Mutex。 </p>
+<p>要使用RwLock要确保满足以下两个条件：并发读，且需要对读到的资源进行”长时间”的操作，HashMap也许满足了并发读的需求，但是往往并不能满足后者：”长时间”的操作。</p>
+<h2 id="4-6-三方库提供的锁实现"><a href="#4-6-三方库提供的锁实现" class="headerlink" title="4.6 三方库提供的锁实现"></a>4.6 三方库提供的锁实现</h2><p>标准库在设计时总会存在取舍，因为往往性能并不是最好的，如果你追求性能，可以使用三方库提供的并发原语:</p>
+<ul>
+<li>parking_lot, 功能更完善、稳定，社区较为活跃，star 较多，更新较为活跃</li>
+<li>spin, 在多数场景中性能比parking_lot高一点，最近没怎么更新</li>
+</ul>
+<p>如果不是追求特别极致的性能，建议选择前者。</p>
+<h2 id="4-7-用条件变量-Condvar-控制线程的同步"><a href="#4-7-用条件变量-Condvar-控制线程的同步" class="headerlink" title="4.7 用条件变量(Condvar)控制线程的同步"></a>4.7 用条件变量(Condvar)控制线程的同步</h2><p>Mutex用于解决资源安全访问的问题，但是我们还需要一个手段来解决资源访问顺序的问题。而 Rust 考虑到了这一点，为我们提供了条件变量(Condition Variables)，它经常和Mutex一起使用，可以让线程挂起，直到某个条件发生后再继续执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">use std::sync::&#123;Arc,Mutex,Condvar&#125;;</span><br><span class="line">use std::thread::&#123;spawn,sleep&#125;;</span><br><span class="line">use std::time::Duration;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let flag = Arc::new(Mutex::new(false));</span><br><span class="line">    let cond = Arc::new(Condvar::new());</span><br><span class="line">    let cflag = flag.clone();</span><br><span class="line">    let ccond = cond.clone();</span><br><span class="line"></span><br><span class="line">    let hdl = spawn(move || &#123;</span><br><span class="line">        let mut lock = cflag.lock().unwrap();</span><br><span class="line">        let mut counter = 0;</span><br><span class="line"></span><br><span class="line">        while counter &lt; 3 &#123;</span><br><span class="line">            while !*lock &#123;</span><br><span class="line">                // wait方法会接收一个MutexGuard&lt;&#x27;a, T&gt;，且它会自动地暂时释放这个锁，使其他线程可以拿到锁并进行数据更新。</span><br><span class="line">                // 同时当前线程在此处会被阻塞，直到被其他地方notify后，它会将原本的MutexGuard&lt;&#x27;a, T&gt;还给我们，即重新获取到了锁，同时唤醒了此线程。</span><br><span class="line">                lock = ccond.wait(lock).unwrap();</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            *lock = false;</span><br><span class="line"></span><br><span class="line">            counter += 1;</span><br><span class="line">            println!(&quot;inner counter: &#123;&#125;&quot;, counter);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    let mut counter = 0;</span><br><span class="line">    loop &#123;</span><br><span class="line">        sleep(Duration::from_millis(1000));</span><br><span class="line">        *flag.lock().unwrap() = true;</span><br><span class="line">        counter += 1;</span><br><span class="line">        if counter &gt; 3 &#123;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">        println!(&quot;outside counter: &#123;&#125;&quot;, counter);</span><br><span class="line">        cond.notify_one();</span><br><span class="line">    &#125;</span><br><span class="line">    hdl.join().unwrap();</span><br><span class="line">    println!(&quot;&#123;:?&#125;&quot;, flag);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例子中通过主线程来触发子线程实现交替打印输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">outside counter: 1</span><br><span class="line">inner counter: 1</span><br><span class="line">outside counter: 2</span><br><span class="line">inner counter: 2</span><br><span class="line">outside counter: 3</span><br><span class="line">inner counter: 3</span><br><span class="line">Mutex &#123; data: true, poisoned: false, .. &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-8-信号量-Semaphore"><a href="#4-8-信号量-Semaphore" class="headerlink" title="4.8 信号量 Semaphore"></a>4.8 信号量 Semaphore</h2><p>在多线程中，另一个重要的概念就是信号量，使用它可以让我们精准的控制当前正在运行的任务最大数量。<br>当一个新游戏刚开服时(有些较火的老游戏也会，比如wow)，往往会控制游戏内玩家的同时在线数，一旦超过某个临界值，就开始进行排队进服。而在实际使用中，也有很多时候，我们需要通过信号量来控制最大并发数，防止服务器资源被撑爆。</p>
+<p>本来 Rust 在标准库中有提供一个信号量实现, 但是由于各种原因这个库现在已经不再推荐使用了，因此我们推荐使用tokio中提供的Semaphore实现: tokio::sync::Semaphore。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">use std::sync::Arc;</span><br><span class="line">use tokio::sync::Semaphore;</span><br><span class="line"></span><br><span class="line">#[tokio::main]</span><br><span class="line">async fn main() &#123;</span><br><span class="line">    let semaphore = Arc::new(Semaphore::new(3));</span><br><span class="line">    let mut join_handles = Vec::new();</span><br><span class="line"></span><br><span class="line">    for _ in 0..5 &#123;</span><br><span class="line">        let permit = semaphore.clone().acquire_owned().await.unwrap();</span><br><span class="line">        join_handles.push(tokio::spawn(async move &#123;</span><br><span class="line">            //</span><br><span class="line">            // 在这里执行任务...</span><br><span class="line">            //</span><br><span class="line">            drop(permit);</span><br><span class="line">        &#125;));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    for handle in join_handles &#123;</span><br><span class="line">        handle.await.unwrap();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码创建了一个容量为 3 的信号量，当正在执行的任务超过 3 时，剩下的任务需要等待正在执行任务完成并减少信号量后到 3 以内时，才能继续执行。</p>
+<p>这里的关键其实说白了就在于：信号量的申请和归还，使用前需要申请信号量，如果容量满了，就需要等待；使用后需要释放信号量，以便其它等待者可以继续。</p>
+<h2 id="5-线程同步：Atomic-原子类型与内存顺序"><a href="#5-线程同步：Atomic-原子类型与内存顺序" class="headerlink" title="5 线程同步：Atomic 原子类型与内存顺序"></a>5 线程同步：Atomic 原子类型与内存顺序</h2>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/BoBoDai">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%EF%BC%9A%E9%94%81%E3%80%81Condvar-%E5%92%8C%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">1.</span> <span class="toc-text">4 线程同步：锁、Condvar 和信号量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E8%AF%A5%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9"><span class="toc-number">2.</span> <span class="toc-text">4.1 该如何选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E4%BA%92%E6%96%A5%E9%94%81-Mutex"><span class="toc-number">3.</span> <span class="toc-text">4.2 互斥锁 Mutex</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-1-%E5%8D%95%E7%BA%BF%E7%A8%8B%E4%B8%AD%E4%BD%BF%E7%94%A8-Mutex"><span class="toc-number">3.1.</span> <span class="toc-text">4.2.1 单线程中使用 Mutex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-2-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%AD%E4%BD%BF%E7%94%A8-Mutex"><span class="toc-number">3.2.</span> <span class="toc-text">4.2.2 多线程中使用 Mutex</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-1-%E6%97%A0%E6%B3%95%E8%BF%90%E8%A1%8C%E7%9A%84Rc"><span class="toc-number">3.2.1.</span> <span class="toc-text">4.2.2.1 无法运行的Rc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-2-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84-Arc"><span class="toc-number">3.2.2.</span> <span class="toc-text">4.2.2.2 多线程安全的 Arc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E5%8F%AF%E5%8F%98%E6%80%A7"><span class="toc-number">3.2.3.</span> <span class="toc-text">内部可变性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9C%80%E8%A6%81%E5%B0%8F%E5%BF%83%E4%BD%BF%E7%94%A8%E7%9A%84-Mutex"><span class="toc-number">3.2.4.</span> <span class="toc-text">需要小心使用的 Mutex</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E6%AD%BB%E9%94%81"><span class="toc-number">4.</span> <span class="toc-text">4.3 死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-1-%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81"><span class="toc-number">5.</span> <span class="toc-text">4.3.1 单线程死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-2-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81"><span class="toc-number">6.</span> <span class="toc-text">4.3.2 多线程死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-3-try-lock"><span class="toc-number">7.</span> <span class="toc-text">4.3.3 try_lock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E8%AF%BB%E5%86%99%E9%94%81-RwLock"><span class="toc-number">8.</span> <span class="toc-text">4.4 读写锁 RwLock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-Mutex-%E8%BF%98%E6%98%AF-RwLock"><span class="toc-number">9.</span> <span class="toc-text">4.5 Mutex 还是 RwLock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-%E4%B8%89%E6%96%B9%E5%BA%93%E6%8F%90%E4%BE%9B%E7%9A%84%E9%94%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">10.</span> <span class="toc-text">4.6 三方库提供的锁实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-7-%E7%94%A8%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F-Condvar-%E6%8E%A7%E5%88%B6%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%90%8C%E6%AD%A5"><span class="toc-number">11.</span> <span class="toc-text">4.7 用条件变量(Condvar)控制线程的同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-8-%E4%BF%A1%E5%8F%B7%E9%87%8F-Semaphore"><span class="toc-number">12.</span> <span class="toc-text">4.8 信号量 Semaphore</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5%EF%BC%9AAtomic-%E5%8E%9F%E5%AD%90%E7%B1%BB%E5%9E%8B%E4%B8%8E%E5%86%85%E5%AD%98%E9%A1%BA%E5%BA%8F"><span class="toc-number">13.</span> <span class="toc-text">5 线程同步：Atomic 原子类型与内存顺序</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&text=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&title=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&is_video=false&description=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RUST圣经-高阶学习-多线程并发和异步-中&body=Check out this article: http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&title=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&title=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&title=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&title=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&name=RUST圣经-高阶学习-多线程并发和异步-中&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%AD/&t=RUST圣经-高阶学习-多线程并发和异步-中"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    BoBoDai
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/BoBoDai">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

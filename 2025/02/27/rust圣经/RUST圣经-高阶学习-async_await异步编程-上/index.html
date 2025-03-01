@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="1 Async 编程简介异步编程是一个并发编程模型，目前主流语言基本都支持了，当然，支持的方式有所不同。异步编程允许我们同时并发运行大量的任务，却仅仅需要几个甚至一个 OS 线程或 CPU 核心，现代化的异步编程在使用体验上跟同步编程也几无区别，例如 Go 语言的 go 关键字，也包括我们后面将介绍的 async&#x2F;await 语法，该语法是 JavaScript 和 Rust 的核心特性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RUST圣经-高阶学习-async_await异步编程-上">
+<meta property="og:url" content="http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/index.html">
+<meta property="og:site_name" content="Cactus Hole">
+<meta property="og:description" content="1 Async 编程简介异步编程是一个并发编程模型，目前主流语言基本都支持了，当然，支持的方式有所不同。异步编程允许我们同时并发运行大量的任务，却仅仅需要几个甚至一个 OS 线程或 CPU 核心，现代化的异步编程在使用体验上跟同步编程也几无区别，例如 Go 语言的 go 关键字，也包括我们后面将介绍的 async&#x2F;await 语法，该语法是 JavaScript 和 Rust 的核心特性">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/1.png">
+<meta property="og:image" content="http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/2.png">
+<meta property="article:published_time" content="2025-02-27T06:30:35.000Z">
+<meta property="article:modified_time" content="2025-03-01T03:07:49.205Z">
+<meta property="article:author" content="BoBoDai">
+<meta property="article:tag" content="rust圣经">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/1.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>RUST圣经-高阶学习-async_await异步编程-上</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/BoBoDai">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2025/03/01/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async-await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8B/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2025/02/26/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%92%8C%E5%BC%82%E6%AD%A5-%E4%B8%8B/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&text=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&title=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&is_video=false&description=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RUST圣经-高阶学习-async_await异步编程-上&body=Check out this article: http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&title=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&title=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&title=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&title=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&name=RUST圣经-高阶学习-async_await异步编程-上&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&t=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Async-%E7%BC%96%E7%A8%8B%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Async 编程简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-async-%E7%AE%80%E4%BB%8B"><span class="toc-number">2.</span> <span class="toc-text">1.1 async 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-1-async-vs-%E5%85%B6%E5%AE%83%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.1.</span> <span class="toc-text">1.1.1 async vs 其它并发模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2-%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="toc-number">2.2.</span> <span class="toc-text">1.1.2 一个例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-async-await-%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8"><span class="toc-number">3.</span> <span class="toc-text">1.2 async&#x2F;.await 简单入门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%BA%95%E5%B1%82%E6%8E%A2%E7%A7%98-Future-%E6%89%A7%E8%A1%8C%E5%99%A8%E4%B8%8E%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-number">4.</span> <span class="toc-text">2 底层探秘: Future 执行器与任务调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Future-%E7%89%B9%E5%BE%81"><span class="toc-number">5.</span> <span class="toc-text">2.1 Future 特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E4%BD%BF%E7%94%A8-Waker-%E6%9D%A5%E5%94%A4%E9%86%92%E4%BB%BB%E5%8A%A1"><span class="toc-number">6.</span> <span class="toc-text">2.2 使用 Waker 来唤醒任务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="toc-number">6.1.</span> <span class="toc-text">2.2.1 构建一个定时器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E6%89%A7%E8%A1%8C%E5%99%A8-Executor"><span class="toc-number">7.</span> <span class="toc-text">2.3 执行器 Executor</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1-%E6%9E%84%E5%BB%BA%E6%89%A7%E8%A1%8C%E5%99%A8"><span class="toc-number">7.1.</span> <span class="toc-text">2.3.1 构建执行器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E6%89%A7%E8%A1%8C%E5%99%A8%E5%92%8C%E7%B3%BB%E7%BB%9F-IO"><span class="toc-number">8.</span> <span class="toc-text">2.4 执行器和系统 IO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%92%88-Pin-%E5%92%8C-Unpin"><span class="toc-number">9.</span> <span class="toc-text">3 定海神针 Pin 和 Unpin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E4%B8%BA%E4%BD%95%E9%9C%80%E8%A6%81-Pin"><span class="toc-number">10.</span> <span class="toc-text">3.1 为何需要 Pin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Unpin"><span class="toc-number">11.</span> <span class="toc-text">3.2 Unpin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-Pin"><span class="toc-number">12.</span> <span class="toc-text">3.3 深入理解 Pin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-Pin-%E5%9C%A8%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E8%BF%90%E7%94%A8"><span class="toc-number">13.</span> <span class="toc-text">3.4 Pin 在实践中的运用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-1-%E5%B0%86%E5%80%BC%E5%9B%BA%E5%AE%9A%E5%88%B0%E6%A0%88%E4%B8%8A"><span class="toc-number">13.1.</span> <span class="toc-text">3.4.1 将值固定到栈上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-2-%E5%9B%BA%E5%AE%9A%E5%88%B0%E5%A0%86%E4%B8%8A"><span class="toc-number">13.2.</span> <span class="toc-text">3.4.2 固定到堆上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-3-%E5%B0%86%E5%9B%BA%E5%AE%9A%E4%BD%8F%E7%9A%84-Future-%E5%8F%98%E4%B8%BA-Unpin"><span class="toc-number">13.3.</span> <span class="toc-text">3.4.3 将固定住的 Future 变为 Unpin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E6%80%BB%E7%BB%93"><span class="toc-number">14.</span> <span class="toc-text">3.5 总结</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        RUST圣经-高阶学习-async_await异步编程-上
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">BoBoDai</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-02-27T06:30:35.000Z" class="dt-published" itemprop="datePublished">2025-02-27</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/rust%E5%9C%A3%E7%BB%8F/" rel="tag">rust圣经</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="1-Async-编程简介"><a href="#1-Async-编程简介" class="headerlink" title="1 Async 编程简介"></a>1 Async 编程简介</h2><p>异步编程是一个并发编程模型，目前主流语言基本都支持了，当然，支持的方式有所不同。异步编程允许我们同时并发运行大量的任务，却仅仅需要几个甚至一个 OS 线程或 CPU 核心，现代化的异步编程在使用体验上跟同步编程也几无区别，例如 Go 语言的 go 关键字，也包括我们后面将介绍的 async&#x2F;await 语法，该语法是 JavaScript 和 Rust 的核心特性之一。</p>
+<h2 id="1-1-async-简介"><a href="#1-1-async-简介" class="headerlink" title="1.1 async 简介"></a>1.1 async 简介</h2><p>async 是 Rust 选择的异步编程模型，下面我们来介绍下它的优缺点，以及何时适合使用。</p>
+<h3 id="1-1-1-async-vs-其它并发模型"><a href="#1-1-1-async-vs-其它并发模型" class="headerlink" title="1.1.1 async vs 其它并发模型"></a>1.1.1 async vs 其它并发模型</h3><p>由于并发编程在现代社会非常重要，因此每个主流语言都对自己的并发模型进行过权衡取舍和精心设计，Rust 语言也不例外。下面的列表可以帮助大家理解不同并发模型的取舍:</p>
+<ul>
+<li>OS 线程， 它最简单，也无需改变任何编程模型(业务&#x2F;代码逻辑)，因此非常适合作为语言的原生并发模型，我们在多线程章节也提到过，Rust 就选择了原生支持线程级的并发编程。但是，这种模型也有缺点，例如线程间的同步将变得更加困难，线程间的上下文切换损耗较大。使用线程池在一定程度上可以提升性能，但是对于 IO 密集的场景来说，线程池还是不够。</li>
+<li>事件驱动(Event driven)， 这个名词你可能比较陌生，如果说事件驱动常常跟回调( Callback )一起使用，相信大家就恍然大悟了。这种模型性能相当的好，但最大的问题就是存在回调地狱的风险：非线性的控制流和结果处理导致了数据流向和错误传播变得难以掌控，还会导致代码可维护性和可读性的大幅降低，大名鼎鼎的 JavaScript 曾经就存在回调地狱。</li>
+<li>协程(Coroutines) 可能是目前最火的并发模型，Go 语言的协程设计就非常优秀，这也是 Go 语言能够迅速火遍全球的杀手锏之一。协程跟线程类似，无需改变编程模型，同时，它也跟 async 类似，可以支持大量的任务并发运行。但协程抽象层次过高，导致用户无法接触到底层的细节，这对于系统编程语言和自定义异步运行时是难以接受的</li>
+<li>actor 模型是 erlang 的杀手锏之一，它将所有并发计算分割成一个一个单元，这些单元被称为 actor ，单元之间通过消息传递的方式进行通信和数据传递，跟分布式系统的设计理念非常相像。由于 actor 模型跟现实很贴近，因此它相对来说更容易实现，但是一旦遇到流控制、失败重试等场景时，就会变得不太好用</li>
+<li>async&#x2F;await， 该模型性能高，还能支持底层编程，同时又像线程和协程那样无需过多的改变编程模型，但有得必有失，async 模型的问题就是内部实现机制过于复杂，对于用户来说，理解和使用起来也没有线程和协程简单，好在前者的复杂性开发者们已经帮我们封装好，而理解和使用起来不够简单，正是本章试图解决的问题。</li>
+</ul>
+<p>总之，Rust 经过权衡取舍后，最终选择了同时提供多线程编程和 async 编程:</p>
+<ul>
+<li><p>前者通过标准库实现，当你无需那么高的并发时，例如需要并行计算时，可以选择它，优点是线程内的代码执行效率更高、实现更直观更简单</p>
+</li>
+<li><p>后者通过语言特性 + 标准库 + 三方库的方式实现，在你需要高并发、异步 I&#x2F;O 时，选择它就对了</p>
+</li>
+<li><p>有大量 IO 任务需要并发运行时，选 async 模型</p>
+</li>
+<li><p>有部分 IO 任务需要并发运行时，选多线程，如果想要降低线程创建和销毁的开销，可以使用线程池</p>
+</li>
+<li><p>有大量 CPU 密集任务需要并行运行时，例如并行计算，选多线程模型，且让线程数等于或者稍大于 CPU 核心数</p>
+</li>
+<li><p>无所谓时，统一选多线程</p>
+</li>
+</ul>
+<h3 id="1-1-2-一个例子"><a href="#1-1-2-一个例子" class="headerlink" title="1.1.2 一个例子"></a>1.1.2 一个例子</h3><p>如果想并发的下载文件，你可以使用多线程如下实现:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fn get_two_sites() &#123;</span><br><span class="line">    // 创建两个新线程执行任务</span><br><span class="line">    let thread_one = thread::spawn(|| download(&quot;https://course.rs&quot;));</span><br><span class="line">    let thread_two = thread::spawn(|| download(&quot;https://fancy.rs&quot;));</span><br><span class="line"></span><br><span class="line">    // 等待两个线程的完成</span><br><span class="line">    thread_one.join().expect(&quot;thread one panicked&quot;);</span><br><span class="line">    thread_two.join().expect(&quot;thread two panicked&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果是在一个小项目中简单的去下载文件，这么写没有任何问题，但是一旦下载文件的并发请求多起来，那一个下载任务占用一个线程的模式就太重了，会很容易成为程序的瓶颈。好在，我们可以使用async的方式来解决：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">async fn get_two_sites_async() &#123;</span><br><span class="line">    // 创建两个不同的`future`，你可以把`future`理解为未来某个时刻会被执行的计划任务</span><br><span class="line">    // 当两个`future`被同时执行后，它们将并发的去下载目标页面</span><br><span class="line">    let future_one = download_async(&quot;https://www.foo.com&quot;);</span><br><span class="line">    let future_two = download_async(&quot;https://www.bar.com&quot;);</span><br><span class="line"></span><br><span class="line">    // 同时运行两个`future`，直至完成</span><br><span class="line">    join!(future_one, future_two);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时，不再有线程创建和切换的昂贵开销，所有的函数都是通过静态的方式进行分发，同时也没有任何内存分配发生。这段代码的性能简直无懈可击！</p>
+<p>事实上，async 和多线程并不是二选一，在同一应用中，可以根据情况两者一起使用，当然，我们还可以使用其它的并发模型，例如上面提到事件驱动模型，前提是有三方库提供了相应的实现。</p>
+<h2 id="1-2-async-await-简单入门"><a href="#1-2-async-await-简单入门" class="headerlink" title="1.2 async&#x2F;.await 简单入门"></a>1.2 async&#x2F;.await 简单入门</h2><p>async&#x2F;.await 是 Rust 内置的语言特性，可以让我们用同步的方式去编写异步的代码。</p>
+<p>async 标记的语法块会被转换成实现了Future特征的状态机。 与同步调用阻塞当前线程不同，当Future执行并遇到阻塞时，它会让出当前线程的控制权，这样其它的Future就可以在该线程中运行，这种方式完全不会导致当前线程的阻塞。</p>
+<p>开始之前，需要先引入 futures 包。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dependencies]</span><br><span class="line">futures = &quot;0.3&quot;</span><br></pre></td></tr></table></figure>
+
+<p>使用 async</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">async fn do_something() &#123;</span><br><span class="line">    println!(&quot;go go go !&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>异步函数的返回值是一个 Future，若直接调用该函数，不会输出任何结果，因为 Future 还未被执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">      do_something();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行后，go go go并没有打印</p>
+<p>使用 block_on 就能打印出来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// `block_on`会阻塞当前线程直到指定的`Future`执行完成，这种阻塞当前线程以等待任务完成的方式较为简单、粗暴，</span><br><span class="line">// 好在其它运行时的执行器(executor)会提供更加复杂的行为，例如将多个`future`调度到同一个线程上执行。</span><br><span class="line">use futures::executor::block_on;</span><br><span class="line"></span><br><span class="line">async fn hello_world() &#123;</span><br><span class="line">    println!(&quot;hello, world!&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let future = hello_world(); // 返回一个Future, 因此不会打印任何输出</span><br><span class="line">    block_on(future); // 执行`Future`并等待其运行完成，此时&quot;hello, world!&quot;会被打印输出</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用.await</p>
+<p>上述代码的main函数中，我们使用block_on这个执行器等待Future的完成。</p>
+<p>但是如果你要在一个async fn函数中去调用另一个async fn并等待其完成后再执行后续的代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">use futures::executor::block_on;</span><br><span class="line"></span><br><span class="line">async fn hello_world() &#123;</span><br><span class="line">    hello_cat().await;</span><br><span class="line">    println!(&quot;hello, world!&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async fn hello_cat() &#123;</span><br><span class="line">    println!(&quot;hello, kitty!&quot;);</span><br><span class="line">&#125;</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let future = hello_world();</span><br><span class="line">    block_on(future);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中使用同步的代码顺序实现了异步的执行效果，非常简单、高效，而且很好理解，未来也绝对不会有回调地狱的发生。</p>
+<p>在async fn函数中使用.await可以等待另一个异步调用的完成。但是与block_on不同，.await并不会阻塞当前的线程，而是异步的等待Future A的完成，在等待的过程中，该线程还可以继续执行其它的Future B，最终实现了并发处理的效果。</p>
+<p>一个例子</p>
+<p>用.await，我们可能会有如下实现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">use futures::executor::block_on;</span><br><span class="line"></span><br><span class="line">struct Song &#123;</span><br><span class="line">    author: String,</span><br><span class="line">    name: String,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async fn learn_song() -&gt; Song &#123;</span><br><span class="line">    Song &#123;</span><br><span class="line">        author: &quot;周杰伦&quot;.to_string(),</span><br><span class="line">        name: String::from(&quot;《菊花台》&quot;),</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async fn sing_song(song: Song) &#123;</span><br><span class="line">    println!(</span><br><span class="line">        &quot;给大家献上一首&#123;&#125;的&#123;&#125; ~ &#123;&#125;&quot;,</span><br><span class="line">        song.author, song.name, &quot;菊花残，满地伤~ ~&quot;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async fn dance() &#123;</span><br><span class="line">    println!(&quot;唱到情深处，身体不由自主的动了起来~ ~&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let song = block_on(learn_song());</span><br><span class="line">    block_on(sing_song(song));</span><br><span class="line">    block_on(dance());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过修改后可以提高性能</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">use futures::executor::block_on;</span><br><span class="line"></span><br><span class="line">struct Song &#123;</span><br><span class="line">    author: String,</span><br><span class="line">    name: String,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async fn learn_song() -&gt; Song &#123;</span><br><span class="line">    Song &#123;</span><br><span class="line">        author: &quot;周杰伦&quot;.to_string(),</span><br><span class="line">        name: String::from(&quot;《菊花台》&quot;),</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async fn sing_song(song: Song) &#123;</span><br><span class="line">    println!(</span><br><span class="line">        &quot;给大家献上一首&#123;&#125;的&#123;&#125; ~ &#123;&#125;&quot;,</span><br><span class="line">        song.author, song.name, &quot;菊花残，满地伤~ ~&quot;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async fn dance() &#123;</span><br><span class="line">    println!(&quot;唱到情深处，身体不由自主的动了起来~ ~&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async fn learn_and_sing() &#123;</span><br><span class="line">    // 这里使用`.await`来等待学歌的完成，但是并不会阻塞当前线程，该线程在学歌的任务`.await`后，完全可以去执行跳舞的任务</span><br><span class="line">    let song = learn_song().await;</span><br><span class="line"></span><br><span class="line">    // 唱歌必须要在学歌之后</span><br><span class="line">    sing_song(song).await;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async fn async_main() &#123;</span><br><span class="line">    let f1 = learn_and_sing();</span><br><span class="line">    let f2 = dance();</span><br><span class="line"></span><br><span class="line">    // `join!`可以并发的处理和等待多个`Future`，若`learn_and_sing Future`被阻塞，那`dance Future`可以拿过线程的所有权继续执行。若`dance`也变成阻塞状态，那`learn_and_sing`又可以再次拿回线程所有权，继续执行。</span><br><span class="line">    // 若两个都被阻塞，那么`async main`会变成阻塞状态，然后让出线程所有权，并将其交给`main`函数中的`block_on`执行器</span><br><span class="line">    futures::join!(f1, f2);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    block_on(async_main());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>学歌和唱歌具有明显的先后顺序，但是这两者都可以跟跳舞一同存在，也就是你可以在跳舞的时候学歌，也可以在跳舞的时候唱歌。如果上面代码不使用.await，而是使用block_on(learn_song())， 那在学歌时，当前线程就会阻塞，不再可以做其它任何事，包括跳舞。</p>
+<p>.await对于实现异步编程至关重要，它允许我们在同一个线程内并发的运行多个任务，而不是一个一个先后完成。</p>
+<h2 id="2-底层探秘-Future-执行器与任务调度"><a href="#2-底层探秘-Future-执行器与任务调度" class="headerlink" title="2 底层探秘: Future 执行器与任务调度"></a>2 底层探秘: Future 执行器与任务调度</h2><p>如果你希望能深入理解 Rust 的 async&#x2F;.await 代码是如何工作、理解运行时和性能，甚至未来想要构建自己的 async 运行时或相关工具，那么本章节终究不会辜负于你。</p>
+<h2 id="2-1-Future-特征"><a href="#2-1-Future-特征" class="headerlink" title="2.1 Future 特征"></a>2.1 Future 特征</h2><p>Future 特征是 Rust 异步编程的核心，毕竟异步函数是异步编程的核心，而 Future 恰恰是异步函数的返回值和被执行的关键。</p>
+<p>给出 Future 的定义：它是一个能产出值的异步计算(虽然该值可能为空，例如 () )。光看这个定义，可能会觉得很空洞，我们来看看一个简化版的 Future 特征:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">trait SimpleFuture &#123;</span><br><span class="line">    type Output;</span><br><span class="line">    fn poll(&amp;mut self, wake: fn()) -&gt; Poll&lt;Self::Output&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">enum Poll&lt;T&gt; &#123;</span><br><span class="line">    Ready(T),</span><br><span class="line">    Pending,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Future 需要被执行器poll(轮询)后才能运行,通过调用该方法，可以推进 Future 的进一步执行，直到被切走为止( 这里不好理解，但是你只需要知道 Future 并不能保证在一次 poll 中就被执行完，后面会详解介绍)。</p>
+<p>在当前 poll 中， Future 可以被完成，则会返回 Poll::Ready(result) ，反之则返回 Poll::Pending， 并且安排一个 wake 函数：当未来 Future 准备好进一步执行时， 该函数会被调用，然后管理该 Future 的执行器(例如上一章节中的block_on函数)会再次调用 poll 方法，此时 Future 就可以继续执行了。</p>
+<p>没有 wake 方法，那执行器无法知道某个 Future 是否可以继续被执行，除非执行器定期的轮询每一个 Future，确认它是否能被执行，但这种作法效率较低。而有了 wake，Future 就可以主动通知执行器，然后执行器就可以精确的执行该 Future。 这种“事件通知 -&gt; 执行”的方式要远比定期对所有 Future 进行一次全遍历来的高效。</p>
+<p>用一个例子来说明下。考虑一个需要从 socket 读取数据的场景：如果有数据，可以直接读取数据并返回 Poll::Ready(data)， 但如果没有数据，Future 会被阻塞且不会再继续执行，此时它会注册一个 wake 函数，当 socket 数据准备好时，该函数将被调用以通知执行器：我们的 Future 已经准备好了，可以继续执行。</p>
+<p>下面的 SocketRead 结构体就是一个 Future:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">pub struct SocketRead&lt;&#x27;a&gt; &#123;</span><br><span class="line">    socket: &amp;&#x27;a Socket,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl SimpleFuture for SocketRead&lt;&#x27;_&gt; &#123;</span><br><span class="line">    type Output = Vec&lt;u8&gt;;</span><br><span class="line"></span><br><span class="line">    fn poll(&amp;mut self, wake: fn()) -&gt; Poll&lt;Self::Output&gt; &#123;</span><br><span class="line">        if self.socket.has_data_to_read() &#123;</span><br><span class="line">            // socket有数据，写入buffer中并返回</span><br><span class="line">            Poll::Ready(self.socket.read_buf())</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // socket中还没数据</span><br><span class="line">            //</span><br><span class="line">            // 注册一个`wake`函数，当数据可用时，该函数会被调用，</span><br><span class="line">            // 然后当前Future的执行器会再次调用`poll`方法，此时就可以读取到数据</span><br><span class="line">            self.socket.set_readable_callback(wake);</span><br><span class="line">            Poll::Pending</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种 Future 模型允许将多个异步操作组合在一起，同时还无需任何内存分配。不仅仅如此，如果你需要同时运行多个 Future或链式调用多个 Future ，也可以通过无内存分配的状态机实现，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">trait SimpleFuture &#123;</span><br><span class="line">    type Output;</span><br><span class="line">    fn poll(&amp;mut self, wake: fn()) -&gt; Poll&lt;Self::Output&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">enum Poll&lt;T&gt; &#123;</span><br><span class="line">    Ready(T),</span><br><span class="line">    Pending,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/// 一个SimpleFuture，它会并发地运行两个Future直到它们完成</span><br><span class="line">///</span><br><span class="line">/// 之所以可以并发，是因为两个Future的轮询可以交替进行，一个阻塞，另一个就可以立刻执行，反之亦然</span><br><span class="line">pub struct Join&lt;FutureA, FutureB&gt; &#123;</span><br><span class="line">    // 结构体的每个字段都包含一个Future，可以运行直到完成.</span><br><span class="line">    // 等到Future完成后，字段会被设置为 `None`. 这样Future完成后，就不会再被轮询</span><br><span class="line">    a: Option&lt;FutureA&gt;,</span><br><span class="line">    b: Option&lt;FutureB&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl&lt;FutureA, FutureB&gt; SimpleFuture for Join&lt;FutureA, FutureB&gt;</span><br><span class="line">where</span><br><span class="line">    FutureA: SimpleFuture&lt;Output = ()&gt;,</span><br><span class="line">    FutureB: SimpleFuture&lt;Output = ()&gt;,</span><br><span class="line">&#123;</span><br><span class="line">    type Output = ();</span><br><span class="line">    fn poll(&amp;mut self, wake: fn()) -&gt; Poll&lt;Self::Output&gt; &#123;</span><br><span class="line">        // 尝试去完成一个 Future `a`</span><br><span class="line">        if let Some(a) = &amp;mut self.a &#123;</span><br><span class="line">            if let Poll::Ready(()) = a.poll(wake) &#123;</span><br><span class="line">                self.a.take();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 尝试去完成一个 Future `b`</span><br><span class="line">        if let Some(b) = &amp;mut self.b &#123;</span><br><span class="line">            if let Poll::Ready(()) = b.poll(wake) &#123;</span><br><span class="line">                self.b.take();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if self.a.is_none() &amp;&amp; self.b.is_none() &#123;</span><br><span class="line">            // 两个 Future都已完成 - 我们可以成功地返回了</span><br><span class="line">            Poll::Ready(())</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // 至少还有一个 Future 没有完成任务，因此返回 `Poll::Pending`.</span><br><span class="line">            // 当该 Future 再次准备好时，通过调用`wake()`函数来继续执行</span><br><span class="line">            Poll::Pending</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码展示了如何同时运行多个 Future， 且在此过程中没有任何内存分配，让并发编程更加高效。 类似的，多个Future也可以一个接一个的连续运行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">/// 一个SimpleFuture, 它使用顺序的方式，一个接一个地运行两个Future</span><br><span class="line">//</span><br><span class="line">// 注意: 由于本例子用于演示，因此功能简单，`AndThenFut` 会假设两个 Future 在创建时就可用了.</span><br><span class="line">// 而真实的`Andthen`允许根据第一个`Future`的输出来创建第二个`Future`，因此复杂的多。</span><br><span class="line">pub struct AndThenFut&lt;FutureA, FutureB&gt; &#123;</span><br><span class="line">    first: Option&lt;FutureA&gt;,</span><br><span class="line">    second: FutureB,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl&lt;FutureA, FutureB&gt; SimpleFuture for AndThenFut&lt;FutureA, FutureB&gt;</span><br><span class="line">where</span><br><span class="line">    FutureA: SimpleFuture&lt;Output = ()&gt;,</span><br><span class="line">    FutureB: SimpleFuture&lt;Output = ()&gt;,</span><br><span class="line">&#123;</span><br><span class="line">    type Output = ();</span><br><span class="line">    fn poll(&amp;mut self, wake: fn()) -&gt; Poll&lt;Self::Output&gt; &#123;</span><br><span class="line">        if let Some(first) = &amp;mut self.first &#123;</span><br><span class="line">            match first.poll(wake) &#123;</span><br><span class="line">                // 我们已经完成了第一个 Future， 可以将它移除， 然后准备开始运行第二个</span><br><span class="line">                Poll::Ready(()) =&gt; self.first.take(),</span><br><span class="line">                // 第一个 Future 还不能完成</span><br><span class="line">                Poll::Pending =&gt; return Poll::Pending,</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 运行到这里，说明第一个Future已经完成，尝试去完成第二个</span><br><span class="line">        self.second.poll(wake)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这些例子展示了在不需要内存对象分配以及深层嵌套回调的情况下，该如何使用 Future 特征去表达异步控制流。 在了解了基础的控制流后，我们再来看看真实的 Future 特征有何不同之处。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">trait Future &#123;</span><br><span class="line">    type Output;</span><br><span class="line">    fn poll(</span><br><span class="line">        // 首先值得注意的地方是，`self`的类型从`&amp;mut self`变成了`Pin&lt;&amp;mut Self&gt;`:</span><br><span class="line">        self: Pin&lt;&amp;mut Self&gt;,</span><br><span class="line">        // 其次将`wake: fn()` 修改为 `cx: &amp;mut Context&lt;&#x27;_&gt;`:</span><br><span class="line">        cx: &amp;mut Context&lt;&#x27;_&gt;,</span><br><span class="line">    ) -&gt; Poll&lt;Self::Output&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先这里多了一个 Pin ，关于它我们会在后面章节详细介绍，现在你只需要知道使用它可以创建一个无法被移动的 Future ，因为无法被移动，所以它将具有固定的内存地址，意味着我们可以存储它的指针(如果内存地址可能会变动，那存储指针地址将毫无意义！)，也意味着可以实现一个自引用数据结构: struct MyFut { a: i32, ptr_to_a: *const i32 }。 而对于 async&#x2F;await 来说，Pin 是不可或缺的关键特性。</p>
+<p>其次，从 wake: fn() 变成了 &amp;mut Context&lt;’_&gt; 。意味着 wake 函数可以携带数据了，为何要携带数据？考虑一个真实世界的场景，一个复杂应用例如 web 服务器可能有数千连接同时在线，那么同时就有数千 Future 在被同时管理着，如果不能携带数据，当一个 Future 调用 wake 后，执行器该如何知道是哪个 Future 调用了 wake ,然后进一步去 poll 对应的 Future ？没有办法！那之前的例子为啥就可以使用没有携带数据的 wake ？ 因为足够简单，不存在歧义性。</p>
+<p>总之，在正式场景要进行 wake ，就必须携带上数据。 而 Context 类型通过提供一个 Waker 类型的值，就可以用来唤醒特定的的任务。</p>
+<h2 id="2-2-使用-Waker-来唤醒任务"><a href="#2-2-使用-Waker-来唤醒任务" class="headerlink" title="2.2 使用 Waker 来唤醒任务"></a>2.2 使用 Waker 来唤醒任务</h2><p>Future 来说，第一次被 poll 时无法完成任务是很正常的。但它需要确保在未来一旦准备好时，可以通知执行器再次对其进行 poll 进而继续往下执行，该通知就是通过 Waker 类型完成的。</p>
+<p>Waker 提供了一个 wake() 方法可以用于告诉执行器：相关的任务可以被唤醒了，此时执行器就可以对相应的 Future 再次进行 poll 操作。</p>
+<h3 id="2-2-1-构建一个定时器"><a href="#2-2-1-构建一个定时器" class="headerlink" title="2.2.1 构建一个定时器"></a>2.2.1 构建一个定时器</h3><p>下面一起来实现一个简单的定时器 Future 。为了让例子尽量简单，当计时器创建时，我们会启动一个线程接着让该线程进入睡眠，等睡眠结束后再通知给 Future 。</p>
+<p>本例子还会在后面继续使用，因此我们重新创建一个工程来演示：使用 cargo new –lib timer_future 来创建一个新工程，在 lib 包的根路径 src&#x2F;lib.rs 中添加以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">use std::&#123;</span><br><span class="line">    future::Future,</span><br><span class="line">    pin::Pin,</span><br><span class="line">    sync::&#123;Arc, Mutex&#125;,</span><br><span class="line">    task::&#123;Context, Poll, Waker&#125;,</span><br><span class="line">    thread,</span><br><span class="line">    time::Duration,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>继续来实现 Future 定时器，之前提到: 新建线程在睡眠结束后会需要将状态同步给定时器 Future ，由于是多线程环境，我们需要使用 Arc&lt;Mutex<T>&gt; 来作为一个共享状态，用于在新线程和 Future 定时器间共享。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">pub struct TimerFuture &#123;</span><br><span class="line">    shared_state: Arc&lt;Mutex&lt;SharedState&gt;&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/// 在Future和等待的线程间共享状态</span><br><span class="line">struct SharedState &#123;</span><br><span class="line">    /// 定时(睡眠)是否结束</span><br><span class="line">    completed: bool,</span><br><span class="line"></span><br><span class="line">    /// 当睡眠结束后，线程可以用`waker`通知`TimerFuture`来唤醒任务</span><br><span class="line">    waker: Option&lt;Waker&gt;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面给出 Future 的具体实现:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">impl Future for TimerFuture &#123;</span><br><span class="line">    type Output = ();</span><br><span class="line">    fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;&#x27;_&gt;) -&gt; Poll&lt;Self::Output&gt; &#123;</span><br><span class="line">        // 通过检查共享状态，来确定定时器是否已经完成</span><br><span class="line">        let mut shared_state = self.shared_state.lock().unwrap();</span><br><span class="line">        if shared_state.completed &#123;</span><br><span class="line">            Poll::Ready(())</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // 设置`waker`，这样新线程在睡眠(计时)结束后可以唤醒当前的任务，接着再次对`Future`进行`poll`操作,</span><br><span class="line">            //</span><br><span class="line">            // 下面的`clone`每次被`poll`时都会发生一次，实际上，应该是只`clone`一次更加合理。</span><br><span class="line">            // 选择每次都`clone`的原因是： `TimerFuture`可以在执行器的不同任务间移动，如果只克隆一次，</span><br><span class="line">            // 那么获取到的`waker`可能已经被篡改并指向了其它任务，最终导致执行器运行了错误的任务</span><br><span class="line">            shared_state.waker = Some(cx.waker().clone());</span><br><span class="line">            Poll::Pending</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码很简单，只要新线程设置了 shared_state.completed &#x3D; true ，那任务就能顺利结束。如果没有设置，会为当前的任务克隆一份 Waker ，这样新线程就可以使用它来唤醒当前的任务。</p>
+<p>最后，再来创建一个 API 用于构建定时器和启动计时线程:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">impl TimerFuture &#123;</span><br><span class="line">    /// 创建一个新的`TimerFuture`，在指定的时间结束后，该`Future`可以完成</span><br><span class="line">    pub fn new(duration: Duration) -&gt; Self &#123;</span><br><span class="line">        let shared_state = Arc::new(Mutex::new(SharedState &#123;</span><br><span class="line">            completed: false,</span><br><span class="line">            waker: None,</span><br><span class="line">        &#125;));</span><br><span class="line"></span><br><span class="line">        // 创建新线程</span><br><span class="line">        let thread_shared_state = shared_state.clone();</span><br><span class="line">        thread::spawn(move || &#123;</span><br><span class="line">            // 睡眠指定时间实现计时功能</span><br><span class="line">            thread::sleep(duration);</span><br><span class="line">            let mut shared_state = thread_shared_state.lock().unwrap();</span><br><span class="line">            // 通知执行器定时器已经完成，可以继续`poll`对应的`Future`了</span><br><span class="line">            shared_state.completed = true;</span><br><span class="line">            if let Some(waker) = shared_state.waker.take() &#123;</span><br><span class="line">                waker.wake()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        TimerFuture &#123; shared_state &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，一个简单的定时器 Future 就已创建成功，那么该如何使用它呢？相信部分爱动脑筋的读者已经猜到了：我们需要创建一个执行器，才能让程序动起来。</p>
+<h2 id="2-3-执行器-Executor"><a href="#2-3-执行器-Executor" class="headerlink" title="2.3 执行器 Executor"></a>2.3 执行器 Executor</h2><p>Rust 的 Future 是惰性的。其中一个推动它的方式就是在 async 函数中使用 .await 来调用另一个 async 函数，但是这个只能解决 async 内部的问题，那么这些最外层的 async 函数，谁来推动它们运行呢？答案就是我们之前多次提到的执行器 executor 。</p>
+<p>执行器会管理一批 Future (最外层的 async 函数)，然后通过不停地 poll 推动它们直到完成。 最开始，执行器会先 poll 一次 Future ，后面就不会主动去 poll 了，而是等待 Future 通过调用 wake 函数来通知它可以继续，它才会继续去 poll 。这种 wake 通知然后 poll 的方式会不断重复，直到 Future 完成。</p>
+<h3 id="2-3-1-构建执行器"><a href="#2-3-1-构建执行器" class="headerlink" title="2.3.1 构建执行器"></a>2.3.1 构建执行器</h3><p>下面我们将实现一个简单的执行器，它可以同时并发运行多个 Future 。例子中，需要用到 futures 包的 ArcWake 特征，它可以提供一个方便的途径去构建一个 Waker 。编辑 Cargo.toml ，添加下面依赖:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[dependencies]</span><br><span class="line">futures = &quot;0.3&quot;</span><br></pre></td></tr></table></figure>
+
+<p>在之前的内容中，我们在 src&#x2F;lib.rs 中创建了定时器 Future ，现在在 src&#x2F;main.rs 中来创建程序的主体内容，开始之前，先引入所需的包：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">use &#123;</span><br><span class="line">    futures::&#123;</span><br><span class="line">        future::&#123;BoxFuture, FutureExt&#125;,</span><br><span class="line">        task::&#123;waker_ref, ArcWake&#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    std::&#123;</span><br><span class="line">        future::Future,</span><br><span class="line">        sync::mpsc::&#123;sync_channel, Receiver, SyncSender&#125;,</span><br><span class="line">        sync::&#123;Arc, Mutex&#125;,</span><br><span class="line">        task::&#123;Context, Poll&#125;,</span><br><span class="line">        time::Duration,</span><br><span class="line">    &#125;,</span><br><span class="line">    // 引入之前实现的定时器模块</span><br><span class="line">    timer_future::TimerFuture,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>执行器需要从一个消息通道( channel )中拉取事件，然后运行它们。当一个任务准备好后（可以继续执行），它会将自己放入消息通道中，然后等待执行器 poll 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">/// 任务执行器，负责从通道中接收任务然后执行</span><br><span class="line">struct Executor &#123;</span><br><span class="line">    ready_queue: Receiver&lt;Arc&lt;Task&gt;&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/// `Spawner`负责创建新的`Future`然后将它发送到任务通道中</span><br><span class="line">#[derive(Clone)]</span><br><span class="line">struct Spawner &#123;</span><br><span class="line">    task_sender: SyncSender&lt;Arc&lt;Task&gt;&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/// 一个Future，它可以调度自己(将自己放入任务通道中)，然后等待执行器去`poll`</span><br><span class="line">struct Task &#123;</span><br><span class="line">    /// 进行中的Future，在未来的某个时间点会被完成</span><br><span class="line">    ///</span><br><span class="line">    /// 按理来说`Mutex`在这里是多余的，因为我们只有一个线程来执行任务。但是由于</span><br><span class="line">    /// Rust并不聪明，它无法知道`Future`只会在一个线程内被修改，并不会被跨线程修改。因此</span><br><span class="line">    /// 我们需要使用`Mutex`来满足这个笨笨的编译器对线程安全的执着。</span><br><span class="line">    ///</span><br><span class="line">    /// 如果是生产级的执行器实现，不会使用`Mutex`，因为会带来性能上的开销，取而代之的是使用`UnsafeCell`</span><br><span class="line">    future: Mutex&lt;Option&lt;BoxFuture&lt;&#x27;static, ()&gt;&gt;&gt;,</span><br><span class="line"></span><br><span class="line">    /// 可以将该任务自身放回到任务通道中，等待执行器的poll</span><br><span class="line">    task_sender: SyncSender&lt;Arc&lt;Task&gt;&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn new_executor_and_spawner() -&gt; (Executor, Spawner) &#123;</span><br><span class="line">    // 任务通道允许的最大缓冲数(任务队列的最大长度)</span><br><span class="line">    // 当前的实现仅仅是为了简单，在实际的执行中，并不会这么使用</span><br><span class="line">    const MAX_QUEUED_TASKS: usize = 10_000;</span><br><span class="line">    let (task_sender, ready_queue) = sync_channel(MAX_QUEUED_TASKS);</span><br><span class="line">    (Executor &#123; ready_queue &#125;, Spawner &#123; task_sender &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面再来添加一个方法用于生成 Future , 然后将它放入任务通道中:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">impl Spawner &#123;</span><br><span class="line">    fn spawn(&amp;self, future: impl Future&lt;Output = ()&gt; + &#x27;static + Send) &#123;</span><br><span class="line">        let future = future.boxed();</span><br><span class="line">        let task = Arc::new(Task &#123;</span><br><span class="line">            future: Mutex::new(Some(future)),</span><br><span class="line">            task_sender: self.task_sender.clone(),</span><br><span class="line">        &#125;);</span><br><span class="line">        self.task_sender.send(task).expect(&quot;任务队列已满&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在执行器 poll 一个 Future 之前，首先需要调用 wake 方法进行唤醒，然后再由 Waker 负责调度该任务并将其放入任务通道中。创建 Waker 的最简单的方式就是实现 ArcWake 特征，先来为我们的任务实现 ArcWake 特征，这样它们就能被转变成 Waker 然后被唤醒:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">impl ArcWake for Task &#123;</span><br><span class="line">    fn wake_by_ref(arc_self: &amp;Arc&lt;Self&gt;) &#123;</span><br><span class="line">        // 通过发送任务到任务管道的方式来实现`wake`，这样`wake`后，任务就能被执行器`poll`</span><br><span class="line">        let cloned = arc_self.clone();</span><br><span class="line">        arc_self</span><br><span class="line">            .task_sender</span><br><span class="line">            .send(cloned)</span><br><span class="line">            .expect(&quot;任务队列已满&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当任务实现了 ArcWake 特征后，它就变成了 Waker ，在调用 wake() 对其唤醒后会将任务复制一份所有权( Arc )，然后将其发送到任务通道中。最后我们的执行器将从通道中获取任务，然后进行 poll 执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">impl Executor &#123;</span><br><span class="line">    fn run(&amp;self) &#123;</span><br><span class="line">        while let Ok(task) = self.ready_queue.recv() &#123;</span><br><span class="line">            // 获取一个future，若它还没有完成(仍然是Some，不是None)，则对它进行一次poll并尝试完成它</span><br><span class="line">            let mut future_slot = task.future.lock().unwrap();</span><br><span class="line">            if let Some(mut future) = future_slot.take() &#123;</span><br><span class="line">                // 基于任务自身创建一个 `LocalWaker`</span><br><span class="line">                let waker = waker_ref(&amp;task);</span><br><span class="line">                let context = &amp;mut Context::from_waker(&amp;*waker);</span><br><span class="line">                // `BoxFuture&lt;T&gt;`是`Pin&lt;Box&lt;dyn Future&lt;Output = T&gt; + Send + &#x27;static&gt;&gt;`的类型别名</span><br><span class="line">                // 通过调用`as_mut`方法，可以将上面的类型转换成`Pin&lt;&amp;mut dyn Future + Send + &#x27;static&gt;`</span><br><span class="line">                if future.as_mut().poll(context).is_pending() &#123;</span><br><span class="line">                    // Future还没执行完，因此将它放回任务中，等待下次被poll</span><br><span class="line">                    *future_slot = Some(future);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>恭喜！我们终于拥有了自己的执行器，下面再来写一段代码使用该执行器去运行之前的定时器 Future ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let (executor, spawner) = new_executor_and_spawner();</span><br><span class="line"></span><br><span class="line">    // 生成一个任务</span><br><span class="line">    spawner.spawn(async &#123;</span><br><span class="line">        println!(&quot;howdy!&quot;);</span><br><span class="line">        // 创建定时器Future，并等待它完成</span><br><span class="line">        TimerFuture::new(Duration::new(2, 0)).await;</span><br><span class="line">        println!(&quot;done!&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    // drop掉任务，这样执行器就知道任务已经完成，不会再有新的任务进来</span><br><span class="line">    drop(spawner);</span><br><span class="line"></span><br><span class="line">    // 运行执行器直到任务队列为空</span><br><span class="line">    // 任务运行后，会先打印`howdy!`, 暂停2秒，接着打印 `done!`</span><br><span class="line">    executor.run();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-4-执行器和系统-IO"><a href="#2-4-执行器和系统-IO" class="headerlink" title="2.4 执行器和系统 IO"></a>2.4 执行器和系统 IO</h2><p>前面我们一起看过一个使用 Future 从 Socket 中异步读取数据的例子:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">pub struct SocketRead&lt;&#x27;a&gt; &#123;</span><br><span class="line">    socket: &amp;&#x27;a Socket,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl SimpleFuture for SocketRead&lt;&#x27;_&gt; &#123;</span><br><span class="line">    type Output = Vec&lt;u8&gt;;</span><br><span class="line"></span><br><span class="line">    fn poll(&amp;mut self, wake: fn()) -&gt; Poll&lt;Self::Output&gt; &#123;</span><br><span class="line">        if self.socket.has_data_to_read() &#123;</span><br><span class="line">            // socket有数据，写入buffer中并返回</span><br><span class="line">            Poll::Ready(self.socket.read_buf())</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // socket中还没数据</span><br><span class="line">            //</span><br><span class="line">            // 注册一个`wake`函数，当数据可用时，该函数会被调用，</span><br><span class="line">            // 然后当前Future的执行器会再次调用`poll`方法，此时就可以读取到数据</span><br><span class="line">            self.socket.set_readable_callback(wake);</span><br><span class="line">            Poll::Pending</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例子中，Future 将从 Socket 读取数据，若当前还没有数据，则会让出当前线程的所有权，允许执行器去执行其它的 Future 。当数据准备好后，会调用 wake() 函数将该 Future 的任务放入任务通道中，等待执行器的 poll 。</p>
+<p>关于该流程已经反复讲了很多次，相信大家应该非常清楚了。然而该例子中还有一个疑问没有解决：</p>
+<ul>
+<li>set_readable_callback 方法到底是怎么工作的？怎么才能知道 socket 中的数据已经可以被读取了？</li>
+</ul>
+<p>关于第二点，其中一个简单粗暴的方法就是使用一个新线程不停的检查 socket 中是否有了数据，当有了后，就调用 wake() 函数。该方法确实可以满足需求，但是性能着实太低了，需要为每个阻塞的 Future 都创建一个单独的线程！</p>
+<p>现实世界中，该问题往往是通过操作系统提供的 IO 多路复用机制来完成，例如 Linux 中的 epoll，FreeBSD 和 macOS 中的 kqueue ，Windows 中的 IOCP, Fuchisa中的 ports 等(可以通过 Rust 的跨平台包 mio 来使用它们)。借助 IO 多路复用机制，可以实现一个线程同时阻塞地去等待多个异步 IO 事件，一旦某个事件完成就立即退出阻塞并返回数据。相关实现类似于以下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">struct IoBlocker &#123;</span><br><span class="line">    /* ... */</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct Event &#123;</span><br><span class="line">    // Event的唯一ID，该事件发生后，就会被监听起来</span><br><span class="line">    id: usize,</span><br><span class="line"></span><br><span class="line">    // 一组需要等待或者已发生的信号</span><br><span class="line">    signals: Signals,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl IoBlocker &#123;</span><br><span class="line">    /// 创建需要阻塞等待的异步IO事件的集合</span><br><span class="line">    fn new() -&gt; Self &#123; /* ... */ &#125;</span><br><span class="line"></span><br><span class="line">    /// 对指定的IO事件表示兴趣</span><br><span class="line">    fn add_io_event_interest(</span><br><span class="line">        &amp;self,</span><br><span class="line"></span><br><span class="line">        /// 事件所绑定的socket</span><br><span class="line">        io_object: &amp;IoObject,</span><br><span class="line"></span><br><span class="line">        event: Event,</span><br><span class="line">    ) &#123; /* ... */ &#125;</span><br><span class="line"></span><br><span class="line">    /// 进入阻塞，直到某个事件出现</span><br><span class="line">    fn block(&amp;self) -&gt; Event &#123; /* ... */ &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let mut io_blocker = IoBlocker::new();</span><br><span class="line">io_blocker.add_io_event_interest(</span><br><span class="line">    &amp;socket_1,</span><br><span class="line">    Event &#123; id: 1, signals: READABLE &#125;,</span><br><span class="line">);</span><br><span class="line">io_blocker.add_io_event_interest(</span><br><span class="line">    &amp;socket_2,</span><br><span class="line">    Event &#123; id: 2, signals: READABLE | WRITABLE &#125;,</span><br><span class="line">);</span><br><span class="line">let event = io_blocker.block();</span><br><span class="line"></span><br><span class="line">// 当socket的数据可以读取时，打印 &quot;Socket 1 is now READABLE&quot;</span><br><span class="line">println!(&quot;Socket &#123;:?&#125; is now &#123;:?&#125;&quot;, event.id, event.signals);</span><br></pre></td></tr></table></figure>
+
+<p>这样，我们只需要一个执行器线程，它会接收 IO 事件并将其分发到对应的 Waker 中，接着后者会唤醒相关的任务，最终通过执行器 poll 后，任务可以顺利地继续执行, 这种 IO 读取流程可以不停的循环，直到 socket 关闭。</p>
+<h2 id="3-定海神针-Pin-和-Unpin"><a href="#3-定海神针-Pin-和-Unpin" class="headerlink" title="3 定海神针 Pin 和 Unpin"></a>3 定海神针 Pin 和 Unpin</h2><p>在 Rust 异步编程中，有一个定海神针般的存在，它就是 Pin，作用说简单也简单，说复杂也非常复杂，当初刚出来时就连一些 Rust 大佬都一头雾水，何况瑟瑟发抖的我。好在今非昔比，目前网上的资料已经很全，而我就借花献佛，给大家好好讲讲这个 Pin。</p>
+<p>在 Rust 中，所有的类型可以分为两类:</p>
+<ul>
+<li>类型的值可以在内存中安全地被移动，例如数值、字符串、布尔值、结构体、枚举，总之你能想到的几乎所有类型都可以落入到此范畴内</li>
+<li>自引用类型，大魔王来了，大家快跑，在之前章节我们已经见识过它的厉害</li>
+</ul>
+<p>下面就是一个自引用类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct SelfRef &#123;</span><br><span class="line">    value: String,</span><br><span class="line">    pointer_to_value: *mut String,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>pointer_to_value 是一个裸指针，指向第一个字段 value 持有的字符串 String 。很简单对吧？现在考虑一个情况， 若 value 被移动了怎么办？</p>
+<p>一个致命的问题就出现了：value 的内存地址变了，而 pointer_to_value 依然指向 value 之前的地址，一个重大 bug 就出现了！</p>
+<p>Pin 闪亮登场，它可以防止一个类型在内存中被移动。再来回忆下之前在 Future 章节中，我们提到过在 poll 方法的签名中有一个 self: Pin&lt;&amp;mut Self&gt; ，那么为何要在这里使用 Pin 呢？</p>
+<h2 id="3-1-为何需要-Pin"><a href="#3-1-为何需要-Pin" class="headerlink" title="3.1 为何需要 Pin"></a>3.1 为何需要 Pin</h2><p>Pin 还有一个小伙伴 UnPin ，与前者相反，后者表示类型可以在内存中安全地移动。在深入之前，我们先来回忆下 async&#x2F;.await 是如何工作的:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let fut_one = /* ... */; // Future 1</span><br><span class="line">let fut_two = /* ... */; // Future 2</span><br><span class="line">async move &#123;</span><br><span class="line">    fut_one.await;</span><br><span class="line">    fut_two.await;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在底层，async 会创建一个实现了 Future 的匿名类型，并提供了一个 poll 方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">// `async &#123; ... &#125;`语句块创建的 `Future` 类型</span><br><span class="line">struct AsyncFuture &#123;</span><br><span class="line">    fut_one: FutOne,</span><br><span class="line">    fut_two: FutTwo,</span><br><span class="line">    state: State,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// `async` 语句块可能处于的状态</span><br><span class="line">enum State &#123;</span><br><span class="line">    AwaitingFutOne,</span><br><span class="line">    AwaitingFutTwo,</span><br><span class="line">    Done,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl Future for AsyncFuture &#123;</span><br><span class="line">    type Output = ();</span><br><span class="line"></span><br><span class="line">    fn poll(mut self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;&#x27;_&gt;) -&gt; Poll&lt;()&gt; &#123;</span><br><span class="line">        loop &#123;</span><br><span class="line">            match self.state &#123;</span><br><span class="line">                State::AwaitingFutOne =&gt; match self.fut_one.poll(..) &#123;</span><br><span class="line">                    Poll::Ready(()) =&gt; self.state = State::AwaitingFutTwo,</span><br><span class="line">                    Poll::Pending =&gt; return Poll::Pending,</span><br><span class="line">                &#125;</span><br><span class="line">                State::AwaitingFutTwo =&gt; match self.fut_two.poll(..) &#123;</span><br><span class="line">                    Poll::Ready(()) =&gt; self.state = State::Done,</span><br><span class="line">                    Poll::Pending =&gt; return Poll::Pending,</span><br><span class="line">                &#125;</span><br><span class="line">                State::Done =&gt; return Poll::Ready(()),</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当 poll 第一次被调用时，它会去查询 fut_one 的状态，若 fut_one 无法完成，则 poll 方法会返回。未来对 poll 的调用将从上一次调用结束的地方开始。该过程会一直持续，直到 Future 完成为止。</p>
+<p>然而，如果我们的 async 语句块中使用了引用类型，会发生什么？例如下面例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">async &#123;</span><br><span class="line">    let mut x = [0; 128];</span><br><span class="line">    let read_into_buf_fut = read_into_buf(&amp;mut x);</span><br><span class="line">    read_into_buf_fut.await;</span><br><span class="line">    println!(&quot;&#123;:?&#125;&quot;, x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码会编译成下面的形式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">struct ReadIntoBuf&lt;&#x27;a&gt; &#123;</span><br><span class="line">buf: &amp;&#x27;a mut [u8], // 指向下面的`x`字段</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct AsyncFuture &#123;</span><br><span class="line">x: [u8; 128],</span><br><span class="line">read_into_buf_fut: ReadIntoBuf&lt;&#x27;what_lifetime?&gt;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里，ReadIntoBuf 拥有一个引用字段，指向了结构体的另一个字段 x ，一旦 AsyncFuture 被移动，那 x 的地址也将随之变化，此时对 x 的引用就变成了不合法的，也就是 read_into_buf_fut.buf 会变为不合法的。</p>
+<p>若能将 Future 在内存中固定到一个位置，就可以避免这种问题的发生，也就可以安全的创建上面这种引用类型。</p>
+<h2 id="3-2-Unpin"><a href="#3-2-Unpin" class="headerlink" title="3.2 Unpin"></a>3.2 Unpin</h2><p>绝大多数类型都不在意是否被移动(开篇提到的第一种类型)，因此它们都自动实现了 Unpin 特征。</p>
+<p>大家可能以为 Pin 和 Unpin 都是特征吧？实际上，Pin 不按套路出牌，它是一个结构体：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pub struct Pin&lt;P&gt; &#123;</span><br><span class="line">    pointer: P,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>它包裹一个指针，并且能确保该指针指向的数据不会被移动，例如 Pin&lt;&amp;mut T&gt; , Pin&lt;&amp;T&gt; , Pin&lt;Box<T>&gt; ，都能确保 T 不会被移动。</p>
+<p><img src="/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/1.png"></p>
+<p>而 Unpin 才是一个特征，它表明一个类型可以随意被移动，可以被 Pin 住的值，它有没有实现什么特征呢？ 答案很出乎意料，可以被 Pin 住的值实现的特征是 !Unpin ，大家可能之前没有见过，但是它其实很简单，! 代表没有实现某个特征的意思，!Unpin 说明类型没有实现 Unpin 特征，那自然就可以被 Pin 了。</p>
+<p>那是不是意味着类型如果实现了 Unpin 特征，就不能被 Pin 了？其实，还是可以 Pin 的，毕竟它只是一个结构体，你可以随意使用，但是不再有任何效果而已，该值一样可以被移动！</p>
+<p>例如 Pin&lt;&amp;mut u8&gt; ，显然 u8 实现了 Unpin 特征，它可以在内存中被移动，因此 Pin&lt;&amp;mut u8&gt; 跟 &amp;mut u8 实际上并无区别，一样可以被移动。</p>
+<p>一个类型如果不能被移动，它必须实现 !Unpin 特征。</p>
+<p>将 Unpin 与之前章节学过的 Send&#x2F;Sync 进行下对比，会发现它们都很像：</p>
+<ul>
+<li>都是标记特征( marker trait )，该特征未定义任何行为，非常适用于标记</li>
+<li>都可以通过!语法去除实现</li>
+<li>绝大多数情况都是自动实现, 无需我们的操心</li>
+</ul>
+<h2 id="3-3-深入理解-Pin"><a href="#3-3-深入理解-Pin" class="headerlink" title="3.3 深入理解 Pin"></a>3.3 深入理解 Pin</h2><p>对于上面的问题，我们可以简单的归结为如何在 Rust 中处理自引用类型(果然，只要是难点，都和自引用脱离不了关系)，下面用一个稍微简单点的例子来理解下 Pin :</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#[derive(Debug)]</span><br><span class="line">struct Test &#123;</span><br><span class="line">    a: String,</span><br><span class="line">    b: *const String,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl Test &#123;</span><br><span class="line">    fn new(txt: &amp;str) -&gt; Self &#123;</span><br><span class="line">        Test &#123;</span><br><span class="line">            a: String::from(txt),</span><br><span class="line">            b: std::ptr::null(),</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn init(&amp;mut self) &#123;</span><br><span class="line">        let self_ref: *const String = &amp;self.a;</span><br><span class="line">        self.b = self_ref;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn a(&amp;self) -&gt; &amp;str &#123;</span><br><span class="line">        &amp;self.a</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn b(&amp;self) -&gt; &amp;String &#123;</span><br><span class="line">        assert!(!self.b.is_null(), &quot;Test::b called without Test::init being called first&quot;);</span><br><span class="line">        unsafe &#123; &amp;*(self.b) &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Test 提供了方法用于获取字段 a 和 b 的值的引用。这里b 是 a 的一个引用，但是我们并没有使用引用类型而是用了裸指针，原因是：Rust 的借用规则不允许我们这样用，因为不符合生命周期的要求。 此时的 Test 就是一个自引用结构体。</p>
+<p>如果不移动任何值，那么上面的例子将没有任何问题。</p>
+<p>我们就移动下数据试试，将 test1 和 test2 进行下交换：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">    let mut test1 = Test::new(&quot;test1&quot;);</span><br><span class="line">    test1.init();</span><br><span class="line">    let mut test2 = Test::new(&quot;test2&quot;);</span><br><span class="line">    test2.init();</span><br><span class="line"></span><br><span class="line">    println!(&quot;a: &#123;&#125;, b: &#123;&#125;&quot;, test1.a(), test1.b());</span><br><span class="line">    std::mem::swap(&amp;mut test1, &amp;mut test2);</span><br><span class="line">    println!(&quot;a: &#123;&#125;, b: &#123;&#125;&quot;, test2.a(), test2.b());</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果是，test2.b 指针依然指向了旧的地址，而该地址对应的值现在在 test1 里，最终会打印出意料之外的值。</p>
+<p><img src="/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/2.png"></p>
+<h2 id="3-4-Pin-在实践中的运用"><a href="#3-4-Pin-在实践中的运用" class="headerlink" title="3.4 Pin 在实践中的运用"></a>3.4 Pin 在实践中的运用</h2><p>理解了 Pin 的作用后，我们再来看看它怎么帮我们解决问题。</p>
+<h3 id="3-4-1-将值固定到栈上"><a href="#3-4-1-将值固定到栈上" class="headerlink" title="3.4.1 将值固定到栈上"></a>3.4.1 将值固定到栈上</h3><p>回到之前的例子，我们可以用 Pin 来解决指针指向的数据被移动的问题:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">use std::pin::Pin;</span><br><span class="line">use std::marker::PhantomPinned;</span><br><span class="line"></span><br><span class="line">#[derive(Debug)]</span><br><span class="line">struct Test &#123;</span><br><span class="line">    a: String,</span><br><span class="line">    b: *const String,</span><br><span class="line">    _marker: PhantomPinned,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">impl Test &#123;</span><br><span class="line">    fn new(txt: &amp;str) -&gt; Self &#123;</span><br><span class="line">        Test &#123;</span><br><span class="line">            a: String::from(txt),</span><br><span class="line">            b: std::ptr::null(),</span><br><span class="line">            _marker: PhantomPinned, // 这个标记可以让我们的类型自动实现特征`!Unpin`</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn init(self: Pin&lt;&amp;mut Self&gt;) &#123;</span><br><span class="line">        let self_ptr: *const String = &amp;self.a;</span><br><span class="line">        let this = unsafe &#123; self.get_unchecked_mut() &#125;;</span><br><span class="line">        this.b = self_ptr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn a(self: Pin&lt;&amp;Self&gt;) -&gt; &amp;str &#123;</span><br><span class="line">        &amp;self.get_ref().a</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn b(self: Pin&lt;&amp;Self&gt;) -&gt; &amp;String &#123;</span><br><span class="line">        assert!(!self.b.is_null(), &quot;Test::b called without Test::init being called first&quot;);</span><br><span class="line">        unsafe &#123; &amp;*(self.b) &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，我们使用了一个标记类型 PhantomPinned 将自定义结构体 Test 变成了 !Unpin (编译器会自动帮我们实现)，因此该结构体无法再被移动。</p>
+<p>一旦类型实现了 !Unpin ，那将它的值固定到栈( stack )上就是不安全的行为，因此在代码中我们使用了 unsafe 语句块来进行处理，你也可以使用 pin_utils 来避免 unsafe 的使用。</p>
+<p>此时，再去尝试移动被固定的值，就会导致编译错误：</p>
+<h3 id="3-4-2-固定到堆上"><a href="#3-4-2-固定到堆上" class="headerlink" title="3.4.2 固定到堆上"></a>3.4.2 固定到堆上</h3><p>将一个 !Unpin 类型的值固定到堆上，会给予该值一个稳定的内存地址，它指向的堆中的值在 Pin 后是无法被移动的。而且与固定在栈上不同，我们知道堆上的值在整个生命周期内都会被稳稳地固定住。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">use std::pin::Pin;</span><br><span class="line">use std::marker::PhantomPinned;</span><br><span class="line"></span><br><span class="line">#[derive(Debug)]</span><br><span class="line">struct Test &#123;</span><br><span class="line">    a: String,</span><br><span class="line">    b: *const String,</span><br><span class="line">    _marker: PhantomPinned,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl Test &#123;</span><br><span class="line">    fn new(txt: &amp;str) -&gt; Pin&lt;Box&lt;Self&gt;&gt; &#123;</span><br><span class="line">        let t = Test &#123;</span><br><span class="line">            a: String::from(txt),</span><br><span class="line">            b: std::ptr::null(),</span><br><span class="line">            _marker: PhantomPinned,</span><br><span class="line">        &#125;;</span><br><span class="line">        let mut boxed = Box::pin(t);</span><br><span class="line">        let self_ptr: *const String = &amp;boxed.as_ref().a;</span><br><span class="line">        unsafe &#123; boxed.as_mut().get_unchecked_mut().b = self_ptr &#125;;</span><br><span class="line"></span><br><span class="line">        boxed</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn a(self: Pin&lt;&amp;Self&gt;) -&gt; &amp;str &#123;</span><br><span class="line">        &amp;self.get_ref().a</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn b(self: Pin&lt;&amp;Self&gt;) -&gt; &amp;String &#123;</span><br><span class="line">        unsafe &#123; &amp;*(self.b) &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">pub fn main() &#123;</span><br><span class="line">    let test1 = Test::new(&quot;test1&quot;);</span><br><span class="line">    let test2 = Test::new(&quot;test2&quot;);</span><br><span class="line"></span><br><span class="line">    println!(&quot;a: &#123;&#125;, b: &#123;&#125;&quot;,test1.as_ref().a(), test1.as_ref().b());</span><br><span class="line">    println!(&quot;a: &#123;&#125;, b: &#123;&#125;&quot;,test2.as_ref().a(), test2.as_ref().b());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-3-将固定住的-Future-变为-Unpin"><a href="#3-4-3-将固定住的-Future-变为-Unpin" class="headerlink" title="3.4.3 将固定住的 Future 变为 Unpin"></a>3.4.3 将固定住的 Future 变为 Unpin</h3><p>async 函数返回的 Future 默认就是 !Unpin 的。</p>
+<p>在实际应用中，一些函数会要求它们处理的 Future 是 Unpin 的，此时，若你使用的 Future 是 !Unpin 的，必须要使用以下的方法先将 Future 进行固定:</p>
+<ul>
+<li>Box::pin， 创建一个 Pin&lt;Box<T>&gt;</li>
+<li>pin_utils::pin_mut!， 创建一个 Pin&lt;&amp;mut T&gt;</li>
+</ul>
+<p>固定后获得的 Pin&lt;Box<T>&gt; 和 Pin&lt;&amp;mut T&gt; 既可以用于 Future ，又会自动实现 Unpin。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">use pin_utils::pin_mut; // `pin_utils` 可以在crates.io中找到</span><br><span class="line"></span><br><span class="line">// 函数的参数是一个`Future`，但是要求该`Future`实现`Unpin`</span><br><span class="line">fn execute_unpin_future(x: impl Future&lt;Output = ()&gt; + Unpin) &#123; /* ... */ &#125;</span><br><span class="line"></span><br><span class="line">let fut = async &#123; /* ... */ &#125;;</span><br><span class="line">// 下面代码报错: 默认情况下，`fut` 实现的是`!Unpin`，并没有实现`Unpin`</span><br><span class="line">// execute_unpin_future(fut);</span><br><span class="line"></span><br><span class="line">// 使用`Box`进行固定</span><br><span class="line">let fut = async &#123; /* ... */ &#125;;</span><br><span class="line">let fut = Box::pin(fut);</span><br><span class="line">execute_unpin_future(fut); // OK</span><br><span class="line"></span><br><span class="line">// 使用`pin_mut!`进行固定</span><br><span class="line">let fut = async &#123; /* ... */ &#125;;</span><br><span class="line">pin_mut!(fut);</span><br><span class="line">execute_unpin_future(fut); // OK</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-5-总结"><a href="#3-5-总结" class="headerlink" title="3.5 总结"></a>3.5 总结</h2><ul>
+<li>若 T: Unpin ( Rust 类型的默认实现)，那么 Pin&lt;’a, T&gt; 跟 &amp;’a mut T 完全相同，也就是 Pin 将没有任何效果, 该移动还是照常移动</li>
+<li>绝大多数标准库类型都实现了 Unpin ，事实上，对于 Rust 中你能遇到的绝大多数类型，该结论依然成立 ，其中一个例外就是：async&#x2F;await 生成的 Future 没有实现 Unpin</li>
+<li>你可以通过以下方法为自己的类型添加 !Unpin 约束：<ul>
+<li>使用文中提到的 std::marker::PhantomPinned</li>
+<li>使用nightly 版本下的 feature flag</li>
+</ul>
+</li>
+<li>可以将值固定到栈上，也可以固定到堆上<ul>
+<li>将 !Unpin 值固定到栈上需要使用 unsafe</li>
+<li>将 !Unpin 值固定到堆上无需 unsafe ，可以通过 Box::pin 来简单的实现</li>
+</ul>
+</li>
+<li>当固定类型 T: !Unpin 时，你需要保证数据从被固定到被 drop 这段时期内，其内存不会变得非法或者被重用</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/BoBoDai">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Async-%E7%BC%96%E7%A8%8B%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1 Async 编程简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-async-%E7%AE%80%E4%BB%8B"><span class="toc-number">2.</span> <span class="toc-text">1.1 async 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-1-async-vs-%E5%85%B6%E5%AE%83%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.1.</span> <span class="toc-text">1.1.1 async vs 其它并发模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2-%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="toc-number">2.2.</span> <span class="toc-text">1.1.2 一个例子</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-async-await-%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8"><span class="toc-number">3.</span> <span class="toc-text">1.2 async&#x2F;.await 简单入门</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%BA%95%E5%B1%82%E6%8E%A2%E7%A7%98-Future-%E6%89%A7%E8%A1%8C%E5%99%A8%E4%B8%8E%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-number">4.</span> <span class="toc-text">2 底层探秘: Future 执行器与任务调度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Future-%E7%89%B9%E5%BE%81"><span class="toc-number">5.</span> <span class="toc-text">2.1 Future 特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E4%BD%BF%E7%94%A8-Waker-%E6%9D%A5%E5%94%A4%E9%86%92%E4%BB%BB%E5%8A%A1"><span class="toc-number">6.</span> <span class="toc-text">2.2 使用 Waker 来唤醒任务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AE%9A%E6%97%B6%E5%99%A8"><span class="toc-number">6.1.</span> <span class="toc-text">2.2.1 构建一个定时器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E6%89%A7%E8%A1%8C%E5%99%A8-Executor"><span class="toc-number">7.</span> <span class="toc-text">2.3 执行器 Executor</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1-%E6%9E%84%E5%BB%BA%E6%89%A7%E8%A1%8C%E5%99%A8"><span class="toc-number">7.1.</span> <span class="toc-text">2.3.1 构建执行器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E6%89%A7%E8%A1%8C%E5%99%A8%E5%92%8C%E7%B3%BB%E7%BB%9F-IO"><span class="toc-number">8.</span> <span class="toc-text">2.4 执行器和系统 IO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%9A%E6%B5%B7%E7%A5%9E%E9%92%88-Pin-%E5%92%8C-Unpin"><span class="toc-number">9.</span> <span class="toc-text">3 定海神针 Pin 和 Unpin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E4%B8%BA%E4%BD%95%E9%9C%80%E8%A6%81-Pin"><span class="toc-number">10.</span> <span class="toc-text">3.1 为何需要 Pin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Unpin"><span class="toc-number">11.</span> <span class="toc-text">3.2 Unpin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3-Pin"><span class="toc-number">12.</span> <span class="toc-text">3.3 深入理解 Pin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-Pin-%E5%9C%A8%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E8%BF%90%E7%94%A8"><span class="toc-number">13.</span> <span class="toc-text">3.4 Pin 在实践中的运用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-1-%E5%B0%86%E5%80%BC%E5%9B%BA%E5%AE%9A%E5%88%B0%E6%A0%88%E4%B8%8A"><span class="toc-number">13.1.</span> <span class="toc-text">3.4.1 将值固定到栈上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-2-%E5%9B%BA%E5%AE%9A%E5%88%B0%E5%A0%86%E4%B8%8A"><span class="toc-number">13.2.</span> <span class="toc-text">3.4.2 固定到堆上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-3-%E5%B0%86%E5%9B%BA%E5%AE%9A%E4%BD%8F%E7%9A%84-Future-%E5%8F%98%E4%B8%BA-Unpin"><span class="toc-number">13.3.</span> <span class="toc-text">3.4.3 将固定住的 Future 变为 Unpin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-%E6%80%BB%E7%BB%93"><span class="toc-number">14.</span> <span class="toc-text">3.5 总结</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&text=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&title=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&is_video=false&description=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RUST圣经-高阶学习-async_await异步编程-上&body=Check out this article: http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&title=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&title=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&title=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&title=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&name=RUST圣经-高阶学习-async_await异步编程-上&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/02/27/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-async_await%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E4%B8%8A/&t=RUST圣经-高阶学习-async_await异步编程-上"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2024-2025
+    BoBoDai
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/BoBoDai">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

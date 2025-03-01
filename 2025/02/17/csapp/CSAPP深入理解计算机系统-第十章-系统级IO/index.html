@@ -13,29 +13,29 @@
 <meta property="og:site_name" content="Cactus Hole">
 <meta property="og:description" content="输入&#x2F;输出（I&#x2F;O）是在主存和外部设备之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。 10.1 Unix I&#x2F;O一个Linux文件就是一个m字节的序列 1B0,B1,...,Bk,...,Bm-1  所有I&#x2F;O设备（网络、磁盘和终端）都被模型化为文件，所有的输入输出都被当作对应文件的读和">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.1.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.2.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.3.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.4.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.5.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.6.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.7.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.8.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.9.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.10.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.11.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.12.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.13.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.14.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.15.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.16.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.17.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.1.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.2.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.3.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.4.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.5.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.6.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.7.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.8.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.9.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.10.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.11.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.12.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.13.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.14.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.15.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.16.png">
+<meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.17.png">
 <meta property="article:published_time" content="2025-02-17T09:13:16.000Z">
 <meta property="article:modified_time" content="2025-02-17T09:19:34.245Z">
 <meta property="article:author" content="BoBoDai">
 <meta property="article:tag" content="计算机系统">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.1.png">
+<meta name="twitter:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.1.png">
     
     
       
@@ -207,7 +207,7 @@
 </li>
 </ul>
 <h2 id="10-3-打开和关闭文件"><a href="#10-3-打开和关闭文件" class="headerlink" title="10.3 打开和关闭文件"></a>10.3 打开和关闭文件</h2><p>进程通过调用open函数打开一个已经存在的文件或者创建一个新文件</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.1.png" alt="image-10.1"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.1.png" alt="image-10.1"></p>
 <p>open函数将filename转换为一个文件描述符，并返回描述符数字。返回的描述符总是在进程中当前没有打开的最小描述符。flag参数指明来进程打算如何访问这个文件：</p>
 <ul>
 <li>O_RDONLY：只读</li>
@@ -227,16 +227,16 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fd = Open(&quot;foo.txt&quot;,O_WRDONLY|O_APPEND, 0)</span><br></pre></td></tr></table></figure>
 
 <p>mode参数指定来新文件的访问权限位。这些位的符号名字如图所示</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.2.png" alt="image-10.2"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.2.png" alt="image-10.2"></p>
 <p>作为上下文的一部分，每个进程都有一个umask，它是通过调用umask函数来设置的。当进程通过某个mode参数的open函数调用来创建一个新文件时，文件的访问权限位被设置为mode &amp; ～umask。例如，假设我们给定下面的mode和umask默认值：</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.3.png" alt="image-10.3"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.3.png" alt="image-10.3"></p>
 <p>接下来创建一个新文件，文件的拥有者有读写权限，而所有其他的用户都有读权限。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.4.png" alt="image-10.4"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.4.png" alt="image-10.4"></p>
 <p>最后进程通过调用close函数关闭一个打开的文件。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int close(int fd);</span><br></pre></td></tr></table></figure>
 
 <h2 id="10-4-读和写文件"><a href="#10-4-读和写文件" class="headerlink" title="10.4 读和写文件"></a>10.4 读和写文件</h2><p>应用程序通过分别调用read和write函数来执行输入输出</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.5.png" alt="image-10.5"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.5.png" alt="image-10.5"></p>
 <p>read函数从当前文件位置复制最多n个字节到内存位置buf。</p>
 <p>write函数从内存位置buf复制最多n个字节到描述符fd当前文件位置。</p>
 <p>调用lseek函数，应用程序能够显示地修改当前文件的位置。</p>
@@ -252,21 +252,21 @@
 <li>带缓冲的输入函数。这些函数允许高校的从文件中读取文本行和二进制数据，这些文件内容缓冲在应用级缓冲区内，带缓冲的RIO输入函数是现场安全的。</li>
 </ul>
 <h3 id="10-5-1-RIO的无缓冲的输入输出函数"><a href="#10-5-1-RIO的无缓冲的输入输出函数" class="headerlink" title="10.5.1 RIO的无缓冲的输入输出函数"></a>10.5.1 RIO的无缓冲的输入输出函数</h3><p>通过调用rio_readn和rio_writen函数，应用程序可以在内存和文件之间直接传送数据。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.6.png" alt="image-10.6"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.6.png" alt="image-10.6"></p>
 <p>rio_readn函数从描述符fd的当前文件位置最多传送n个字节到内存位置usrbuf。</p>
 <p>类似的，rio_writen函数从位置usrbuf传送n个字节到描述符fd。rio_read函数在遇到EOF时只能返回一个不足值。rio_writen函数决不会返回不足值。对同一个描述符，可以任意交错地调用rio_readn和rio_writen。</p>
 <p>如果他俩被一个应用信号处理程序返回中断，那么每个函数都会手动的重启read或write。</p>
 <h3 id="10-5-2-RIO的带缓冲的输入函数"><a href="#10-5-2-RIO的带缓冲的输入函数" class="headerlink" title="10.5.2 RIO的带缓冲的输入函数"></a>10.5.2 RIO的带缓冲的输入函数</h3><p>要编写一个程序来计算文本文件中文本行的数量，如果一次一个字节的从文件传送到用户内存，读每一个字节都要求陷入内核。</p>
 <p>更好的办法是调用一个包装函数，它从缓冲区复制一个文本行，缓存区变空，会自动的调用read重新填满缓冲区。</p>
 <h2 id="10-6-读取文件元数据"><a href="#10-6-读取文件元数据" class="headerlink" title="10.6 读取文件元数据"></a>10.6 读取文件元数据</h2><p>应用程序通过调用stat和fstat函数，检索到关于文件的信息，也称文件的元数据。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.7.png" alt="image-10.7"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.7.png" alt="image-10.7"></p>
 <p>stat函数输入一个文件名，并写入一个stat数据结构。</p>
 <p>在Web服务器中，会需要stat数据结构中的st_mode和st_size成员。</p>
 <p>st_size成员包含来文件的字节数大小。st_mode成员则编码来文件访问许可位和文件类型。</p>
 <h2 id="10-7-读取目录内容"><a href="#10-7-读取目录内容" class="headerlink" title="10.7 读取目录内容"></a>10.7 读取目录内容</h2><p>应用程序可以用readdir系列函数来读取目录的内容。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.8.png" alt="image-10.8"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.8.png" alt="image-10.8"></p>
 <p>函数opendir以路径名为参数，返回指向目录流的指针。流是对条目有序列表的抽象，在这里是指目录项的列表。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.9.png" alt="image-10.9"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.9.png" alt="image-10.9"></p>
 <p>每次调用返回的都是指向流dirp中下一个目录项的指针，如果没有更多目录项则返回NULL，每个目录项都是一个结构。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct dirent &#123;</span><br><span class="line">	ino_t d_ino;     //inode number</span><br><span class="line">	char d_name[256] //Filename</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -277,11 +277,11 @@
 <li>文件表。打开文件的集合是由一张文件表来表示的，所有的进程共享这张表。每个文件表的表项组成包括当前的文件位置、引用计数，以及一个指向v-node表中对应表项的指针。关闭一个描述符会减少相应的文件表表项中的引用计数。内核不会删除这个文件表表项，直到引用计数为0。</li>
 <li>v-node表。同文件表一样，所有的进程共享这张v-node表。每个表项包含stat结构中的大多数信息，包括st_mode和st_size成员。</li>
 </ul>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.10.png" alt="image-10.10"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.10.png" alt="image-10.10"></p>
 <p>其中描述符1和4通过不同的打开文件表表项来引用两个不同的文件。这种情况没有共享文件，并且每个描述符对应一个不同的文件。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.11.png" alt="image-10.11"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.11.png" alt="image-10.11"></p>
 <p>多个描述符也可以通过不同的文件表表项来引用同一个文件，例如以同一个filename调用open函数2次，就会发生这种情况。关键是每个描述符都有它自己的文件位置，所以对不同描述符的读操作可以从文件的不同位置获取数据。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.12.png" alt="image-10.12"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.12.png" alt="image-10.12"></p>
 <p>父子进程共享文件，在调用fork之前，父进程有10-12所示打开文件。然后调用fork之后。子进程有一个父进程描述符表的副本，父子进程共享相同的打开文件表集合，因此共享相同的文件位置。</p>
 <p>在内核删除对应文件表项之前，父子进程必须都关闭了他们的描述符。</p>
 <h2 id="10-9-I-O重定向"><a href="#10-9-I-O重定向" class="headerlink" title="10.9 I&#x2F;O重定向"></a>10.9 I&#x2F;O重定向</h2><p>Linux shell提供了I&#x2F;O重定向操作符，允许用户将磁盘文件和标准输入输出联系起来。输入</p>
@@ -293,13 +293,13 @@
 
 <p>dup2函数父子描述符表表项oldfd到描述符表表项newfd，覆盖描述符表表项newfd以前到内容。如果newfd已经打开了，dup2会在父子oldfd之前关闭newfd。</p>
 <p>在调用dup2(4,1)之前，我们的状态如10-12所示，其中描述符1（标准输出）对应于文件A（比如一个终端），描述符4对应于文件B（比如一个磁盘文件）。A和B的引用计数都等于1.图10-15显示了调用dup2(4,1)之后的情况。两个描述符现在都指向文件B；文件A已经被关闭了，并且它的文件表和v-node表表项也已经被删除了；文件B都引用计数已经增加了。从此之后，人后写到标准输出的数据都被重定向到文件B。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.13.png" alt="image-10.13"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.13.png" alt="image-10.13"></p>
 <h2 id="10-10-标准-I-O"><a href="#10-10-标准-I-O" class="headerlink" title="10.10 标准 I&#x2F;O"></a>10.10 标准 I&#x2F;O</h2><p>C语言定义了一组高级输入输出函数，称为标准I&#x2F;O库。库 libc 提供了打开和关闭文件的函数（fopen 和 fclose）、读和写字节的函数（fread 和 fwrite）、读和写字符串的函数（fgets 和 fputs），以及复杂的格式化的I&#x2F;O函数（scanf 和 printf）。</p>
 <p>标准I&#x2F;O库将一个打开的文件模型化为一个流。对于程序员一个流就是一个指向FILE类型的结构的指针。每个ANSI C程序开始时都有三个打开的流 stdin、stdout 和 stderr，分别对应于标准输入、标准输出和标准错误：</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.14.png" alt="image-10.14"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.14.png" alt="image-10.14"></p>
 <p>类型为FILE的流是对文件描述符和流缓冲区的抽象。流缓冲区的目的和RIO读缓冲区的一样：就是使开销较高的LinuxI&#x2F;O系统调用的数量尽可能的小。</p>
 <p>例如，我们有一个程序，它反复调用标准I&#x2F;O的getc函数，每次调用返回文件的下一个字符。当第一次调用getc时，库通过调用一次read函数来填充缓冲区，然后将缓冲区中的第一个字节返回给应用程序。子要缓冲区中还有未读的字节，接下来对getc的调用就能直接从流缓冲区得到服务。</p>
-<h2 id="10-11-综合：该使用哪些I-O函数"><a href="#10-11-综合：该使用哪些I-O函数" class="headerlink" title="10.11 综合：该使用哪些I&#x2F;O函数"></a>10.11 综合：该使用哪些I&#x2F;O函数</h2><p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.15.png" alt="image-10.15"></p>
+<h2 id="10-11-综合：该使用哪些I-O函数"><a href="#10-11-综合：该使用哪些I-O函数" class="headerlink" title="10.11 综合：该使用哪些I&#x2F;O函数"></a>10.11 综合：该使用哪些I&#x2F;O函数</h2><p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.15.png" alt="image-10.15"></p>
 <ul>
 <li>G1:只要有可能就使用标准I&#x2F;O。对磁盘和终端设备I&#x2F;O来说，标准I&#x2F;O函数是首选方法。</li>
 <li>G2:不要使用scanf或rio_readlined来读二进制文件，是来专门读文本文件的，因为二进制文件有很多0xa字节，然而这些字节与终止文本行无关。</li>
@@ -311,9 +311,9 @@
 <li>限制二：跟着输入函数之后的输出函数。如果中间没有插入对fseek、fsetpos或者rewind的调用，一个输出函数不能跟随在一个输入函数之后，除非该输入函数遇到来一个文件结束。</li>
 </ul>
 <p>这些限制带来一个问题，因为对套接字使用lseek函数的非法的。对流I&#x2F;O的第一个限制能够通过采用在每个输入操作前刷新缓冲区这样的规则来满足。然而，要满足第二个限制的唯一方法，是对同一个打开的到套接字描述符打开两个流，一个读，一个写。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.16.png" alt="image-10.16"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.16.png" alt="image-10.16"></p>
 <p>但是这种方法也有问题，因为它要求应用程序在两个流上都调用fclose，这样才能释放与每个流相关联的内存资源，避免内存泄漏：</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.17.png" alt="image-10.17"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.17.png" alt="image-10.17"></p>
 <p>这些操作中的每一个都试图关闭同一个底层的套接字描述符，所以第二个close操作就会失败。对顺序的程序来说，这不是问题，但是在一个线程化的程序中关闭一个已经关闭了的描述符会导致灾难。</p>
 
   </div>
@@ -381,7 +381,7 @@
     Copyright &copy;
     
     
-    2016-2025
+    2024-2025
     BoBoDai
   </div>
   <div class="footer-right">

@@ -13,44 +13,44 @@
 <meta property="og:site_name" content="Cactus Hole">
 <meta property="og:description" content="进程都是共享CPU以及主存资源的，如果一个程序没有空间可用时，会破坏别的进程的内存。 为了更有效的管理内存并少出错，提出了一种对主存的抽象概念，叫虚拟内存。 虚拟内存提供了三个重要的能力  它将主存看成是一个存储在磁盘上的地址空间的高速缓存，在主存中只保存活动区域，并根据需要在磁盘和主存之间来回传送数据，高效的使用了主存。 它为每个进程提供了一致的地址空间，从而简化了内存管理。 它保护了每个进程的">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.1.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.2.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.3.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.4.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.5.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.6.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.7.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.8.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.9.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.10.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.11.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.12.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.13.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.14.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.15.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.16.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.17.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.18.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.19.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.20.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.21.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.22.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.23.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.24.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.25.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.26.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.27.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.28.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.29.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.30.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.31.png">
-<meta property="og:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.32.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.1.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.2.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.3.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.4.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.5.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.6.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.7.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.8.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.9.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.10.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.11.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.12.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.13.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.14.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.15.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.16.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.17.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.18.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.19.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.20.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.21.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.22.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.23.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.24.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.25.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.26.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.27.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.28.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.29.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.30.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.31.png">
+<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.32.png">
 <meta property="article:published_time" content="2025-01-10T01:33:30.000Z">
 <meta property="article:modified_time" content="2025-02-17T09:06:40.562Z">
 <meta property="article:author" content="BoBoDai">
 <meta property="article:tag" content="计算机系统">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.1.png">
+<meta name="twitter:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.1.png">
     
     
       
@@ -218,10 +218,10 @@
 <h2 id="9-1-物理和虚拟寻址"><a href="#9-1-物理和虚拟寻址" class="headerlink" title="9.1 物理和虚拟寻址"></a>9.1 物理和虚拟寻址</h2><p>主存被组织成一个由M个连续的字节大小的单元组成的数组。</p>
 <p>每字节都有一个唯一的<strong>物理地址</strong>。</p>
 <p>第一个字节的地址为0，下一个为1，再下一个为2，CPU访问内存最自然的方式就是使用物理地址，这种方式称为<strong>物理寻址</strong>。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.1.png" alt="image-9.1"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.1.png" alt="image-9.1"></p>
 <p>上图读取物理地址4处开始的4字节字。当CPU执行这条加载指令时，会生成一个有效的物理地址，通过内存总线，传递给主存。主存从物理地址取出四字节字，返回给cpu放到一个寄存器里。</p>
 <p>早期PC使用物理寻址，现代计算机使用虚拟寻址。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.2.png" alt="image-9.2"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.2.png" alt="image-9.2"></p>
 <p>CPU通过虚拟地址（VA）来访问主存，虚拟地址在被送到内存之前先转换成适当的物理地址。将虚拟地址转为物理地址的行为叫做地址翻译。CPU上的内存管理单元（Memory Management Unit）为专用硬件，利用存放在主存中的地址表来动态翻译虚拟地址。</p>
 <h2 id="9-2-地址空间"><a href="#9-2-地址空间" class="headerlink" title="9.2 地址空间"></a>9.2 地址空间</h2><p>地址空间是一个非负整数地址的有序集合。</p>
 <p>如果地址空间中的整数是连续的，那么我们说是一个线性地址空间。</p>
@@ -247,7 +247,7 @@
 <li>缓存的：当前已缓存在物理内存中的已分配页。</li>
 <li>未缓存的：未缓存在物理内存中的已分配页。</li>
 </ul>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.3.png" alt="image-9.3"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.3.png" alt="image-9.3"></p>
 <p>上图是一个有8个虚拟页的小虚拟内存，虚拟页0和3还没有分配，所以在磁盘上还不存在。虚拟页1、4、6被缓存在物理内存中。页2、5、7已经被分配；但是并未缓存在主存中。</p>
 <h3 id="9-3-1-DRAM缓存的组织结构"><a href="#9-3-1-DRAM缓存的组织结构" class="headerlink" title="9.3.1 DRAM缓存的组织结构"></a>9.3.1 DRAM缓存的组织结构</h3><p>SRAM缓存表示位于CPU和主存之间的L1、L2和L3高速缓存。</p>
 <p>DRAM缓存表示虚拟内存系统的缓存，它在主存中缓存虚拟页。</p>
@@ -260,17 +260,17 @@
 <h3 id="9-3-2-页表"><a href="#9-3-2-页表" class="headerlink" title="9.3.2 页表"></a>9.3.2 页表</h3><p>虚拟内存系统必须有种方法来判定一个虚拟页是否缓存在DRAM中的某个地方。如果是，系统还需要确定这个虚拟内存存放在哪个物理页中。如果不命中，需要判断虚拟页在磁盘的哪个位置，在物理内存中选择一个牺牲页，并将虚拟页从磁盘复制到DRAM中，替换掉牺牲页。</p>
 <p>这些功能通过软硬件结合实现，包括操作系统软件、MMU中的地址翻译硬件和一个存放在物理内存中叫页表的数据结构，页表将虚拟内存页映射到物理页。</p>
 <p>每次地址翻译硬件将一个虚拟地址转换为物理地址时，都会读取页表。操作系统负责维护页表的内容，以及在磁盘与DRAM之间来回传送页。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.4.png" alt="image-9.4"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.4.png" alt="image-9.4"></p>
 <p>页表就是一个页表条目（Page Table Entry）的数组。虚拟地址空间中每个页在页表中一个固定偏移量处都有一个PTE。</p>
 <p>假设每个PTE是由一个有效位和一个n位地址字段组成的。有效位表明该虚拟页当前是否被缓存在DRAM中。如果设置的有效位，那么地址字段就表示DRAM中对应的物理页的起始位置，物理页中缓存了该虚拟页。如果没有有效位，那么一个空地址表示这个虚拟页还未被分配。否则这个地址应该指向该虚拟页在磁盘上的起始位置。</p>
-<h3 id="9-3-3-页命中"><a href="#9-3-3-页命中" class="headerlink" title="9.3.3 页命中"></a>9.3.3 页命中</h3><p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.5.png" alt="image-9.5"></p>
+<h3 id="9-3-3-页命中"><a href="#9-3-3-页命中" class="headerlink" title="9.3.3 页命中"></a>9.3.3 页命中</h3><p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.5.png" alt="image-9.5"></p>
 <p>当CPU想要读包含在VP2中的虚拟内存的一个字时。</p>
 <p>VP2被缓存在DRAM中。地址翻译硬件将虚拟地址作为索引来定位PTE2，并从内存中读取它。</p>
 <p>因为设置了有效位，地址翻译硬件就知道VP2已经缓存在内存中了。所以它使用PTE中的物理内存地址，得到这个字的物理地址。</p>
 <h3 id="9-3-4-缺页"><a href="#9-3-4-缺页" class="headerlink" title="9.3.4 缺页"></a>9.3.4 缺页</h3><p>DRAM缓存不命中为缺页。</p>
 <p>CPU引用了VP3中的一个字，VP3并未缓存在DRAM中。地址翻译硬件从内存中读取PTE3，从有效位判断VP3未被缓存，并触发一个<strong>缺页异常</strong>。</p>
 <p>缺页异常调用内核中的缺页异常处理程序，该程序会选择一个牺牲页，如放在pp3中的vp4，如果vp4已经被修改了，内核就将它复制回磁盘（回写）。无论怎样都会修改VP4的页表条目。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.6.png" alt="image-9.6"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.6.png" alt="image-9.6"></p>
 <p>接下来内核从磁盘中复制VP3到内存中的PP3，更新PTE3，随后返回。当异常处理程序返回时会重新启动导致缺页的指令，该指令回把导致缺页的地址重新发送到地址翻译软件，现在VP3已经在主存中了，所以页面能正常由地址翻译正常处理了。</p>
 <p>在虚拟内存的习惯说法中，快被称为页。在磁盘和内存之间传送页的活动叫做<code>交换</code>或者<code>页面调度</code>。页从磁盘换入DRAM和从DRAM中换出。</p>
 <p>当有不命中发生时才换入页面的策略叫做按需页面调度。</p>
@@ -285,7 +285,7 @@
 
 <h2 id="9-4-虚拟内存作为内存管理的工具"><a href="#9-4-虚拟内存作为内存管理的工具" class="headerlink" title="9.4 虚拟内存作为内存管理的工具"></a>9.4 虚拟内存作为内存管理的工具</h2><p>早期系统支持的是一个比物理内存更小的虚拟地址空间。然而虚拟地址还是一个有用的机制，其大大简化的内存管理，并提供了一种自然保护内存的方法。</p>
 <p>之前假设是一个单独的页表，将一个虚拟地址空间映射到物理地址空间。实际上，操作系统为每个进程提供了一个独立的页表，也就是一个独立的虚拟地址空间。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.7.png" alt="image-9.7"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.7.png" alt="image-9.7"></p>
 <p>多个虚拟页面可以映射到同一个共享物理页面上。</p>
 <p>VM简化了链接和加载、代码和数据共享，以及应用程序的内存分配。</p>
 <ul>
@@ -313,21 +313,21 @@
 </ul>
 <h2 id="9-5-虚拟内存作为内存保护的工具"><a href="#9-5-虚拟内存作为内存保护的工具" class="headerlink" title="9.5 虚拟内存作为内存保护的工具"></a>9.5 虚拟内存作为内存保护的工具</h2><p>计算机不应该允许一个用户进程修改它的只读代码段，也不应该允许它读或者修改任何内核中的代码和数据结构。不应该读其他进程的私有内存，而且不允许修改任何与其他进程共享的虚拟页面，除非所有共享者都显式的允许它这么做。</p>
 <p>独立的地址空间使得区分不同进程的私有内存变得容易。但是地址翻译机制可以用自然的方式扩展到提供更好的访问控制。因为每次CPU生成一个地址时，地址翻译硬件都会读一个PTE，所以通过在PTE上添加一些额外的许可位来控制对一个虚拟页面内容的访问十分简单。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.8.png" alt="image-9.8"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.8.png" alt="image-9.8"></p>
 <p>每个PTE中已经添加了三个许可位。SUP位表示进程是否必须运行在内核模式下才能访问该页。</p>
 <p>运行在内核模式下可以反问任何页面，但是运行在用户模式的进程只允许访问那些SUP为0的页面。READ位和WRITE位控制对页面的读和写访问。例如进程i运行在用户模式下，那么它有读VP0和读写VP1的权限。然而，不允许它访问VP2。</p>
 <p>如果一个指令违反了这些许可条件，那么CPU就触发一个一般保护故障，将控制传递给一个内核中的异常处理程序。Linux shell一般将这种异常报告为，段错误。</p>
-<h2 id="9-6-地址翻译"><a href="#9-6-地址翻译" class="headerlink" title="9.6 地址翻译"></a>9.6 地址翻译</h2><p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.9.png" alt="image-9.9"></p>
+<h2 id="9-6-地址翻译"><a href="#9-6-地址翻译" class="headerlink" title="9.6 地址翻译"></a>9.6 地址翻译</h2><p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.9.png" alt="image-9.9"></p>
 <p>地址翻译是一个N元素的虚拟地址空间（VAS）中的元素和一个M元素的物理地址空间（PAS）中的元素之间的映射。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MAP:VAS -&gt; PAS U ⌀</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.10.png" alt="image-9.10"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.10.png" alt="image-9.10"></p>
 <p>上图表示了MMU如何利用页表来实现这种映射。CPU中的一个控制寄存器，页表基址寄存器（PTBR）指向当前页表。</p>
 <p>n位的虚拟地址包含两个部分：一个p位的虚拟页面偏移（VPO）和一个（n-p）位的虚拟页号（VPN）。</p>
 <p>MMU将利用VPN来选择适当的PTE。</p>
 <p>将页表条目中物理页号（PPN）和虚拟地址中的VPO串联起来，就得到相应的物理地址。</p>
 <p>物理和虚拟页面都是p字节的，所以物理页面偏移（VPO）和PPO是相同的。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.11.png" alt="image-9.11"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.11.png" alt="image-9.11"></p>
 <p>页面命中时，CPU硬件执行的步骤。</p>
 <ul>
 <li>第一步：处理器生成一个虚拟地址，并把它传送给MMU。</li>
@@ -336,7 +336,7 @@
 <li>第四步：MMU构造物理地址，并把它传送给高速缓存&#x2F;主存。</li>
 <li>第五步：高速缓存&#x2F;主存返回所请求的数据字给处理器。</li>
 </ul>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.12.png" alt="image-9.12"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.12.png" alt="image-9.12"></p>
 <p>页面命中完全是由硬件来处理的，与之不同的是，处理缺页要求硬件和操作系统内核协作完成。</p>
 <ul>
 <li>第一步到第三步与命中完全相同。</li>
@@ -347,13 +347,13 @@
 </ul>
 <h3 id="9-6-1-结合高速缓存和虚拟缓存"><a href="#9-6-1-结合高速缓存和虚拟缓存" class="headerlink" title="9.6.1 结合高速缓存和虚拟缓存"></a>9.6.1 结合高速缓存和虚拟缓存</h3><p>在任何使用虚拟内存又实用SRAM高速缓存的系统中，都有应该使用虚拟地址还是使用物理地址来访问SRAM高数缓存的问题。</p>
 <p>大多数系统是物理寻址的。使用物理寻址，多个进程很容易同时在高速缓存中有存储块和共享来自相同虚拟页面的块。而且，改善缓存无需处理保护问题，因为访问权限的检查是地址翻译过程的一部分。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.13.png" alt="image-9.13"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.13.png" alt="image-9.13"></p>
 <p>将VM与物理寻址的高速缓存结合起来：VA：虚拟地址。PTEA：页表条目地址。PTE：页表条目。PA：物理地址</p>
 <h3 id="9-6-2-利用TLB加速地址翻译"><a href="#9-6-2-利用TLB加速地址翻译" class="headerlink" title="9.6.2 利用TLB加速地址翻译"></a>9.6.2 利用TLB加速地址翻译</h3><p>CPU产生一个虚拟地址，MMU就必须查阅一个PTE，以便将虚拟地址翻译为物理地址。在最糟糕的情况下，会要求从内存多取一次数据，代价是几十到几百个周期。如果PTE碰巧缓存在L1中，那么开销就下降到1个或2个周期。然而，许多系统都试图消除即使是这样的开销，他们在MMU中包括来一个关于PTE的小缓存，称为翻译后备缓冲器（TLB）。</p>
 <p>TLB是一个小的虚拟寻址的缓存，其中每一行都保存着一个由单个PTE组成的块。TLB通常有高度的相联度。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.14.png" alt="image-9.14"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.14.png" alt="image-9.14"></p>
 <p>用于组选择和行匹配度索引和标记字段是从虚拟地址中的虚拟页号中提取出来的。如果TLB有T&#x3D;2^t个组，那么TLB索引是由VPN的t个最低位组成的，而TLB标记（TLBT）是由VPN中剩余的位组成的。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.15.png" alt="image-9.15"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.15.png" alt="image-9.15"></p>
 <p>当TLB命中时（通常情况）所包括的步骤。这里的关键是，所有的地址翻译步骤都是在芯片上的MMU中执行的，因此非常的块。</p>
 <ul>
 <li><p>第一步：CPU产生一个虚拟地址VA</p>
@@ -370,7 +370,7 @@
 <p>压缩页表的常用方法是使用层次结构的页表。</p>
 <p>假设32位虚拟地址空间被分为4KB的页，而每个页表条目都是4字节。</p>
 <p>假设在这样时刻，虚拟地址空间有如下形式：内存的前2K页面分配给了代码和数据，接下来的6K个页面还未分配，再接下来的1023个页面也未被分配，接下来的1个页面分配给了用户栈。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.16.png" alt="image-9.16"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.16.png" alt="image-9.16"></p>
 <p>为虚拟地址空间构造的两级的页表层次结构。</p>
 <p>一级页表中的每个PTE负责映射虚拟地址空间中一个4MB的片，这里每一个片都是由1024个连续的页面组成的。比如，PTE0 映射第一片，PTE1 映射接下来的一片。</p>
 <p>假设地址空间是4GB，1024个PTE一级足够覆盖整个空间了。</p>
@@ -385,7 +385,7 @@
 <li>第二，只有一级页表才需要总是在主存中；</li>
 </ul>
 <p>虚拟内存系统可以在需要时创建、页面调入和调出二级页表，这就减少了主存的压力，只有最经常使用的二级页表才需要缓存在主存中。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.17.png" alt="image-9.17"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.17.png" alt="image-9.17"></p>
 <p>上图使用k级页表层次结构的地址翻译。虚拟地址被划分成为k个VPN和一个VPO。每个VPN i 都是一个到第i 级页表的索引，其中 1&lt;&#x3D;i&lt;&#x3D;k。</p>
 <p>第j级页表中的每个PTE， 1&lt;&#x3D;j&lt;&#x3D;k-1，都指向第 j+1级的某个页表的基址。第k级页表中的每个PTE包含某个物理页面的PPN，或者一个磁盘块的地址。</p>
 <p>为了构造物理地址，在能够确定PPN之前，MMU必须访问k个PTE。对于只有一级的页表结构，PPO和VPO是相同的。</p>
@@ -400,17 +400,17 @@
 <li>TLB是四路相联的，总共有16个条目</li>
 <li>系统是物理寻址、直接映射的，行大小为4字节，而总共有16个组。</li>
 </ul>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.18.png" alt="image-9.18"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.18.png" alt="image-9.18"></p>
 <p>因为页大小是64字节的，所以虚拟地址和物理地址的低6位分别作为VPO和PPO。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.19.png" alt="image-9.19"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.19.png" alt="image-9.19"></p>
 <ul>
 <li><p>TLB</p>
 <p>TLB是利用VPN的位进行虚拟寻址的。因为TLB有四组，所以VPN的低2位就作为组索引TLBI。VPN中的高6位作为标记（TLBT），用了区别可能映射到同一个TLB组的不同的VPN。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.20.png" alt="image-9.20"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.20.png" alt="image-9.20"></p>
 </li>
 <li><p>页表</p>
 <p>这个页表是一个单级设计，一共有2^8&#x3D;256个页表条目（PTE）。然而，我们只对这些条目中的开头16个感兴趣。为了方便，我们用索引它的VPN来标识每个PTE；但这些VPN不是页表的一部分，也不存储在内存中。同时有效位为0的数据是没有意义的。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.21.png" alt="image-9.21"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.21.png" alt="image-9.21"></p>
 </li>
 <li><p>高速缓存</p>
 <p>直接映射就是通过物理地址中的字段来寻址的。因为每个块都是4字节，所以物理地址的低2位作为块偏移（CO）。因为有16组，所以接下来的四位就用来标识组索引（CI）。剩下的6位作为标记（CT）。</p>
@@ -418,22 +418,22 @@
 </ul>
 <p>当CPU执行读一条0x03d4处字节的加载指令时会发生什么。</p>
 <p>这是虚拟地址的各个位</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.22.png" alt="image-9.22"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.22.png" alt="image-9.22"></p>
 <p>开始时，MMU从虚拟地址中抽取出VPN（0x0f），并且检查TLB，看它是否因为前面某个内存引用缓存来PTE0x0f的一个副本。TLB从VPN中抽取出TLB索引（0x03）和TLB标记（0x03），组0x03的第二个条目中有效匹配，所以命中，然后将缓存的PPN（0x0D）返回给MMU。</p>
 <p>如果TLB不命中，那么MMU就需要从主存中取出相应的PTE。这样MMU就有了形成物理地址所需要的所有东西。通过来自PTE的PPN（0x0D）和来自虚拟地址的VPO（0x14）链接起来，这就形成来物理地址（0x354）。</p>
 <p>接下来，MMU发送物理地址给缓存，缓存从物理地址中抽取出缓存偏移CO（0x0）、缓存组索引CI（0x05）以及缓存标记CT（0x0D）。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.23.png" alt="image-9.23"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.23.png" alt="image-9.23"></p>
 <p>因为0x5中标记与CT相匹配，索引检测到一个命中，读出在偏移量CO处的数据字节（0x36），并将它返回给MMU，随后MMU将它传递回CPU。</p>
 <p>如果TLB不命中，那么MMU就必须从页表中的PTE中取出PPN。如果得到的PTE是无效的就会产生一个缺页，内核就要调入合适的页面，重新运行这条加载指令。如果PTE是有效的，但是所需要的内存块在缓存中不命中。</p>
 <h1 id="9-7-Linux虚拟内存系统"><a href="#9-7-Linux虚拟内存系统" class="headerlink" title="9.7 Linux虚拟内存系统"></a>9.7 Linux虚拟内存系统</h1><p>Linux为每一个进程维护了一个单独的虚拟地址空间，</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.24.png" alt="image-9.24"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.24.png" alt="image-9.24"></p>
 <p>内核虚拟内存包含内核中的代码和数据结构。内核虚拟内存的某些区域被映射到所有进程共享的物理界面。</p>
 <p>例如每个进程共享内核的代码和全局数据结构。Linux也将一组连续的虚拟页面（大小等于系统中DRAM的总量）映射到相应的一组连续的物理页面。</p>
 <p>这就为内核提供了一种便利的方法来访问物理内存中特定的位置，当它要访问页表，或者在设备上执行内存映射I&#x2F;O操作，而这些设备被映射到特定的物理内存位置时。</p>
 <p>内核虚拟内存的其他区域包含每个进程都不相同的数据。比如，页表、内核在进程的上下文中执行代码时使用的栈，以及记录虚拟地址空间当前组织的各种数据结构。</p>
 <h3 id="9-7-1-Linux虚拟内存区域"><a href="#9-7-1-Linux虚拟内存区域" class="headerlink" title="9.7.1 Linux虚拟内存区域"></a>9.7.1 Linux虚拟内存区域</h3><p>Linux将虚拟内存组织成一些区域（段）的集合。一个区域就是已经存在着的虚拟内存连续片，这些页以某种方式相关联。</p>
 <p>代码段、数据段、堆、共享库段，以及用户栈都是不同的区域。每个存在的虚拟页都保存在某个区域中，不属于某个区域的虚拟页是不存在的，并且不能被进程引用。区域允许虚拟地址空间有间隙。内核不用记录那些不存在的虚拟页，而这样的页不用占用内存，或者是其他任何资源。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.25.png" alt="image-9.25"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.25.png" alt="image-9.25"></p>
 <p>上图为一个进程中虚拟内存区域的内核数据结构。内核为系统中的每个进程维护一个单独的任务结构。（task_struct）任务结构中的元素包含或者指向内核运行该进程所需要的所有信息（PID、指向用户栈的指针、可执行目标文件的名字、程序计数器）。</p>
 <p>任务结构中的一个条目指向mm_struct，它描述来虚拟内存的当前状态。我们感兴趣的两个字段是pgd和mmap，其中pgd指向第一级页表（页全局目录）的基址，而mmap指向一个vm_area_structs（区域结构）的链表，其中每个vm_area_structs都描述来当前虚拟地址空间的一个区域。当内核运行这个进程时，就将pgd存放在CR3控制寄存器中。</p>
 <p>一个具体区域结构包含下面的字段：</p>
@@ -444,7 +444,7 @@
 <li>vm_flags：描述这个区域内的页面是与其他进程共享的，还是这个进程私有的</li>
 <li>vm_next：指向链表中下一个区域结构</li>
 </ul>
-<h3 id="9-7-2-Linux缺页异常处理"><a href="#9-7-2-Linux缺页异常处理" class="headerlink" title="9.7.2 Linux缺页异常处理"></a>9.7.2 Linux缺页异常处理</h3><p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.26.png" alt="image-9.26"></p>
+<h3 id="9-7-2-Linux缺页异常处理"><a href="#9-7-2-Linux缺页异常处理" class="headerlink" title="9.7.2 Linux缺页异常处理"></a>9.7.2 Linux缺页异常处理</h3><p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.26.png" alt="image-9.26"></p>
 <p>当MMU试图翻译某个虚拟地址A时，触发来一个缺页。这个异常导致控制转移到内核的缺页处理程序，处理程序随后就执行下面的步骤：</p>
 <ul>
 <li><p>1 虚拟地址A是合法的吗？A在某个区域结构定义的区域内吗？缺页处理程序搜索区域结构的链表，把A和每个区域结构中的vm_start和vm_end做比较。如果这个指令不合法，那么缺页处理程序就触发一个段错误，从而终止这个进程（标识为1）。</p>
@@ -471,10 +471,10 @@
 <h3 id="9-8-1-再看共享对象"><a href="#9-8-1-再看共享对象" class="headerlink" title="9.8.1 再看共享对象"></a>9.8.1 再看共享对象</h3><p>如果讯内存系统可以集成到传统的文件系统中，那么就能提供一种简单而高效的把程序和数据加载到内存中的方法。</p>
 <p>一个对象可以被映射到虚拟内存的一个区域，要么作为共享对象，要么作为私有对象。如果一个进程将一个共享对象映射到它的虚拟地址空间的一个区域内，那么这个进程对这个区域的任何写操作，对于那些把这个共享对象映射到他们虚拟内存的其他进程而言，也是可见的。而且，这些变化也会反映在磁盘上的原始对象中。</p>
 <p>另一方面，对于一个映射到私有对象的区域做的改变，对于其他进程来说是不可见的，并且进程对这个区域所做的任何写操作都不会反映在磁盘上的对象中。一个映射到共享对象的虚拟内存区域叫做共享区域。类似的，也有私有区域。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.27.png" alt="image-9.27"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.27.png" alt="image-9.27"></p>
 <p>假设进程1将一个共享对象映射到它的虚拟内存的一个区域中。现在假设进程2将同一个共享对象映射到它的地址空间，因为每个对象有唯一文件名，内核可以迅速地判定进程1已经映射了这个对象，而且可以使进程2中的页表条目指向相应的物理页面。关键是即使对象被映射到啦多个共享区域，物理内存中也只需要存放共享对象的一个副本。</p>
 <p>私有对象使用写时复制的技术被映射到虚拟内存中。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.28.png" alt="image-9.28"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.28.png" alt="image-9.28"></p>
 <p>私有对象开始生命周期的方式与共享对象基本一样，在物理内存中只保存有私有对象的一份副本。</p>
 <p>上图两个进程将一个私有对象映射到它们虚拟内存的不同区域，但共享同一个物理副本。对于每个映射啦私有对象的进程，相应私有区域的页表条目都被标记为只读，并且区域结构被标记为私有的写时复制。只要没有进程试图写他自己的私有区域，他们就可以继续共享物理内存中对象的一个单独副本。然而，只要有一个进程试图写私有区域的某个页面，那么这个写操作就会触发一个保护故障。</p>
 <p>当故障处理程序注意到保护异常是由于进程试图写私有的写时复制区域中的一个页面而引起的，它就会在物理内存中创建这个页面的一个新副本，更新页表条目指向这个新的副本，然后恢复这个页面的可写权限。</p>
@@ -486,7 +486,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execve(&quot;a.out&quot;,NULL,NULL)</span><br></pre></td></tr></table></figure>
 
 <p>execve函数在当前进程中加载并运行包含在a.out中的程序，用a.out替代了当前程序，加载并运行一共有一下几个步骤。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.29.png" alt="image-9.29"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.29.png" alt="image-9.29"></p>
 <ul>
 <li>删除已存在的用户区域。删除当前进程虚拟地址的用户部分中的已存在的区域结构。</li>
 <li>映射私有区域。为新程序的代码、数据、bss和栈区域创建新的区域结构。所有这些新的区域都是私有的、写时复制的。代码和数据区域被映射为a.out文件中的.text和.data区。bss区域是请求二进制0的，映射到匿名文件，其大小包含在a.out中。栈和堆区域也是请求二进制0的，初始长度为0。</li>
@@ -494,9 +494,9 @@
 <li>设置程序计数器（PC）。execve最后会设置当前进程上下文中的程序计数器，使之指向代码区域的入口点。下一次调度这个进程时，它将从这个入口点开始执行。Linux会根据需要换入代码和数据页面。</li>
 </ul>
 <h3 id="9-8-4-使用mmap函数的用户级内存映射"><a href="#9-8-4-使用mmap函数的用户级内存映射" class="headerlink" title="9.8.4 使用mmap函数的用户级内存映射"></a>9.8.4 使用mmap函数的用户级内存映射</h3><p>mmap被用来创建新的虚拟内存区域，并将对象映射到这些区域中。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.30.png" alt="image-9.30"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.30.png" alt="image-9.30"></p>
 <p>mmap函数要求内核创建一个新的虚拟内存区域，最好从start开始的一个区域，并将文件描述符fd指定的对象的一个连续的片映射到这个新的区域。连续的对象片大小为length字节，从文件开始处偏移量为offset字节的地方开始。start地址仅仅是一个暗示，通常被定义为NULL。我们总是假设起始地址为NULL。</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.31.png" alt="image-9.31"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.31.png" alt="image-9.31"></p>
 <p>prot包含描述新映射的虚拟内存区域的访问权限位（vm_prot位）</p>
 <ul>
 <li>PROT_EXEC：这个区域内的页面由可以被CPU执行的指令组成。</li>
@@ -510,7 +510,7 @@
 
 <p>如果嗲用成功bufp包含新的区域地址。</p>
 <p>munmap函数删除虚拟内存的区域：</p>
-<p><img src="/2024/12/29/hello-world/%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.32.png" alt="image-9.32"></p>
+<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.32.png" alt="image-9.32"></p>
 <p>munmap删除函数从start开始，到接下来length字节组成的区域，如果再引用已删除的区域会导致段错误。</p>
 <h2 id="9-9-动态内存分配"><a href="#9-9-动态内存分配" class="headerlink" title="9.9 动态内存分配"></a>9.9 动态内存分配</h2><h2 id="9-10-垃圾收集"><a href="#9-10-垃圾收集" class="headerlink" title="9.10 垃圾收集"></a>9.10 垃圾收集</h2><p>如果程序猿分配了一块内存空间，但忘记释放这个块。它就是内存泄漏。</p>
 <p>垃圾收集器定期识别垃圾块，并相应的调用free，将这些块放回到空闲链表中。</p>
@@ -585,7 +585,7 @@
     Copyright &copy;
     
     
-    2016-2025
+    2024-2025
     BoBoDai
   </div>
   <div class="footer-right">

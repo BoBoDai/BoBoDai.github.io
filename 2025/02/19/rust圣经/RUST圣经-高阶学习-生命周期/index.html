@@ -14,7 +14,7 @@
 <meta property="og:description" content="1 Rust 的基本借用规则对于正常的代码实现来说，Rust中要么一个可变借用，要么多个不可变借用 我们不能对一个不可变的值进行可变借用，这会破坏 Rust 的安全性保证，相反，你可以对一个可变值进行不可变借用。原因是：当值不可变时，可能会有多个不可变的引用指向它，此时若将其中一个修改为可变的，会造成可变引用与不可变引用共存的情况；而当值可变时，最多只会有一个可变引用指向它，将其修改为不可变，那么">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-02-19T07:46:10.000Z">
-<meta property="article:modified_time" content="2025-02-27T06:30:20.273Z">
+<meta property="article:modified_time" content="2025-03-03T01:54:22.724Z">
 <meta property="article:author" content="BoBoDai">
 <meta property="article:tag" content="rust圣经">
 <meta name="twitter:card" content="summary">
@@ -115,7 +115,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Rust-%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%80%9F%E7%94%A8%E8%A7%84%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">1 Rust 的基本借用规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Rust-%E4%B8%AD%E7%9A%84-static-%E5%92%8C-const"><span class="toc-number">2.</span> <span class="toc-text">2 Rust 中的 static 和 const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E4%B8%AD-Copy-%E5%92%8C-Clone-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.</span> <span class="toc-text">Rust 中 Copy 和 Clone 的区别</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Rust-%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%80%9F%E7%94%A8%E8%A7%84%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">1 Rust 的基本借用规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Rust-%E4%B8%AD%E7%9A%84-static-%E5%92%8C-const"><span class="toc-number">2.</span> <span class="toc-text">2 Rust 中的 static 和 const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E4%B8%AD-Copy-%E5%92%8C-Clone-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.</span> <span class="toc-text">Rust 中 Copy 和 Clone 的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%80%99static-%E5%92%8C-T-%E2%80%98static"><span class="toc-number">4.</span> <span class="toc-text">&amp;’static 和 T: ‘static</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%99static"><span class="toc-number">4.1.</span> <span class="toc-text">&amp;’static</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T-%E2%80%98static"><span class="toc-number">4.2.</span> <span class="toc-text">T: ‘static</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -421,6 +421,22 @@
 <li>如果你的类型可以按位复制，并且不涉及堆内存分配（例如基础数据类型，如 i32、f64 等），那么可以实现 Copy，Rust 会自动进行按位复制。</li>
 <li>如果你的类型涉及堆内存或更复杂的数据结构（例如 String、Vec 等），你需要显式调用 .clone()，这时候它会通过深拷贝来创建副本，并且会有更高的性能开销。</li>
 </ul>
+<h2 id="’static-和-T-‘static"><a href="#’static-和-T-‘static" class="headerlink" title="&amp;’static 和 T: ‘static"></a>&amp;’static 和 T: ‘static</h2><p>‘static 在 Rust 中是相当常见的，例如字符串字面值就具有 ‘static 生命周期:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fn main() &#123;</span><br><span class="line">  let mark_twain: &amp;str = &quot;Samuel Clemens&quot;;</span><br><span class="line">  print_author(mark_twain);</span><br><span class="line">&#125;</span><br><span class="line">fn print_author(author: &amp;&#x27;static str) &#123;</span><br><span class="line">  println!(&quot;&#123;&#125;&quot;, author);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>除此之外，特征对象的生命周期也是 ‘static</p>
+<p>除了 &amp;’static 的用法外，我们在另外一种场景中也可以见到 ‘static 的使用:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">use std::fmt::Display;</span><br><span class="line">fn main() &#123;</span><br><span class="line">    let mark_twain = &quot;Samuel Clemens&quot;;</span><br><span class="line">    print(&amp;mark_twain);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn print&lt;T: Display + &#x27;static&gt;(message: &amp;T) &#123;</span><br><span class="line">    println!(&quot;&#123;&#125;&quot;, message);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里，很明显 ‘static 是作为生命周期约束来使用了。 那么问题来了， &amp;’static 和 T: ‘static 的用法到底有何区别？</p>
+<h3 id="’static"><a href="#’static" class="headerlink" title="&amp;’static"></a>&amp;’static</h3><p>&amp;’static 对于生命周期有着非常强的要求：一个引用必须要活得跟剩下的程序一样久，才能被标注为 &amp;’static。</p>
+<p>对于字符串字面量来说，它直接被打包到二进制文件中，永远不会被 drop，因此它能跟程序活得一样久，自然它的生命周期是 ‘static。</p>
+<p>但是，&amp;’static 生命周期针对的仅仅是引用，而不是持有该引用的变量，对于变量来说，还是要遵循相应的作用域规则 :</p>
+<p>&amp;’static 的引用确实可以和程序活得一样久，因为我们通过 get_str_at_location 函数直接取到了对应的字符串。持有 &amp;’static 引用的变量，它的生命周期受到作用域的限制，大家务必不要搞混了</p>
+<h3 id="T-‘static"><a href="#T-‘static" class="headerlink" title="T: ‘static"></a>T: ‘static</h3><p>在以下两种情况下，T: ‘static 与 &amp;’static 有相同的约束：T 必须活得和程序一样久。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">use std::fmt::Debug;</span><br><span class="line"></span><br><span class="line">fn print_it&lt;T: Debug + &#x27;static&gt;( input: T) &#123;</span><br><span class="line">    println!( &quot;&#x27;static value passed in is: &#123;:?&#125;&quot;, input );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn print_it1( input: impl Debug + &#x27;static ) &#123;</span><br><span class="line">    println!( &quot;&#x27;static value passed in is: &#123;:?&#125;&quot;, input );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    let i = 5;</span><br><span class="line"></span><br><span class="line">    print_it(&amp;i);</span><br><span class="line">    print_it1(&amp;i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上代码会报错，原因很简单: &amp;i 的生命周期无法满足 ‘static 的约束，如果大家将 i 修改为常量，那自然一切 OK。</p>
 
   </div>
 </article>
@@ -448,7 +464,7 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Rust-%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%80%9F%E7%94%A8%E8%A7%84%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">1 Rust 的基本借用规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Rust-%E4%B8%AD%E7%9A%84-static-%E5%92%8C-const"><span class="toc-number">2.</span> <span class="toc-text">2 Rust 中的 static 和 const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E4%B8%AD-Copy-%E5%92%8C-Clone-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.</span> <span class="toc-text">Rust 中 Copy 和 Clone 的区别</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Rust-%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%80%9F%E7%94%A8%E8%A7%84%E5%88%99"><span class="toc-number">1.</span> <span class="toc-text">1 Rust 的基本借用规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Rust-%E4%B8%AD%E7%9A%84-static-%E5%92%8C-const"><span class="toc-number">2.</span> <span class="toc-text">2 Rust 中的 static 和 const</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Rust-%E4%B8%AD-Copy-%E5%92%8C-Clone-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.</span> <span class="toc-text">Rust 中 Copy 和 Clone 的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%80%99static-%E5%92%8C-T-%E2%80%98static"><span class="toc-number">4.</span> <span class="toc-text">&amp;’static 和 T: ‘static</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%99static"><span class="toc-number">4.1.</span> <span class="toc-text">&amp;’static</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T-%E2%80%98static"><span class="toc-number">4.2.</span> <span class="toc-text">T: ‘static</span></a></li></ol></li></ol>
       </div>
     
 

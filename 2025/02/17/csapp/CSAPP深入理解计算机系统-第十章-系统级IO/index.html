@@ -1,11 +1,24 @@
+
+
 <!DOCTYPE html>
-<html lang=en>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
 <head>
-    <!-- so meta -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="BoBoDai">
+  <meta name="keywords" content="">
+  
     <meta name="description" content="输入&#x2F;输出（I&#x2F;O）是在主存和外部设备之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。 10.1 Unix I&#x2F;O一个Linux文件就是一个m字节的序列 1B0,B1,...,Bk,...,Bm-1  所有I&#x2F;O设备（网络、磁盘和终端）都被模型化为文件，所有的输入输出都被当作对应文件的读和">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSAPP深入理解计算机系统-第十章-系统级IO">
@@ -34,151 +47,258 @@
 <meta property="article:modified_time" content="2025-02-17T09:19:34.245Z">
 <meta property="article:author" content="BoBoDai">
 <meta property="article:tag" content="计算机系统">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.1.png">
-    
-    
-      
-        
-          <link rel="shortcut icon" href="/images/favicon.ico">
-        
-      
-      
-        
-          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
-        
-      
-      
-        
-          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        
-      
-    
-    <!-- title -->
-    <title>CSAPP深入理解计算机系统-第十章-系统级IO</title>
-    <!-- async scripts -->
-    <!-- Google Analytics -->
+  
+  
+  
+  <title>CSAPP深入理解计算机系统-第十章-系统级IO - Cactus Hole</title>
 
-
-    <!-- Umami Analytics -->
-
-
-    <!-- styles -->
-    
-<link rel="stylesheet" href="/css/style.css">
-
-    <!-- persian styles -->
-    
-    <!-- rss -->
-    
-    
-	<!-- mathjax -->
-	
-<meta name="generator" content="Hexo 7.3.0"></head>
-
-<body class="max-width mx-auto px3 ltr">
-    
-      <div id="header-post">
-  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
-  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
-  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
-  <span id="menu">
-    <span id="nav">
-      <ul>
-        <!--
-       --><li><a href="/">Home</a></li><!--
-     --><!--
-       --><li><a href="/about/">About</a></li><!--
-     --><!--
-       --><li><a href="/archives/">Writing</a></li><!--
-     --><!--
-       --><li><a target="_blank" rel="noopener" href="http://github.com/BoBoDai">Projects</a></li><!--
-     -->
-      </ul>
-    </span>
-    <br/>
-    <span id="actions">
-      <ul>
-        
-        <li><a class="icon" aria-label="Previous post" href="/2025/02/19/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
-        
-        
-        <li><a class="icon" aria-label="Next post" href="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
-        
-        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
-        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
-      </ul>
-      <span id="i-prev" class="info" style="display:none;">Previous post</span>
-      <span id="i-next" class="info" style="display:none;">Next post</span>
-      <span id="i-top" class="info" style="display:none;">Back to top</span>
-      <span id="i-share" class="info" style="display:none;">Share post</span>
-    </span>
-    <br/>
-    <div id="share" style="display: none">
-      <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&text=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&title=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&is_video=false&description=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=CSAPP深入理解计算机系统-第十章-系统级IO&body=Check out this article: http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&title=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&title=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&title=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&title=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&name=CSAPP深入理解计算机系统-第十章-系统级IO&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&t=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
-</ul>
-
-    </div>
-    
-    
-      <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-Unix-I-O"><span class="toc-number">1.</span> <span class="toc-text">10.1 Unix I&#x2F;O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-%E6%96%87%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">10.2 文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-3-%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">10.3 打开和关闭文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-4-%E8%AF%BB%E5%92%8C%E5%86%99%E6%96%87%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">10.4 读和写文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-5-%E7%94%A8RIO%E5%8C%85%E5%81%A5%E5%A3%AE%E7%9A%84%E8%AF%BB%E5%86%99"><span class="toc-number">5.</span> <span class="toc-text">10.5 用RIO包健壮的读写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10-5-1-RIO%E7%9A%84%E6%97%A0%E7%BC%93%E5%86%B2%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%87%BD%E6%95%B0"><span class="toc-number">5.1.</span> <span class="toc-text">10.5.1 RIO的无缓冲的输入输出函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-5-2-RIO%E7%9A%84%E5%B8%A6%E7%BC%93%E5%86%B2%E7%9A%84%E8%BE%93%E5%85%A5%E5%87%BD%E6%95%B0"><span class="toc-number">5.2.</span> <span class="toc-text">10.5.2 RIO的带缓冲的输入函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-6-%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%85%83%E6%95%B0%E6%8D%AE"><span class="toc-number">6.</span> <span class="toc-text">10.6 读取文件元数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-7-%E8%AF%BB%E5%8F%96%E7%9B%AE%E5%BD%95%E5%86%85%E5%AE%B9"><span class="toc-number">7.</span> <span class="toc-text">10.7 读取目录内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-8%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6"><span class="toc-number">8.</span> <span class="toc-text">10.8共享文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-9-I-O%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">9.</span> <span class="toc-text">10.9 I&#x2F;O重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-10-%E6%A0%87%E5%87%86-I-O"><span class="toc-number">10.</span> <span class="toc-text">10.10 标准 I&#x2F;O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-11-%E7%BB%BC%E5%90%88%EF%BC%9A%E8%AF%A5%E4%BD%BF%E7%94%A8%E5%93%AA%E4%BA%9BI-O%E5%87%BD%E6%95%B0"><span class="toc-number">11.</span> <span class="toc-text">10.11 综合：该使用哪些I&#x2F;O函数</span></a></li></ol>
-      </div>
-    
-  </span>
-</div>
-
-    
-    <div class="content index py4 ">
-        
-        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
-  <header>
-    
-    <h1 class="posttitle p-name" itemprop="name headline">
-        CSAPP深入理解计算机系统-第十章-系统级IO
-    </h1>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
 
-    <div class="meta">
-      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
-        <span class="p-name" itemprop="name">BoBoDai</span>
-      </span>
-      
-    <div class="postdate">
-      
-        <time datetime="2025-02-17T09:13:16.000Z" class="dt-published" itemprop="datePublished">2025-02-17</time>
-        
-      
-    </div>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
-      
 
-      
-    <div class="article-tag">
-        <i class="fa-solid fa-tag"></i>
-        <a class="p-category" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" rel="tag">计算机系统</a>
-    </div>
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
 
 
-    </div>
-  </header>
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
-  <div class="content e-content" itemprop="articleBody">
-    <p>输入&#x2F;输出（I&#x2F;O）是在主存和外部设备之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。</p>
+
+
+  
+<link rel="stylesheet" href="/css/macpanel.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>BoBoBlog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CSAPP深入理解计算机系统-第十章-系统级IO"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-17 17:13" pubdate>
+          February 17, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CSAPP深入理解计算机系统-第十章-系统级IO</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>输入&#x2F;输出（I&#x2F;O）是在主存和外部设备之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。</p>
 <h2 id="10-1-Unix-I-O"><a href="#10-1-Unix-I-O" class="headerlink" title="10.1 Unix I&#x2F;O"></a>10.1 Unix I&#x2F;O</h2><p>一个Linux文件就是一个m字节的序列</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">B0,B1,...,Bk,...,Bm-1</span><br></pre></td></tr></table></figure>
 
@@ -207,7 +327,7 @@
 </li>
 </ul>
 <h2 id="10-3-打开和关闭文件"><a href="#10-3-打开和关闭文件" class="headerlink" title="10.3 打开和关闭文件"></a>10.3 打开和关闭文件</h2><p>进程通过调用open函数打开一个已经存在的文件或者创建一个新文件</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.1.png" alt="image-10.1"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.1.png" srcset="/img/loading.gif" lazyload alt="image-10.1"></p>
 <p>open函数将filename转换为一个文件描述符，并返回描述符数字。返回的描述符总是在进程中当前没有打开的最小描述符。flag参数指明来进程打算如何访问这个文件：</p>
 <ul>
 <li>O_RDONLY：只读</li>
@@ -227,16 +347,16 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fd = Open(&quot;foo.txt&quot;,O_WRDONLY|O_APPEND, 0)</span><br></pre></td></tr></table></figure>
 
 <p>mode参数指定来新文件的访问权限位。这些位的符号名字如图所示</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.2.png" alt="image-10.2"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.2.png" srcset="/img/loading.gif" lazyload alt="image-10.2"></p>
 <p>作为上下文的一部分，每个进程都有一个umask，它是通过调用umask函数来设置的。当进程通过某个mode参数的open函数调用来创建一个新文件时，文件的访问权限位被设置为mode &amp; ～umask。例如，假设我们给定下面的mode和umask默认值：</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.3.png" alt="image-10.3"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.3.png" srcset="/img/loading.gif" lazyload alt="image-10.3"></p>
 <p>接下来创建一个新文件，文件的拥有者有读写权限，而所有其他的用户都有读权限。</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.4.png" alt="image-10.4"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.4.png" srcset="/img/loading.gif" lazyload alt="image-10.4"></p>
 <p>最后进程通过调用close函数关闭一个打开的文件。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int close(int fd);</span><br></pre></td></tr></table></figure>
 
 <h2 id="10-4-读和写文件"><a href="#10-4-读和写文件" class="headerlink" title="10.4 读和写文件"></a>10.4 读和写文件</h2><p>应用程序通过分别调用read和write函数来执行输入输出</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.5.png" alt="image-10.5"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.5.png" srcset="/img/loading.gif" lazyload alt="image-10.5"></p>
 <p>read函数从当前文件位置复制最多n个字节到内存位置buf。</p>
 <p>write函数从内存位置buf复制最多n个字节到描述符fd当前文件位置。</p>
 <p>调用lseek函数，应用程序能够显示地修改当前文件的位置。</p>
@@ -252,21 +372,21 @@
 <li>带缓冲的输入函数。这些函数允许高校的从文件中读取文本行和二进制数据，这些文件内容缓冲在应用级缓冲区内，带缓冲的RIO输入函数是现场安全的。</li>
 </ul>
 <h3 id="10-5-1-RIO的无缓冲的输入输出函数"><a href="#10-5-1-RIO的无缓冲的输入输出函数" class="headerlink" title="10.5.1 RIO的无缓冲的输入输出函数"></a>10.5.1 RIO的无缓冲的输入输出函数</h3><p>通过调用rio_readn和rio_writen函数，应用程序可以在内存和文件之间直接传送数据。</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.6.png" alt="image-10.6"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.6.png" srcset="/img/loading.gif" lazyload alt="image-10.6"></p>
 <p>rio_readn函数从描述符fd的当前文件位置最多传送n个字节到内存位置usrbuf。</p>
 <p>类似的，rio_writen函数从位置usrbuf传送n个字节到描述符fd。rio_read函数在遇到EOF时只能返回一个不足值。rio_writen函数决不会返回不足值。对同一个描述符，可以任意交错地调用rio_readn和rio_writen。</p>
 <p>如果他俩被一个应用信号处理程序返回中断，那么每个函数都会手动的重启read或write。</p>
 <h3 id="10-5-2-RIO的带缓冲的输入函数"><a href="#10-5-2-RIO的带缓冲的输入函数" class="headerlink" title="10.5.2 RIO的带缓冲的输入函数"></a>10.5.2 RIO的带缓冲的输入函数</h3><p>要编写一个程序来计算文本文件中文本行的数量，如果一次一个字节的从文件传送到用户内存，读每一个字节都要求陷入内核。</p>
 <p>更好的办法是调用一个包装函数，它从缓冲区复制一个文本行，缓存区变空，会自动的调用read重新填满缓冲区。</p>
 <h2 id="10-6-读取文件元数据"><a href="#10-6-读取文件元数据" class="headerlink" title="10.6 读取文件元数据"></a>10.6 读取文件元数据</h2><p>应用程序通过调用stat和fstat函数，检索到关于文件的信息，也称文件的元数据。</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.7.png" alt="image-10.7"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.7.png" srcset="/img/loading.gif" lazyload alt="image-10.7"></p>
 <p>stat函数输入一个文件名，并写入一个stat数据结构。</p>
 <p>在Web服务器中，会需要stat数据结构中的st_mode和st_size成员。</p>
 <p>st_size成员包含来文件的字节数大小。st_mode成员则编码来文件访问许可位和文件类型。</p>
 <h2 id="10-7-读取目录内容"><a href="#10-7-读取目录内容" class="headerlink" title="10.7 读取目录内容"></a>10.7 读取目录内容</h2><p>应用程序可以用readdir系列函数来读取目录的内容。</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.8.png" alt="image-10.8"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.8.png" srcset="/img/loading.gif" lazyload alt="image-10.8"></p>
 <p>函数opendir以路径名为参数，返回指向目录流的指针。流是对条目有序列表的抽象，在这里是指目录项的列表。</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.9.png" alt="image-10.9"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.9.png" srcset="/img/loading.gif" lazyload alt="image-10.9"></p>
 <p>每次调用返回的都是指向流dirp中下一个目录项的指针，如果没有更多目录项则返回NULL，每个目录项都是一个结构。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct dirent &#123;</span><br><span class="line">	ino_t d_ino;     //inode number</span><br><span class="line">	char d_name[256] //Filename</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -277,11 +397,11 @@
 <li>文件表。打开文件的集合是由一张文件表来表示的，所有的进程共享这张表。每个文件表的表项组成包括当前的文件位置、引用计数，以及一个指向v-node表中对应表项的指针。关闭一个描述符会减少相应的文件表表项中的引用计数。内核不会删除这个文件表表项，直到引用计数为0。</li>
 <li>v-node表。同文件表一样，所有的进程共享这张v-node表。每个表项包含stat结构中的大多数信息，包括st_mode和st_size成员。</li>
 </ul>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.10.png" alt="image-10.10"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.10.png" srcset="/img/loading.gif" lazyload alt="image-10.10"></p>
 <p>其中描述符1和4通过不同的打开文件表表项来引用两个不同的文件。这种情况没有共享文件，并且每个描述符对应一个不同的文件。</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.11.png" alt="image-10.11"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.11.png" srcset="/img/loading.gif" lazyload alt="image-10.11"></p>
 <p>多个描述符也可以通过不同的文件表表项来引用同一个文件，例如以同一个filename调用open函数2次，就会发生这种情况。关键是每个描述符都有它自己的文件位置，所以对不同描述符的读操作可以从文件的不同位置获取数据。</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.12.png" alt="image-10.12"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.12.png" srcset="/img/loading.gif" lazyload alt="image-10.12"></p>
 <p>父子进程共享文件，在调用fork之前，父进程有10-12所示打开文件。然后调用fork之后。子进程有一个父进程描述符表的副本，父子进程共享相同的打开文件表集合，因此共享相同的文件位置。</p>
 <p>在内核删除对应文件表项之前，父子进程必须都关闭了他们的描述符。</p>
 <h2 id="10-9-I-O重定向"><a href="#10-9-I-O重定向" class="headerlink" title="10.9 I&#x2F;O重定向"></a>10.9 I&#x2F;O重定向</h2><p>Linux shell提供了I&#x2F;O重定向操作符，允许用户将磁盘文件和标准输入输出联系起来。输入</p>
@@ -293,13 +413,13 @@
 
 <p>dup2函数父子描述符表表项oldfd到描述符表表项newfd，覆盖描述符表表项newfd以前到内容。如果newfd已经打开了，dup2会在父子oldfd之前关闭newfd。</p>
 <p>在调用dup2(4,1)之前，我们的状态如10-12所示，其中描述符1（标准输出）对应于文件A（比如一个终端），描述符4对应于文件B（比如一个磁盘文件）。A和B的引用计数都等于1.图10-15显示了调用dup2(4,1)之后的情况。两个描述符现在都指向文件B；文件A已经被关闭了，并且它的文件表和v-node表表项也已经被删除了；文件B都引用计数已经增加了。从此之后，人后写到标准输出的数据都被重定向到文件B。</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.13.png" alt="image-10.13"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.13.png" srcset="/img/loading.gif" lazyload alt="image-10.13"></p>
 <h2 id="10-10-标准-I-O"><a href="#10-10-标准-I-O" class="headerlink" title="10.10 标准 I&#x2F;O"></a>10.10 标准 I&#x2F;O</h2><p>C语言定义了一组高级输入输出函数，称为标准I&#x2F;O库。库 libc 提供了打开和关闭文件的函数（fopen 和 fclose）、读和写字节的函数（fread 和 fwrite）、读和写字符串的函数（fgets 和 fputs），以及复杂的格式化的I&#x2F;O函数（scanf 和 printf）。</p>
 <p>标准I&#x2F;O库将一个打开的文件模型化为一个流。对于程序员一个流就是一个指向FILE类型的结构的指针。每个ANSI C程序开始时都有三个打开的流 stdin、stdout 和 stderr，分别对应于标准输入、标准输出和标准错误：</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.14.png" alt="image-10.14"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.14.png" srcset="/img/loading.gif" lazyload alt="image-10.14"></p>
 <p>类型为FILE的流是对文件描述符和流缓冲区的抽象。流缓冲区的目的和RIO读缓冲区的一样：就是使开销较高的LinuxI&#x2F;O系统调用的数量尽可能的小。</p>
 <p>例如，我们有一个程序，它反复调用标准I&#x2F;O的getc函数，每次调用返回文件的下一个字符。当第一次调用getc时，库通过调用一次read函数来填充缓冲区，然后将缓冲区中的第一个字节返回给应用程序。子要缓冲区中还有未读的字节，接下来对getc的调用就能直接从流缓冲区得到服务。</p>
-<h2 id="10-11-综合：该使用哪些I-O函数"><a href="#10-11-综合：该使用哪些I-O函数" class="headerlink" title="10.11 综合：该使用哪些I&#x2F;O函数"></a>10.11 综合：该使用哪些I&#x2F;O函数</h2><p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.15.png" alt="image-10.15"></p>
+<h2 id="10-11-综合：该使用哪些I-O函数"><a href="#10-11-综合：该使用哪些I-O函数" class="headerlink" title="10.11 综合：该使用哪些I&#x2F;O函数"></a>10.11 综合：该使用哪些I&#x2F;O函数</h2><p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.15.png" srcset="/img/loading.gif" lazyload alt="image-10.15"></p>
 <ul>
 <li>G1:只要有可能就使用标准I&#x2F;O。对磁盘和终端设备I&#x2F;O来说，标准I&#x2F;O函数是首选方法。</li>
 <li>G2:不要使用scanf或rio_readlined来读二进制文件，是来专门读文本文件的，因为二进制文件有很多0xa字节，然而这些字节与终止文本行无关。</li>
@@ -311,148 +431,355 @@
 <li>限制二：跟着输入函数之后的输出函数。如果中间没有插入对fseek、fsetpos或者rewind的调用，一个输出函数不能跟随在一个输入函数之后，除非该输入函数遇到来一个文件结束。</li>
 </ul>
 <p>这些限制带来一个问题，因为对套接字使用lseek函数的非法的。对流I&#x2F;O的第一个限制能够通过采用在每个输入操作前刷新缓冲区这样的规则来满足。然而，要满足第二个限制的唯一方法，是对同一个打开的到套接字描述符打开两个流，一个读，一个写。</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.16.png" alt="image-10.16"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.16.png" srcset="/img/loading.gif" lazyload alt="image-10.16"></p>
 <p>但是这种方法也有问题，因为它要求应用程序在两个流上都调用fclose，这样才能释放与每个流相关联的内存资源，避免内存泄漏：</p>
-<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.17.png" alt="image-10.17"></p>
+<p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.17.png" srcset="/img/loading.gif" lazyload alt="image-10.17"></p>
 <p>这些操作中的每一个都试图关闭同一个底层的套接字描述符，所以第二个close操作就会失败。对顺序的程序来说，这不是问题，但是在一个线程化的程序中关闭一个已经关闭了的描述符会导致灾难。</p>
 
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" class="print-no-link">#计算机系统</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CSAPP深入理解计算机系统-第十章-系统级IO</div>
+      <div>http://example.com/2025/02/17/csapp/CSAPP深入理解计算机系统-第十章-系统级IO/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>BoBoDai</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>February 17, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
   </div>
-</article>
 
 
 
-        
-          <div id="footer-post-container">
-  <div id="footer-post">
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/02/19/rust%E5%9C%A3%E7%BB%8F/RUST%E5%9C%A3%E7%BB%8F-%E9%AB%98%E9%98%B6%E5%AD%A6%E4%B9%A0-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" title="RUST圣经-高阶学习-生命周期">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">RUST圣经-高阶学习-生命周期</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" title="CSAPP深入理解计算机系统-第九章-虚拟内存">
+                        <span class="hidden-mobile">CSAPP深入理解计算机系统-第九章-虚拟内存</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
 
-    <div id="nav-footer" style="display: none">
-      <ul>
-        
-          <li><a href="/">Home</a></li>
-        
-          <li><a href="/about/">About</a></li>
-        
-          <li><a href="/archives/">Writing</a></li>
-        
-          <li><a target="_blank" rel="noopener" href="http://github.com/BoBoDai">Projects</a></li>
-        
-      </ul>
-    </div>
-
-    
-    
-      <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#10-1-Unix-I-O"><span class="toc-number">1.</span> <span class="toc-text">10.1 Unix I&#x2F;O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-2-%E6%96%87%E4%BB%B6"><span class="toc-number">2.</span> <span class="toc-text">10.2 文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-3-%E6%89%93%E5%BC%80%E5%92%8C%E5%85%B3%E9%97%AD%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">10.3 打开和关闭文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-4-%E8%AF%BB%E5%92%8C%E5%86%99%E6%96%87%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">10.4 读和写文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-5-%E7%94%A8RIO%E5%8C%85%E5%81%A5%E5%A3%AE%E7%9A%84%E8%AF%BB%E5%86%99"><span class="toc-number">5.</span> <span class="toc-text">10.5 用RIO包健壮的读写</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10-5-1-RIO%E7%9A%84%E6%97%A0%E7%BC%93%E5%86%B2%E7%9A%84%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%87%BD%E6%95%B0"><span class="toc-number">5.1.</span> <span class="toc-text">10.5.1 RIO的无缓冲的输入输出函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-5-2-RIO%E7%9A%84%E5%B8%A6%E7%BC%93%E5%86%B2%E7%9A%84%E8%BE%93%E5%85%A5%E5%87%BD%E6%95%B0"><span class="toc-number">5.2.</span> <span class="toc-text">10.5.2 RIO的带缓冲的输入函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-6-%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E5%85%83%E6%95%B0%E6%8D%AE"><span class="toc-number">6.</span> <span class="toc-text">10.6 读取文件元数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-7-%E8%AF%BB%E5%8F%96%E7%9B%AE%E5%BD%95%E5%86%85%E5%AE%B9"><span class="toc-number">7.</span> <span class="toc-text">10.7 读取目录内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-8%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6"><span class="toc-number">8.</span> <span class="toc-text">10.8共享文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-9-I-O%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">9.</span> <span class="toc-text">10.9 I&#x2F;O重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-10-%E6%A0%87%E5%87%86-I-O"><span class="toc-number">10.</span> <span class="toc-text">10.10 标准 I&#x2F;O</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-11-%E7%BB%BC%E5%90%88%EF%BC%9A%E8%AF%A5%E4%BD%BF%E7%94%A8%E5%93%AA%E4%BA%9BI-O%E5%87%BD%E6%95%B0"><span class="toc-number">11.</span> <span class="toc-text">10.11 综合：该使用哪些I&#x2F;O函数</span></a></li></ol>
+            
+          </article>
+        </div>
       </div>
-    
-
-    <div id="share-footer" style="display: none">
-      <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&text=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&title=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&is_video=false&description=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=CSAPP深入理解计算机系统-第十章-系统级IO&body=Check out this article: http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&title=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&title=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&title=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&title=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&name=CSAPP深入理解计算机系统-第十章-系统级IO&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/&t=CSAPP深入理解计算机系统-第十章-系统级IO"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
-</ul>
-
     </div>
 
-    <div id="actions-footer">
-        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
-        
-          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
-        
-        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
-        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
-    </div>
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
 
+
+
+  </aside>
+
+
+    </div>
   </div>
 </div>
 
-        
-        <footer id="footer">
-  <div class="footer-left">
-    Copyright &copy;
-    
-    
-    2024-2025
-    BoBoDai
-  </div>
-  <div class="footer-right">
-    <nav>
-      <ul>
-        <!--
-       --><li><a href="/">Home</a></li><!--
-     --><!--
-       --><li><a href="/about/">About</a></li><!--
-     --><!--
-       --><li><a href="/archives/">Writing</a></li><!--
-     --><!--
-       --><li><a target="_blank" rel="noopener" href="http://github.com/BoBoDai">Projects</a></li><!--
-     -->
-      </ul>
-    </nav>
-  </div>
-</footer>
 
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
-    <!-- styles -->
+  </div>
+</div>
 
+    
 
+    
+  </main>
 
-  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
-
-
-    <!-- jquery -->
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
-
-
-
-
-<!-- clipboard -->
-
+  <footer>
+    <div class="footer-inner">
   
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
   
-  <script type="text/javascript">
-  $(function() {
-    // copy-btn HTML
-    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
-    btn += '<i class="fa-regular fa-clone"></i>';
-    btn += '</span>';
-    // mount it!
-    $(".highlight table").before(btn);
-    var clip = new ClipboardJS('.btn-copy', {
-      text: function(trigger) {
-        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
-      }
-    });
-    clip.on('success', function(e) {
-      e.trigger.setAttribute('aria-label', "Copied!");
-      e.clearSelection();
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
     })
-  })
   </script>
 
 
-<script src="/js/main.js"></script>
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
-<!-- search -->
 
-<!-- Baidu Analytics -->
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
 
-<!-- Cloudflare Analytics -->
 
-<!-- Disqus Comments -->
 
-<!-- utterances Comments -->
 
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
 </body>
 </html>

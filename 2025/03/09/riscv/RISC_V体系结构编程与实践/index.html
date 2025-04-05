@@ -22,20 +22,22 @@
     <meta name="description" content="RISC-V体系结构编程与实践1 基本概念 执行环境接口(Execution Environment Interface, EEI)：包括程序的初始状态、CPU的类型和数量、支持的S(Supervisor)模式、内存和I&#x2F;O区域的可访问性与属性、在每个CPU上执行指令的行为以及任何异常（包括中断、系统调用）的处理等。常见的RISC-V执行环境接口包括Linux应用程序二进制接口(Appl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RISC_V体系结构编程与实践">
-<meta property="og:url" content="http://example.com/2025/03/09/RISC_V/RISC_V%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:url" content="http://example.com/2025/03/09/riscv/RISC_V%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/index.html">
 <meta property="og:site_name" content="Cactus Hole">
 <meta property="og:description" content="RISC-V体系结构编程与实践1 基本概念 执行环境接口(Execution Environment Interface, EEI)：包括程序的初始状态、CPU的类型和数量、支持的S(Supervisor)模式、内存和I&#x2F;O区域的可访问性与属性、在每个CPU上执行指令的行为以及任何异常（包括中断、系统调用）的处理等。常见的RISC-V执行环境接口包括Linux应用程序二进制接口(Appl">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">
-<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">
-<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">
-<meta property="og:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">
+<meta property="og:image" content="http://example.com/2025/03/09/riscv/RISC_V%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/riscv.1.png">
+<meta property="og:image" content="http://example.com/2025/03/09/riscv/RISC_V%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/riscv.2.png">
+<meta property="og:image" content="http://example.com/2025/03/09/riscv/RISC_V%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/riscv.3.png">
+<meta property="og:image" content="http://example.com/2025/03/09/riscv/RISC_V%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/riscv.4.png">
+<meta property="og:image" content="http://example.com/2025/01/06/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E9%93%BE%E6%8E%A5/5.png">
+<meta property="og:image" content="http://example.com/2025/01/06/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E9%93%BE%E6%8E%A5/6.png">
 <meta property="article:published_time" content="2025-03-09T02:49:24.000Z">
-<meta property="article:modified_time" content="2025-04-01T14:12:40.567Z">
+<meta property="article:modified_time" content="2025-04-05T07:01:38.146Z">
 <meta property="article:author" content="BoBoDai">
 <meta property="article:tag" content="RISC-V 硬件">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/">
+<meta name="twitter:image" content="http://example.com/2025/03/09/riscv/RISC_V%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/riscv.1.png">
   
   
   
@@ -232,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.6k words
+          1.8k words
         
       </span>
     
@@ -243,7 +245,7 @@
         
         
         
-          14 mins
+          16 mins
         
       </span>
     
@@ -295,7 +297,7 @@
 <li><p>虚拟化：为客户操作系统提供多个特权模式的执行环境。每个客户操作系统通过SBI访问虚拟化管理程序</p>
 </li>
 </ul>
-<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2025/03/09/riscv/RISC_V%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/riscv.1.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li>特权级别(privilege level)包括RISC-V处理器提供的3种模式。<ul>
 <li>机器模式（M模式）：以M模式运行的代码通常在本质上是可信的，因为它具有对机器实现的全部访问权限，常用于管理RISC-V上的安全执行环境。通常在M模式下运行SBI固件，为操作系统提供服务。</li>
@@ -310,11 +312,11 @@
 </ul>
 </li>
 </ul>
-<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2025/03/09/riscv/RISC_V%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/riscv.2.png" srcset="/img/loading.gif" lazyload></p>
 <h2 id="1-1-RISC-V寄存器"><a href="#1-1-RISC-V寄存器" class="headerlink" title="1.1 RISC-V寄存器"></a>1.1 RISC-V寄存器</h2><h3 id="1-1-1-通用寄存器"><a href="#1-1-1-通用寄存器" class="headerlink" title="1.1.1 通用寄存器"></a>1.1.1 通用寄存器</h3><p> 64&#x2F;32 位的RISC-V体系结构提供 <strong>32</strong> 个64位&#x2F;32位的整型通用寄存器。<br>分别是 x0 - x31。</p>
 <p>对于浮点数运算，64位的RISC-V体系结构也提供32个浮点数通用寄存器，分别为 f0 - f31。</p>
 <p>每个寄存器都有别名，可以直接使用别名。</p>
-<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2025/03/09/riscv/RISC_V%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/riscv.3.png" srcset="/img/loading.gif" lazyload></p>
 <table>
 <thead>
 <tr>
@@ -373,10 +375,21 @@
 </ul>
 <p>程序可以通过CSR指令（如CSRRW指令）访问系统寄存器</p>
 <p>CSR指令编码中预留了12位编码空间(csr[11:0])用来索引系统寄存器</p>
-<p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2025/03/09/riscv/RISC_V%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%BC%96%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/riscv.4.png" srcset="/img/loading.gif" lazyload></p>
 <p>RISC-V体系结构对12位CSR编码空间做了约定。其中，Bit[11:10]用来表示系统寄存器的读写属性，0b11表示只读，其余表示可读可写。Bit[9:8]表示允许访问该系统寄存器的处理器模式，0b00表示U模式，0b01表示S模式，0b10表示HS&#x2F;VS模式，0b11表示M模式。剩余的位用作寄存器的索引。使用CSR地址的最高位对默认的访问权限进行编码，简化了硬件中的错误检查流程，并提供了更大的CSR编码空间，但限制了CSR到地址空间的映射。CSR地址空间映射如表1.3所示。</p>
-<p>…</p>
-<h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><ol>
+<h2 id="1-2-指令编码格式"><a href="#1-2-指令编码格式" class="headerlink" title="1.2 指令编码格式"></a>1.2 指令编码格式</h2><p><img src="/2025/01/06/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E9%93%BE%E6%8E%A5/5.png" srcset="/img/loading.gif" lazyload></p>
+<p>指令长度： ILEN1 &#x3D; 32bit<br>指令对齐：IALIGN &#x3D; 32bit<br>32个bit划分成不同的域（field）<br>funct3&#x2F;funct7 和 opcode 一起决定最终的指令类型<br>指令在内存中按照小端序排列</p>
+<p>6种指令格式</p>
+<ul>
+<li>R-type（Register），每条指令中有三个 fields，用于指定3个寄存器参数</li>
+<li>I-type（Immediate）立即数指令，每条指令除了带有两个寄存器参数除外，还有一个立即数参数</li>
+<li>S-type（Store）访问内存指令，</li>
+<li>B-type（Branch）</li>
+<li>U-type（Upper）</li>
+<li>J-type（Jump）</li>
+</ul>
+<p><img src="/2025/01/06/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E9%93%BE%E6%8E%A5/6.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="1-3-思考题"><a href="#1-3-思考题" class="headerlink" title="1.3 思考题"></a>1.3 思考题</h2><ol>
 <li>RISC-V体系结构有什么特点<ul>
 <li>设计简洁。RISC-V指令集和基础体系结构的设计都相当简洁</li>
 <li>模块化。RISC-V指令集采用模块化设计思想。它具有一个最小的指令集，这个指令集可以完整地实现一个软件栈，然后通过模块化的方式实现其他扩展功能的指令，如浮点数乘法和除法指令、矢量指令等。模块化的RISC-V体系结构使用户能够灵活选择不同的模块组合，以适应不同的应用场景，从嵌入式设备到服务器都可以使用RISC-V体系结构进行设计。</li>
@@ -389,10 +402,26 @@
 <li>RISC-V体系结构中，Hart代表什么意思</li>
 <li>在RISC-V体系结构中，什么是SBI</li>
 </ol>
-<h2 id="2-搭建RISC-V实验"><a href="#2-搭建RISC-V实验" class="headerlink" title="2 搭建RISC-V实验"></a>2 搭建RISC-V实验</h2><p>QEMU</p>
-<p>QEMU Virt实验平台（QEMU模拟器中内置的一块虚拟开发板）模拟的是一款通用的RISC-V开发板，包括内存布局、中断分配、CPU配置、时钟配置等信息，这些信息目前都在QEMU的源代码中实现，具体文件是qemu&#x2F;hw&#x2F;riscv&#x2F;virt.c。</p>
-<p>最多支持8个RV32GC&#x2F;RV64GC通用处理器内核。支持CLINT。</p>
-<p>支持平台级别的中断控制器。支持NOR Flash存储器。支持兼容NS16550的串口。支持RTC。支持8个VirtIO-MMIO传输设备。支持1个PCIe主机桥接设备。支持fw_cfg，用于从QEMU获取固件配置信息。</p>
+<h2 id="2-RISC-V汇编语言编程"><a href="#2-RISC-V汇编语言编程" class="headerlink" title="2 RISC-V汇编语言编程"></a>2 RISC-V汇编语言编程</h2><p>一个完整的 RISC-V 汇编程序有多条语句（statement）组成<br>一条典型的RISC-V汇编语句由3部分组成</p>
+<div class="code-wrapper"><pre><code class="hljs css"><span class="hljs-selector-attr">[label:]</span> <span class="hljs-selector-attr">[operation]</span> <span class="hljs-selector-attr">[comment]</span></code></pre></div>
+<ul>
+<li>label: 标号：GNU汇编中，任何以冒号结尾的标识符都被认为是一个标号</li>
+<li>operation 可以有以下多种指令<ul>
+<li>instruction（指令）：直接对应二进制机器指令的字符串</li>
+<li>pseudo-instruction（伪指令）：为了提高编写代码的效率，可以用一条伪指令指示汇编器产生多条实际的指令</li>
+<li>directive（指示&#x2F;伪操作）：通过类似指令的形式（以“.”开头），通知汇编器如何控制代码的产生等，不对应具体的指令。<ul>
+<li>.text 数据存放段</li>
+<li>.global 全局可见</li>
+</ul>
+</li>
+<li>macro：采用 .macro&#x2F;.endm 自定义的宏，.macro 和 .endm 之间的是宏</li>
+</ul>
+</li>
+<li>comment<ul>
+<li>注释，“#” 开始到当前行结束</li>
+</ul>
+</li>
+</ul>
 
                 
               </div>
@@ -418,7 +447,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>RISC_V体系结构编程与实践</div>
-      <div>http://example.com/2025/03/09/RISC_V/RISC_V体系结构编程与实践/</div>
+      <div>http://example.com/2025/03/09/riscv/RISC_V体系结构编程与实践/</div>
     </div>
     <div class="license-meta">
       

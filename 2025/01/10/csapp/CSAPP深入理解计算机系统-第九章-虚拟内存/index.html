@@ -401,7 +401,7 @@
 <p>在将工作集页面调度到内存中之后，接下来对这个工作集的引用将导致命中，不会产生额外的磁盘流量。</p>
 <p>只要程序有良好的时间局部性，虚拟内存就可以工作的很好。</p>
 <p>如果工作集的大小超出了物理内存的大小，那么程序将产生抖动，页面不断的换进换出，性能像爬一样。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">可以利用Linux的getrusage函数监测缺页数量（以及许多其他的信息）</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs">可以利用Linux的getrusage函数监测缺页数量（以及许多其他的信息）</code></pre></div>
 
 <h2 id="9-4-虚拟内存作为内存管理的工具"><a href="#9-4-虚拟内存作为内存管理的工具" class="headerlink" title="9.4 虚拟内存作为内存管理的工具"></a>9.4 虚拟内存作为内存管理的工具</h2><p>早期系统支持的是一个比物理内存更小的虚拟地址空间。然而虚拟地址还是一个有用的机制，其大大简化的内存管理，并提供了一种自然保护内存的方法。</p>
 <p>之前假设是一个单独的页表，将一个虚拟地址空间映射到物理地址空间。实际上，操作系统为每个进程提供了一个独立的页表，也就是一个独立的虚拟地址空间。</p>
@@ -439,7 +439,7 @@
 <p>如果一个指令违反了这些许可条件，那么CPU就触发一个一般保护故障，将控制传递给一个内核中的异常处理程序。Linux shell一般将这种异常报告为，段错误。</p>
 <h2 id="9-6-地址翻译"><a href="#9-6-地址翻译" class="headerlink" title="9.6 地址翻译"></a>9.6 地址翻译</h2><p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.9.png" srcset="/img/loading.gif" lazyload alt="image-9.9"></p>
 <p>地址翻译是一个N元素的虚拟地址空间（VAS）中的元素和一个M元素的物理地址空间（PAS）中的元素之间的映射。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MAP:VAS -&gt; PAS U ⌀</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs arcade"><span class="hljs-built_in">MAP</span>:VAS -&gt; PAS U ⌀</code></pre></div>
 
 <p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.10.png" srcset="/img/loading.gif" lazyload alt="image-9.10"></p>
 <p>上图表示了MMU如何利用页表来实现这种映射。CPU中的一个控制寄存器，页表基址寄存器（PTBR）指向当前页表。</p>
@@ -603,7 +603,7 @@
 <p>当fork函数被当前进程调用时，内核为新进程创建各种数据结构，并分配给它一个唯一的PID。未来给这个新进程创建虚拟内存，它创建了当前进程的mm_struct、区域结构和页表的原样副本。它将两个进程中的每个页面标记为只读，并将两个进程中的每个区域结构都标记为私有的写时复制。</p>
 <p>当fork返回时，新进程现在的虚拟内存刚好和调用fork时的虚拟内存相同，当这两个进程中的任一个来进行写操作时，写时复制机制就会创建新页面。位每个进程保持来私有地址空间的抽象。</p>
 <h3 id="9-8-3-再看execve函数"><a href="#9-8-3-再看execve函数" class="headerlink" title="9.8.3 再看execve函数"></a>9.8.3 再看execve函数</h3><p>假设运行在当前进程中的程序执行了如下的execve调用：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">execve(&quot;a.out&quot;,NULL,NULL)</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">execve</span><span class="hljs-params">(<span class="hljs-string">&quot;a.out&quot;</span>,NULL,NULL)</span></span></code></pre></div>
 
 <p>execve函数在当前进程中加载并运行包含在a.out中的程序，用a.out替代了当前程序，加载并运行一共有一下几个步骤。</p>
 <p><img src="/2025/01/10/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/9.29.png" srcset="/img/loading.gif" lazyload alt="image-9.29"></p>
@@ -626,7 +626,7 @@
 </ul>
 <p>参数flags由描述被映射对象类型的位组成。如果设置了MAP_ANON标记位，那么被映射的对象就是匿名对象，相应的页面上请求二进制0的。</p>
 <p>MAP_PRIVATE表示被映射的对象是一个私有的、写时复制对象，而MAP_SHARED表示是一个共享对象</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bufp=Mmap(NULL,size,PROT_READ,MAP_PRIVATE|MAP_ANON,0,0)</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs 1c">bufp<span class="hljs-punctuation">=</span>Mmap<span class="hljs-punctuation">(</span><span class="hljs-literal">NULL</span><span class="hljs-punctuation">,</span>size<span class="hljs-punctuation">,</span>PROT_READ<span class="hljs-punctuation">,</span>MAP_PRIVATE<span class="hljs-string">|MAP_ANON,0,0)</span></code></pre></div>
 
 <p>如果嗲用成功bufp包含新的区域地址。</p>
 <p>munmap函数删除虚拟内存的区域：</p>

@@ -19,12 +19,12 @@
   <meta name="author" content="BoBoDai">
   <meta name="keywords" content="">
   
-    <meta name="description" content="输入&#x2F;输出（I&#x2F;O）是在主存和外部设备之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。 10.1 Unix I&#x2F;O一个Linux文件就是一个m字节的序列 1B0,B1,...,Bk,...,Bm-1  所有I&#x2F;O设备（网络、磁盘和终端）都被模型化为文件，所有的输入输出都被当作对应文件的读和">
+    <meta name="description" content="输入&#x2F;输出（I&#x2F;O）是在主存和外部设备之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。 10.1 Unix I&#x2F;O一个Linux文件就是一个m字节的序列 B0,B1,...,Bk,...,Bm-1  所有I&#x2F;O设备（网络、磁盘和终端）都被模型化为文件，所有的输入输出都被当作对应文件的读和写">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CSAPP深入理解计算机系统-第十章-系统级IO">
 <meta property="og:url" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/index.html">
 <meta property="og:site_name" content="Cactus Hole">
-<meta property="og:description" content="输入&#x2F;输出（I&#x2F;O）是在主存和外部设备之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。 10.1 Unix I&#x2F;O一个Linux文件就是一个m字节的序列 1B0,B1,...,Bk,...,Bm-1  所有I&#x2F;O设备（网络、磁盘和终端）都被模型化为文件，所有的输入输出都被当作对应文件的读和">
+<meta property="og:description" content="输入&#x2F;输出（I&#x2F;O）是在主存和外部设备之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。 10.1 Unix I&#x2F;O一个Linux文件就是一个m字节的序列 B0,B1,...,Bk,...,Bm-1  所有I&#x2F;O设备（网络、磁盘和终端）都被模型化为文件，所有的输入输出都被当作对应文件的读和写">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.1.png">
 <meta property="og:image" content="http://example.com/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.2.png">
@@ -300,7 +300,7 @@
                 
                 <p>输入&#x2F;输出（I&#x2F;O）是在主存和外部设备之间复制数据的过程。输入操作是从I&#x2F;O设备复制数据到主存，而输出操作是从主存复制数据到I&#x2F;O设备。</p>
 <h2 id="10-1-Unix-I-O"><a href="#10-1-Unix-I-O" class="headerlink" title="10.1 Unix I&#x2F;O"></a>10.1 Unix I&#x2F;O</h2><p>一个Linux文件就是一个m字节的序列</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">B0,B1,...,Bk,...,Bm-1</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs gams"><span class="hljs-function"><span class="hljs-title">B0</span></span>,B1,...,Bk,...,Bm<span class="hljs-number">-1</span></code></pre></div>
 
 <p>所有I&#x2F;O设备（网络、磁盘和终端）都被模型化为文件，所有的输入输出都被当作对应文件的读和写来执行。这种将设备映射为文件的方式，允许Linux内核引出一个简单、第几的应用接口，所有的输入输出都能以一种统一且一致的方式来执行。</p>
 <ul>
@@ -335,7 +335,7 @@
 <li>O_RDWR：可读可写</li>
 </ul>
 <p>例如，下面代码说明如何以读的方式打开一个已经存在的文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fd = Open（&quot;foo.txt&quot;,O_RDONLY, 0）;</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs ini"><span class="hljs-attr">fd</span> = Open（<span class="hljs-string">&quot;foo.txt&quot;</span>,O_RDONLY, <span class="hljs-number">0</span>）<span class="hljs-comment">;</span></code></pre></div>
 
 <p>flag参数也可以是一个或者更多位掩码的或，为写提供给一些额外的提示：</p>
 <ul>
@@ -344,7 +344,7 @@
 <li>O_APPEND：在没错写操作前，设置文件位置到文件结尾处。</li>
 </ul>
 <p>例如，代码的代码说明的是如何打开一个已存在文件，并在后面添加一些数据：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fd = Open(&quot;foo.txt&quot;,O_WRDONLY|O_APPEND, 0)</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs coq">fd = <span class="hljs-keyword">Open</span>(<span class="hljs-string">&quot;foo.txt&quot;</span>,O_WRDONLY|<span class="hljs-type">O_APPEND</span>, <span class="hljs-number">0</span>)</code></pre></div>
 
 <p>mode参数指定来新文件的访问权限位。这些位的符号名字如图所示</p>
 <p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.2.png" srcset="/img/loading.gif" lazyload alt="image-10.2"></p>
@@ -353,7 +353,7 @@
 <p>接下来创建一个新文件，文件的拥有者有读写权限，而所有其他的用户都有读权限。</p>
 <p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.4.png" srcset="/img/loading.gif" lazyload alt="image-10.4"></p>
 <p>最后进程通过调用close函数关闭一个打开的文件。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int close(int fd);</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs arduino"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">close</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span></span>;</code></pre></div>
 
 <h2 id="10-4-读和写文件"><a href="#10-4-读和写文件" class="headerlink" title="10.4 读和写文件"></a>10.4 读和写文件</h2><p>应用程序通过分别调用read和write函数来执行输入输出</p>
 <p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.5.png" srcset="/img/loading.gif" lazyload alt="image-10.5"></p>
@@ -388,7 +388,10 @@
 <p>函数opendir以路径名为参数，返回指向目录流的指针。流是对条目有序列表的抽象，在这里是指目录项的列表。</p>
 <p><img src="/2025/02/17/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E5%8D%81%E7%AB%A0-%E7%B3%BB%E7%BB%9F%E7%BA%A7IO/10.9.png" srcset="/img/loading.gif" lazyload alt="image-10.9"></p>
 <p>每次调用返回的都是指向流dirp中下一个目录项的指针，如果没有更多目录项则返回NULL，每个目录项都是一个结构。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct dirent &#123;</span><br><span class="line">	ino_t d_ino;     //inode number</span><br><span class="line">	char d_name[256] //Filename</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">dirent</span> &#123;
+	<span class="hljs-type">ino_t</span> d_ino;     <span class="hljs-comment">//inode number</span>
+	<span class="hljs-type">char</span> d_name[<span class="hljs-number">256</span>] <span class="hljs-comment">//Filename</span>
+&#125;</code></pre></div>
 
 <p>d_name是文件名，d_ino是文件位置。</p>
 <h2 id="10-8共享文件"><a href="#10-8共享文件" class="headerlink" title="10.8共享文件"></a>10.8共享文件</h2><p>可以用许多不同的方式来共享Linux文件，内核用三个相关的数据结构来标识打开的文件：</p>
@@ -405,11 +408,13 @@
 <p>父子进程共享文件，在调用fork之前，父进程有10-12所示打开文件。然后调用fork之后。子进程有一个父进程描述符表的副本，父子进程共享相同的打开文件表集合，因此共享相同的文件位置。</p>
 <p>在内核删除对应文件表项之前，父子进程必须都关闭了他们的描述符。</p>
 <h2 id="10-9-I-O重定向"><a href="#10-9-I-O重定向" class="headerlink" title="10.9 I&#x2F;O重定向"></a>10.9 I&#x2F;O重定向</h2><p>Linux shell提供了I&#x2F;O重定向操作符，允许用户将磁盘文件和标准输入输出联系起来。输入</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linux &gt; ls &gt; foo.txt</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs bash">linux &gt; <span class="hljs-built_in">ls</span> &gt; foo.txt</code></pre></div>
 
 <p>使得shell加载和执行ls程序，将标准输出重定向到磁盘文件foo.txt。</p>
 <p>当一个Web服务器代表客户端运行CGI程序时，它就执行一种相似度重定向，通过使用dup2函数</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line"></span><br><span class="line">int dup2(int oldfd, int newfd);</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dup2</span><span class="hljs-params">(<span class="hljs-type">int</span> oldfd, <span class="hljs-type">int</span> newfd)</span></span>;</code></pre></div>
 
 <p>dup2函数父子描述符表表项oldfd到描述符表表项newfd，覆盖描述符表表项newfd以前到内容。如果newfd已经打开了，dup2会在父子oldfd之前关闭newfd。</p>
 <p>在调用dup2(4,1)之前，我们的状态如10-12所示，其中描述符1（标准输出）对应于文件A（比如一个终端），描述符4对应于文件B（比如一个磁盘文件）。A和B的引用计数都等于1.图10-15显示了调用dup2(4,1)之后的情况。两个描述符现在都指向文件B；文件A已经被关闭了，并且它的文件表和v-node表表项也已经被删除了；文件B都引用计数已经增加了。从此之后，人后写到标准输出的数据都被重定向到文件B。</p>

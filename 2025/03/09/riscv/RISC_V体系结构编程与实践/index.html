@@ -42,7 +42,7 @@
 <meta property="og:image" content="http://example.com/2025/01/06/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E9%93%BE%E6%8E%A5/12.png">
 <meta property="og:image" content="http://example.com/2025/01/06/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E9%93%BE%E6%8E%A5/8.png">
 <meta property="article:published_time" content="2025-03-09T02:49:24.000Z">
-<meta property="article:modified_time" content="2025-04-08T08:25:46.393Z">
+<meta property="article:modified_time" content="2025-04-09T03:15:08.512Z">
 <meta property="article:author" content="BoBoDai">
 <meta property="article:tag" content="RISC-V 硬件">
 <meta name="twitter:card" content="summary_large_image">
@@ -243,7 +243,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.5k words
+          4.1k words
         
       </span>
     
@@ -254,7 +254,7 @@
         
         
         
-          30 mins
+          34 mins
         
       </span>
     
@@ -332,50 +332,120 @@
 <th>寄存器</th>
 <th>别名</th>
 <th>作用</th>
+<th>维护者</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>x0</td>
 <td>zero</td>
-<td>寄存器的内容全是0，可以用作源寄存器，也可以用作目标寄存器。</td>
+<td>寄存器的内容全是0，可以用作源寄存器，也可以用作目标寄存器，读取时总为0，写入时不起任何效果</td>
+<td>N&#x2F;A</td>
 </tr>
 <tr>
 <td>x1</td>
 <td>ra</td>
-<td>链接寄存器，用于保存函数返回地址。</td>
+<td>链接寄存器，用于保存函数返回地址。（return address）</td>
+<td>Caller</td>
 </tr>
 <tr>
 <td>x2</td>
 <td>sp</td>
-<td>栈指针寄存器，指向栈的地址</td>
+<td>栈指针寄存器，指向栈的地址 （stack pointer）</td>
+<td>Callee</td>
 </tr>
 <tr>
 <td>x3</td>
 <td>gp</td>
 <td>用于链接器松弛优化。</td>
+<td></td>
 </tr>
 <tr>
 <td>x4</td>
 <td>tp</td>
 <td>线程寄存器，通常在操作系统中用于保存指向进程控制块——task_struct数据结构的指针。</td>
+<td></td>
 </tr>
 <tr>
 <td>x5～x7 x28～x31</td>
-<td>t0～t6。</td>
-<td>临时寄存器</td>
+<td>t0～t2，t3～t6</td>
+<td>临时寄存器（temporaries），Callee 可能会使用这些寄存器，Callee 不保证这些寄存器中的值在函数调用过程中保持不变，对于Caller来说，如果需要的话，Caller需要自己在调用Callee之前保持临时寄存器中的值</td>
+<td>Caller</td>
 </tr>
 <tr>
 <td>x8～x9 x18～x27</td>
-<td>s0～s11</td>
-<td>临时寄存器</td>
+<td>s0，s1，s2～s11</td>
+<td>保存寄存器 （saved），Callee 需要保证这些寄存器的值在函数返回后仍然维持函数调用之前的原值，所以一旦Callee在自己的函数中会用到这些寄存器则需要在栈中备份并在退出函数时进行恢复</td>
+<td>Callee</td>
 </tr>
 <tr>
-<td>x10～x17</td>
-<td>a0～a7</td>
-<td>用于在调用函数时传递参数和返回结果。</td>
+<td>x10,x11</td>
+<td>a0,a1</td>
+<td>参数寄存器（argument）用于在调用函数过程中保存第一个和第二个参数，以及在函数返回时传递返回值和返回结果。</td>
+<td>Caller</td>
+</tr>
+<tr>
+<td>x12～x17</td>
+<td>a2～a7</td>
+<td>参数寄存器（argument）用于在调用函数时需要传递更多的参数，可以用这些寄存器，但注意传递参数的寄存器最多只有8个（a0～a7），如果还有更多的参数则要使用栈。</td>
+<td>Caller</td>
 </tr>
 </tbody></table>
 <p>如果函数调用过程中要使用t0 - t6 s0 - s11寄存器，需要先保存到栈里。另外，s0寄存器可以用作栈帧指针(Frame Pointer, FP)。</p>
+<ul>
+<li>函数调用过程中函数跳转和返回指令的编程约定</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>伪指令</th>
+<th>等价指令</th>
+<th>描述</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>jal offset</td>
+<td>jal x1, offset</td>
+<td>跳转到 offset 指定位置，保存返回地址到x1（ra）</td>
+<td>jal foo</td>
+</tr>
+<tr>
+<td>jalr rs</td>
+<td>jalr x1, 0(rs)</td>
+<td>跳转到 rs 中值所指定的位置，保存返回地址到x1（ra）</td>
+<td>jalr s1</td>
+</tr>
+<tr>
+<td>j offset</td>
+<td>jal x0, offset</td>
+<td>跳转到 offset 指定位置，不保存返回地址</td>
+<td>j loop</td>
+</tr>
+<tr>
+<td>jr rs</td>
+<td>jalr x0, 0(rs)</td>
+<td>跳转到 rs 中所指定的位置，不保存返回地址</td>
+<td>jr s1</td>
+</tr>
+<tr>
+<td>call offset</td>
+<td>auipc x1, offset[31:12] + offset[11];jalr x1, offset<a href="x1">11:0</a></td>
+<td>长跳转调用函数</td>
+<td>call off</td>
+</tr>
+<tr>
+<td>tail offset</td>
+<td>auipc x6, offset[31:12] + offset[11];jalr x0, offset<a href="x6">11:0</a></td>
+<td>长跳转尾调用（最后一次调用，不需要保存返回地址）</td>
+<td>tail foo</td>
+</tr>
+<tr>
+<td>ret</td>
+<td>jalr x0, 0(x1)</td>
+<td>从 Callee 返回</td>
+<td>ret</td>
+</tr>
+</tbody></table>
 <h3 id="1-1-2-系统寄存器"><a href="#1-1-2-系统寄存器" class="headerlink" title="1.1.2 系统寄存器"></a>1.1.2 系统寄存器</h3><p>RISC-V体系结构支持以下3类系统寄存器。</p>
 <ul>
 <li>M模式的系统寄存器。</li>
@@ -867,7 +937,7 @@
 <p>跳转的目标地址计算方法：先将IMM x 2，符号扩展后和PC值相加得到最终的目标地址，所以跳转范围是以 PC 为基准的，+&#x2F;- 4KB 左右（[-4096, 4094]）</p>
 <p>具体编程时，不会直接写IMM，而是用标号代替，交由链接器来最终决定 IMM 的值</p>
 <h4 id="1-条件分支伪指令"><a href="#1-条件分支伪指令" class="headerlink" title="1 条件分支伪指令"></a>1 条件分支伪指令</h4><p><img src="/2025/01/06/csapp/CSAPP%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E7%AC%AC%E4%B8%83%E7%AB%A0-%E9%93%BE%E6%8E%A5/11.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="2-无条件跳转指令"><a href="#2-无条件跳转指令" class="headerlink" title="2 无条件跳转指令"></a>2 无条件跳转指令</h4><table>
+<h3 id="1-2-6-跳转指令"><a href="#1-2-6-跳转指令" class="headerlink" title="1.2.6 跳转指令"></a>1.2.6 跳转指令</h3><h4 id="1-无条件跳转指令"><a href="#1-无条件跳转指令" class="headerlink" title="1 无条件跳转指令"></a>1 无条件跳转指令</h4><table>
 <thead>
 <tr>
 <th>语法</th>
@@ -887,7 +957,7 @@
 <li>JAL 指令的下一跳指令的地址写入 RD， 保存为返回地址。</li>
 <li>实际编程时，用label给出的跳转的目标，具体IMM值由编译器和连接器最终负责生成。</li>
 </ul>
-<h4 id="3-JALR-Jump-And-Link-Register"><a href="#3-JALR-Jump-And-Link-Register" class="headerlink" title="3 JALR (Jump And Link Register)"></a>3 JALR (Jump And Link Register)</h4><table>
+<h4 id="2-JALR-Jump-And-Link-Register"><a href="#2-JALR-Jump-And-Link-Register" class="headerlink" title="2 JALR (Jump And Link Register)"></a>2 JALR (Jump And Link Register)</h4><table>
 <thead>
 <tr>
 <th>语法</th>
@@ -929,7 +999,7 @@
 <td>jr x2</td>
 </tr>
 </tbody></table>
-<h3 id="1-2-6-寻址模式"><a href="#1-2-6-寻址模式" class="headerlink" title="1.2.6 寻址模式"></a>1.2.6 寻址模式</h3><table>
+<h3 id="1-2-7-寻址模式"><a href="#1-2-7-寻址模式" class="headerlink" title="1.2.7 寻址模式"></a>1.2.7 寻址模式</h3><table>
 <thead>
 <tr>
 <th>寻址模式</th>
@@ -978,6 +1048,40 @@
 </ul>
 </li>
 </ul>
+<h2 id="3-函数开始过程"><a href="#3-函数开始过程" class="headerlink" title="3 函数开始过程"></a>3 函数开始过程</h2><table>
+<thead>
+<tr>
+<th>函数起始部分</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>减少sp的值，根据本函数中使用saved寄存器的情况以及local变量的多少开辟一个栈帧</td>
+</tr>
+<tr>
+<td>将 saved 寄存器的值保存到栈中</td>
+</tr>
+<tr>
+<td>如果函数中还会调用其他函数，则将ra寄存器的值保存在栈中</td>
+</tr>
+<tr>
+<td>执行函数</td>
+</tr>
+<tr>
+<td>函数退出部分</td>
+</tr>
+<tr>
+<td>从栈中恢复 saved 寄存器</td>
+</tr>
+<tr>
+<td>需要的话，从栈中恢复 ra 寄存器</td>
+</tr>
+<tr>
+<td>增加 sp 的值，恢复到进入本函数之前的状态。（出栈）</td>
+</tr>
+<tr>
+<td>调用 ret 返回</td>
+</tr>
+</tbody></table>
 
                 
               </div>

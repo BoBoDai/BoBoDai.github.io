@@ -27,9 +27,9 @@
 <meta property="og:description" content="RUST宏使用指南，参考RUST宏小册、RUST参考手册、通过例子学RUST、RUST语言圣经">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-06-15T03:46:12.000Z">
-<meta property="article:modified_time" content="2025-06-15T09:37:29.050Z">
+<meta property="article:modified_time" content="2025-06-16T07:21:18.735Z">
 <meta property="article:author" content="BoBoDai">
-<meta property="article:tag" content="RUST">
+<meta property="article:tag" content="Rust">
 <meta name="twitter:card" content="summary_large_image">
   
   
@@ -280,7 +280,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="1-宏"><a href="#1-宏" class="headerlink" title="1. 宏"></a>1. 宏</h1><p>在 Rust 中宏分为两大类：</p>
+                <p>在 Rust 中宏分为两大类：</p>
 <ul>
 <li>声明式宏( declarative macros ) macro_rules! </li>
 <li>和三种过程宏( procedural macros ):<ul>
@@ -290,11 +290,11 @@
 </ul>
 </li>
 </ul>
-<h2 id="2-宏和函数的区别"><a href="#2-宏和函数的区别" class="headerlink" title="2. 宏和函数的区别"></a>2. 宏和函数的区别</h2><h3 id="2-1-元编程"><a href="#2-1-元编程" class="headerlink" title="2.1. 元编程"></a>2.1. 元编程</h3><p>元编程（Metaprogramming）是编写能够读取、生成、修改或操作其他程序（包括自身）的程序的技术。简单来说，元编程就是“写代码来写代码” 。<br>宏也是通过一种代码生成另一种代码， 元编程可以帮我们减少所需编写的代码，也可以一定程度上减少维护的成本，虽然函数复用也有类似的作用，但是宏依然拥有自己独特的优势。</p>
-<h3 id="2-2-可变参数"><a href="#2-2-可变参数" class="headerlink" title="2.2.可变参数"></a>2.2.可变参数</h3><p>宏可以拥有可变数量的参数，例如可以调用一个参数的 <code>println!(&quot;hello&quot;)</code>，也可以调用两个参数的 <code>println!(&quot;hello &#123;&#125;&quot;, name)</code>。</p>
-<h3 id="2-3-宏展开"><a href="#2-3-宏展开" class="headerlink" title="2.3.宏展开"></a>2.3.宏展开</h3><p>宏会被展开成其它代码，且这个展开过程是发生在编译器对代码进行解释之前。因此，宏可以为指定的类型实现某个特征：先将宏展开成实现特征的代码后，再被编译。</p>
-<h3 id="2-4-宏的缺点"><a href="#2-4-宏的缺点" class="headerlink" title="2.4. 宏的缺点"></a>2.4. 宏的缺点</h3><p>宏是基于代码再展开成代码，因此实现相比函数来说会更加复杂，再加上宏的语法更为复杂，最终导致定义宏的代码相当地难读，也难以理解和维护。</p>
-<h2 id="3-声明式宏-macro-rules"><a href="#3-声明式宏-macro-rules" class="headerlink" title="3. 声明式宏 macro_rules!"></a>3. 声明式宏 macro_rules!</h2><p><strong>也称示例宏</strong><br>声明式宏允许我们写出类似 match 的代码。其接收一个表达式，然后将表达式的结果与多个模式进行匹配。<br><strong>宏也是将一个值跟对应的模式进行匹配，且该模式会与特定的代码相关联。</strong></p>
+<h2 id="1-宏和函数的区别"><a href="#1-宏和函数的区别" class="headerlink" title="1. 宏和函数的区别"></a>1. 宏和函数的区别</h2><h3 id="1-1-元编程"><a href="#1-1-元编程" class="headerlink" title="1.1. 元编程"></a>1.1. 元编程</h3><p>元编程（Metaprogramming）是编写能够读取、生成、修改或操作其他程序（包括自身）的程序的技术。简单来说，元编程就是“写代码来写代码” 。<br>宏也是通过一种代码生成另一种代码， 元编程可以帮我们减少所需编写的代码，也可以一定程度上减少维护的成本，虽然函数复用也有类似的作用，但是宏依然拥有自己独特的优势。</p>
+<h3 id="1-2-可变参数"><a href="#1-2-可变参数" class="headerlink" title="1.2.可变参数"></a>1.2.可变参数</h3><p>宏可以拥有可变数量的参数，例如可以调用一个参数的 <code>println!(&quot;hello&quot;)</code>，也可以调用两个参数的 <code>println!(&quot;hello &#123;&#125;&quot;, name)</code>。</p>
+<h3 id="1-3-宏展开"><a href="#1-3-宏展开" class="headerlink" title="1.3.宏展开"></a>1.3.宏展开</h3><p>宏会被展开成其它代码，且这个展开过程是发生在编译器对代码进行解释之前。因此，宏可以为指定的类型实现某个特征：先将宏展开成实现特征的代码后，再被编译。</p>
+<h3 id="1-4-宏的缺点"><a href="#1-4-宏的缺点" class="headerlink" title="1.4. 宏的缺点"></a>1.4. 宏的缺点</h3><p>宏是基于代码再展开成代码，因此实现相比函数来说会更加复杂，再加上宏的语法更为复杂，最终导致定义宏的代码相当地难读，也难以理解和维护。</p>
+<h2 id="2-声明式宏-macro-rules"><a href="#2-声明式宏-macro-rules" class="headerlink" title="2. 声明式宏 macro_rules!"></a>2. 声明式宏 macro_rules!</h2><p><strong>也称示例宏</strong><br>声明式宏允许我们写出类似 match 的代码。其接收一个表达式，然后将表达式的结果与多个模式进行匹配。<br><strong>宏也是将一个值跟对应的模式进行匹配，且该模式会与特定的代码相关联。</strong></p>
 <p>与 match 不同的是，宏里的值是一段 Rust 源代码(字面量)。模式用于跟这段源代码的结构相比较，一旦匹配，传入宏的那段源代码将被模式关联的代码所替换，最终实现宏展开。<strong>所有的这些都是在编译期发生，并没有运行期的性能损耗。</strong></p>
 <p>例如：使用vec!初始化一个动态数组</p>
 <div class="code-wrapper"><pre><code class="hljs rust"><span class="hljs-meta">#[macro_export]</span>
@@ -321,7 +321,7 @@
 </li>
 </ul>
 <p>更多关于元变量可以查看<a target="_blank" rel="noopener" href="https://rustwiki.org/zh-CN/reference/macros-by-example.html">RUST参考手册</a><br>Rust 计划在未来使用新的声明式宏来替换它，关于声明宏更细致的可以查看<a target="_blank" rel="noopener" href="https://zjp-cn.github.io/tlborm/introduction.html">RUST宏小册</a></p>
-<h2 id="4-过程宏"><a href="#4-过程宏" class="headerlink" title="4. 过程宏"></a>4. 过程宏</h2><p>过程宏和函数较为相像，过程宏是使用源代码作为输入参数，经过操作后输出全新的代码。</p>
+<h2 id="3-过程宏"><a href="#3-过程宏" class="headerlink" title="3. 过程宏"></a>3. 过程宏</h2><p>过程宏和函数较为相像，过程宏是使用源代码作为输入参数，经过操作后输出全新的代码。</p>
 <p>过程宏允许在执行函数时创建句法扩展，过程宏有三种形式</p>
 <ul>
 <li>函数式宏：实现 <code>$name！</code>,<code>$input</code> 功能的宏</li>
@@ -334,7 +334,7 @@
 proc-<span class="hljs-keyword">macro</span> = <span class="hljs-literal">true</span></code></pre></div>
 
 <p>过程宏是非卫生的，需要在库中程序项使用绝对路径</p>
-<h3 id="4-1-函数宏"><a href="#4-1-函数宏" class="headerlink" title="4.1 函数宏"></a>4.1 函数宏</h3><p>类函数过程宏是使用宏调用运算符（!）调用的过程宏。</p>
+<h3 id="3-1-函数宏"><a href="#3-1-函数宏" class="headerlink" title="3.1 函数宏"></a>3.1 函数宏</h3><p>类函数过程宏是使用宏调用运算符（!）调用的过程宏。</p>
 <p>这种宏是由一个带有 <code>proc_macro</code>属性和 <code>(TokenStream) -&gt; TokenStream</code>签名的 公有可见性函数定义。输入 <code>TokenStream</code> 是由宏调用的定界符界定的内容，输出 <code>TokenStream</code> 将替换整个宏调用。</p>
 <p>类函数宏可以让我们定义像函数那样调用的宏，从这个角度来看，它跟声明宏 macro_rules 较为类似。</p>
 <p>类函数过程宏可以在任何宏调用位置调用，这些位置包括语句、表达式、模式、类型表达式、程序项可以出现的位置</p>
@@ -345,7 +345,7 @@ proc-<span class="hljs-keyword">macro</span> = <span class="hljs-literal">true</
 
 
 
-<h3 id="4-2-属性宏"><a href="#4-2-属性宏" class="headerlink" title="4.2 属性宏"></a>4.2 属性宏</h3><p>属性宏定义可以附加到程序项上的新的外部属性，这些程序项包括外部(extern)块、固有实现、trate实现，以及 trait声明中的各类程序项。</p>
+<h3 id="3-2-属性宏"><a href="#3-2-属性宏" class="headerlink" title="3.2 属性宏"></a>3.2 属性宏</h3><p>属性宏定义可以附加到程序项上的新的外部属性，这些程序项包括外部(extern)块、固有实现、trate实现，以及 trait声明中的各类程序项。</p>
 <p>属性宏由带有<code>proc_macro_attribute</code>属性和 <code>(TokenStream, TokenStream) -&gt; TokenStream</code>签名的公有可见性函数定义。</p>
 <div class="code-wrapper"><pre><code class="hljs rust"><span class="hljs-meta">#[proc_macro_attribute]</span>
 <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">name</span>(attr: TokenStream, input: TokenStream) <span class="hljs-punctuation">-&gt;</span> TokenStream &#123;
@@ -412,10 +412,10 @@ proc-<span class="hljs-keyword">macro</span> = <span class="hljs-literal">true</
 <span class="hljs-meta">#[show_streams &#123; delimiters &#125;]</span>
 <span class="hljs-keyword">fn</span> <span class="hljs-title function_">invoke4</span>() &#123;&#125;
 <span class="hljs-comment">// out: attr: &quot;delimiters&quot;</span>
-<span class="hljs-comment">// out: item: &quot;fn invoke4() &#123;&#125;&quot;</span></code></pre></div>
+<span class="hljs-comment">// out: item: &quot;fn invoke3() &#123;&#125;&quot;</span></code></pre></div>
 
 
-<h3 id="4-3-派生宏"><a href="#4-3-派生宏" class="headerlink" title="4.3 派生宏"></a>4.3 派生宏</h3><p>派生宏为derive属性定义新输入，这类宏在给定输入结构体（struct）、枚举（enum）或联合体（union）token流的情况下创建新的程序项，可以定义派生宏辅助属性。</p>
+<h3 id="3-3-派生宏"><a href="#3-3-派生宏" class="headerlink" title="3.3 派生宏"></a>3.3 派生宏</h3><p>派生宏为derive属性定义新输入，这类宏在给定输入结构体（struct）、枚举（enum）或联合体（union）token流的情况下创建新的程序项，可以定义派生宏辅助属性。</p>
 <p>函数定义如下</p>
 <div class="code-wrapper"><pre><code class="hljs rust"><span class="hljs-meta">#[proc_macro_derive(Name)]</span>
 <span class="hljs-keyword">pub</span> <span class="hljs-keyword">fn</span> <span class="hljs-title function_">my_derive</span>(input: TokenStream) <span class="hljs-punctuation">-&gt;</span> TokenStream &#123;
@@ -519,7 +519,7 @@ proc-<span class="hljs-keyword">macro</span> = <span class="hljs-literal">true</
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/RUST/" class="print-no-link">#RUST</a>
+        <a href="/tags/Rust/" class="print-no-link">#Rust</a>
       
     </div>
   
@@ -575,6 +575,12 @@ proc-<span class="hljs-keyword">macro</span> = <span class="hljs-literal">true</
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2025/06/16/OS/%E8%AF%BBWrite-an-OS-in-Rust/" title="Write-an-OS-in-Rust">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Write-an-OS-in-Rust</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

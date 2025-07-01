@@ -27,7 +27,7 @@
 <meta property="og:description" content="参考菜鸟编程">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-06-26T06:38:25.000Z">
-<meta property="article:modified_time" content="2025-06-27T09:16:52.331Z">
+<meta property="article:modified_time" content="2025-07-01T08:57:51.157Z">
 <meta property="article:author" content="BoBoDai">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="DevOps">
@@ -228,7 +228,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.9k words
+          5.4k words
         
       </span>
     
@@ -239,7 +239,7 @@
         
         
         
-          33 mins
+          45 mins
         
       </span>
     
@@ -511,9 +511,101 @@
 <p>后台运行</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker-compose up -d<br></code></pre></td></tr></table></figure>
 
+<h2 id="3-Docker-使用命令"><a href="#3-Docker-使用命令" class="headerlink" title="3. Docker 使用命令"></a>3. Docker 使用命令</h2><h3 id="3-1-Docker-run-命令"><a href="#3-1-Docker-run-命令" class="headerlink" title="3.1. Docker run 命令"></a>3.1. Docker run 命令</h3><p>docker run命令用于创建并启动一个新的容器</p>
+<h4 id="3-1-1-语法"><a href="#3-1-1-语法" class="headerlink" title="3.1.1. 语法"></a>3.1.1. 语法</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run [OPTIONS] IMAGE [COMMAND] [ARG...]<br></code></pre></td></tr></table></figure>
 
+<h4 id="3-1-2-使用"><a href="#3-1-2-使用" class="headerlink" title="3.1.2. 使用"></a>3.1.2. 使用</h4><h4 id="3-1-2-1-基本使用"><a href="#3-1-2-1-基本使用" class="headerlink" title="3.1.2.1. 基本使用"></a>3.1.2.1. 基本使用</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run ubuntu<br></code></pre></td></tr></table></figure>
+<p>拉取 ubuntu 镜像并在前台启动一个容器。</p>
+<h4 id="3-1-2-2-后台运行容器"><a href="#3-1-2-2-后台运行容器" class="headerlink" title="3.1.2.2. 后台运行容器"></a>3.1.2.2. 后台运行容器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -d ubuntu<br></code></pre></td></tr></table></figure>
+<p>在后台运行 ubuntu 容器并返回容器 ID。</p>
+<h4 id="3-1-2-3-交互式运行并分配终端"><a href="#3-1-2-3-交互式运行并分配终端" class="headerlink" title="3.1.2.3. 交互式运行并分配终端"></a>3.1.2.3. 交互式运行并分配终端</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -it ubuntu /bin/bash<br></code></pre></td></tr></table></figure>
+<p>以交互模式运行 ubuntu 容器，并启动一个 Bash shell。</p>
+<h4 id="3-1-2-4-指定容器名称"><a href="#3-1-2-4-指定容器名称" class="headerlink" title="3.1.2.4. 指定容器名称"></a>3.1.2.4. 指定容器名称</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run --name my_container ubuntu<br></code></pre></td></tr></table></figure>
+<p>运行一个 ubuntu 容器，并将其命名为 my_container。</p>
+<h4 id="3-1-2-5-端口映射"><a href="#3-1-2-5-端口映射" class="headerlink" title="3.1.2.5. 端口映射"></a>3.1.2.5. 端口映射</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -p 8080:80 nginx<br></code></pre></td></tr></table></figure>
+<p>将本地主机的 8080 端口映射到容器内的 80 端口，运行 nginx 容器。</p>
+<h4 id="3-1-2-6-挂载卷"><a href="#3-1-2-6-挂载卷" class="headerlink" title="3.1.2.6. 挂载卷"></a>3.1.2.6. 挂载卷</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -v /host/data:/container/data ubuntu<br></code></pre></td></tr></table></figure>
+<p>将主机的 &#x2F;host&#x2F;data 目录挂载到容器内的 &#x2F;container&#x2F;data 目录。</p>
+<h4 id="3-1-2-7-设置环境变量"><a href="#3-1-2-7-设置环境变量" class="headerlink" title="3.1.2.7. 设置环境变量"></a>3.1.2.7. 设置环境变量</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -e MY_ENV_VAR=my_value ubuntu<br></code></pre></td></tr></table></figure>
+<p>设置环境变量 MY_ENV_VAR 的值为 my_value，运行 ubuntu 容器。</p>
+<h4 id="3-1-2-8-使用网络模式"><a href="#3-1-2-8-使用网络模式" class="headerlink" title="3.1.2.8. 使用网络模式"></a>3.1.2.8. 使用网络模式</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run --network host nginx<br></code></pre></td></tr></table></figure>
+<p>使用主机的网络模式运行 nginx 容器。</p>
+<h4 id="3-1-2-9-指定重启策略"><a href="#3-1-2-9-指定重启策略" class="headerlink" title="3.1.2.9. 指定重启策略"></a>3.1.2.9. 指定重启策略</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run --restart always nginx<br></code></pre></td></tr></table></figure>
+<p>设置容器的重启策略为 always，即使容器停止也会自动重启。</p>
+<h4 id="3-1-2-10-指定用户"><a href="#3-1-2-10-指定用户" class="headerlink" title="3.1.2.10. 指定用户"></a>3.1.2.10. 指定用户</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -u user123 ubuntu<br></code></pre></td></tr></table></figure>
+<p>以 user123 用户运行 ubuntu 容器。</p>
+<h4 id="3-1-2-11-组合多个选项"><a href="#3-1-2-11-组合多个选项" class="headerlink" title="3.1.2.11. 组合多个选项"></a>3.1.2.11. 组合多个选项</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker run -d -p 8080:80 -v /host/data:/data --name webserver nginx<br></code></pre></td></tr></table></figure>
+<p>后台运行一个命名为 webserver 的 nginx 容器，将主机的 8080 端口映射到容器的 80 端口，并将主机的 &#x2F;host&#x2F;data 目录挂载到容器的 &#x2F;data 目录。</p>
+<h3 id="3-2-Docker-start-stop-restart-命令"><a href="#3-2-Docker-start-stop-restart-命令" class="headerlink" title="3.2. Docker start&#x2F;stop&#x2F;restart 命令"></a>3.2. Docker start&#x2F;stop&#x2F;restart 命令</h3><p>docker start 命令用于启动一个或多个已经创建的容器。<br>docker stop 命令用于停止一个运行中的容器。<br>docker restart 命令用于重启容器。</p>
+<h4 id="3-2-1-docker-start-命令"><a href="#3-2-1-docker-start-命令" class="headerlink" title="3.2.1. docker start 命令"></a>3.2.1. docker start 命令</h4><p>语法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker start [OPTIONS] CONTAINER [CONTAINER...]<br></code></pre></td></tr></table></figure>
 
+<h5 id="3-2-1-1-启动一个容器"><a href="#3-2-1-1-启动一个容器" class="headerlink" title="3.2.1.1. 启动一个容器"></a>3.2.1.1. 启动一个容器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker start my_container<br></code></pre></td></tr></table></figure>
+<p>启动名称为 my_container 的容器。</p>
+<h5 id="3-2-1-2-启动并附加到容器"><a href="#3-2-1-2-启动并附加到容器" class="headerlink" title="3.2.1.2. 启动并附加到容器"></a>3.2.1.2. 启动并附加到容器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker start -a my_container<br></code></pre></td></tr></table></figure>
+<p>启动容器并附加到它的标准输入输出流。</p>
+<h5 id="3-2-1-3-同时启动多个容器"><a href="#3-2-1-3-同时启动多个容器" class="headerlink" title="3.2.1.3. 同时启动多个容器"></a>3.2.1.3. 同时启动多个容器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker start container1 container2 container3<br></code></pre></td></tr></table></figure>
+<p>同时启动 container1、container2 和 container3 容器。</p>
+<h4 id="3-2-2-docker-stop-命令"><a href="#3-2-2-docker-stop-命令" class="headerlink" title="3.2.2. docker stop 命令"></a>3.2.2. docker stop 命令</h4><p>语法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker stop [OPTIONS] CONTAINER [CONTAINER...]<br></code></pre></td></tr></table></figure>
 
+<h5 id="3-2-2-1-停止一个容器"><a href="#3-2-2-1-停止一个容器" class="headerlink" title="3.2.2.1. 停止一个容器"></a>3.2.2.1. 停止一个容器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker stop my_container<br></code></pre></td></tr></table></figure>
+<p>停止名称为 my_container 的容器。</p>
+<h5 id="3-2-2-2-指定等待时间停止容器"><a href="#3-2-2-2-指定等待时间停止容器" class="headerlink" title="3.2.2.2. 指定等待时间停止容器"></a>3.2.2.2. 指定等待时间停止容器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker stop -t 30 my_container<br></code></pre></td></tr></table></figure>
+<p>等待 30 秒后停止容器。</p>
+<h5 id="3-2-2-3-同时停止多个容器"><a href="#3-2-2-3-同时停止多个容器" class="headerlink" title="3.2.2.3. 同时停止多个容器"></a>3.2.2.3. 同时停止多个容器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker stop container1 container2 container3<br></code></pre></td></tr></table></figure>
+<p>同时停止 container1、container2 和 container3 容器。</p>
+<h4 id="3-2-3-docker-restart-命令"><a href="#3-2-3-docker-restart-命令" class="headerlink" title="3.2.3. docker restart 命令"></a>3.2.3. docker restart 命令</h4><p>语法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker restart [OPTIONS] CONTAINER [CONTAINER...]<br></code></pre></td></tr></table></figure>
+
+<h5 id="3-2-3-1-重启一个容器"><a href="#3-2-3-1-重启一个容器" class="headerlink" title="3.2.3.1. 重启一个容器"></a>3.2.3.1. 重启一个容器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker restart my_container<br></code></pre></td></tr></table></figure>
+<p>重启名称为 my_container 的容器。</p>
+<h5 id="3-2-3-2-指定等待时间重启容器"><a href="#3-2-3-2-指定等待时间重启容器" class="headerlink" title="3.2.3.2. 指定等待时间重启容器"></a>3.2.3.2. 指定等待时间重启容器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker restart -t 15 my_container<br></code></pre></td></tr></table></figure>
+<p>等待 15 秒后重启容器。</p>
+<h5 id="3-2-3-3-同时重启多个容器"><a href="#3-2-3-3-同时重启多个容器" class="headerlink" title="3.2.3.3. 同时重启多个容器"></a>3.2.3.3. 同时重启多个容器</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker restart container1 container2 container3<br></code></pre></td></tr></table></figure>
+<p>同时重启 container1、container2 和 container3 容器。</p>
+<h3 id="3-3-docker-kill-命令"><a href="#3-3-docker-kill-命令" class="headerlink" title="3.3. docker kill 命令"></a>3.3. docker kill 命令</h3><p>docker kill 命令用于立即终止一个或多个正在运行的容器。<br>与 docker stop 命令不同，docker kill 命令会直接发送 SIGKILL 信号给容器的主进程，导致容器立即停止，而不会进行优雅的关闭。</p>
+<p>语法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker kill [OPTIONS] CONTAINER [CONTAINER...]<br></code></pre></td></tr></table></figure>
+
+<p>常用信号</p>
+<p>SIGKILL: 强制终止进程（默认信号）。<br>SIGTERM: 请求进程终止。<br>SIGINT: 发送中断信号，通常表示用户请求终止。<br>SIGHUP: 挂起信号，通常表示终端断开。</p>
+<h4 id="3-3-1-立即终止一个容器"><a href="#3-3-1-立即终止一个容器" class="headerlink" title="3.3.1 立即终止一个容器"></a>3.3.1 立即终止一个容器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker kill my_container<br></code></pre></td></tr></table></figure>
+<p>立即终止名称为 my_container 的容器。</p>
+<h4 id="3-3-2-发送自定义信号"><a href="#3-3-2-发送自定义信号" class="headerlink" title="3.3.2 发送自定义信号"></a>3.3.2 发送自定义信号</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker kill -s SIGTERM my_container<br></code></pre></td></tr></table></figure>
+<p>向名称为 my_container 的容器发送 SIGTERM 信号，而不是默认的 SIGKILL 信号。</p>
+<h4 id="3-3-3-同时终止多个容器"><a href="#3-3-3-同时终止多个容器" class="headerlink" title="3.3.3 同时终止多个容器"></a>3.3.3 同时终止多个容器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker kill container1 container2 container3<br></code></pre></td></tr></table></figure>
+<p>向名称为 my_container 的容器发送 SIGTERM 信号，而不是默认的 SIGKILL 信号。<br>立即终止 container1、container2 和 container3 容器。</p>
+<p>docker kill 命令用于立即终止一个或多个正在运行的容器，通过发送信号（默认 SIGKILL）给容器的主进程实现。与 docker stop 不同，docker kill 不会等待容器优雅地停止，而是直接终止进程。该命令在需要快速停止容器时非常有用，但应谨慎使用以避免数据损失或不一致。</p>
+<h3 id="3-4-Docker-rm-命令"><a href="#3-4-Docker-rm-命令" class="headerlink" title="3.4 Docker rm 命令"></a>3.4 Docker rm 命令</h3><p>docker rm 命令用于删除一个或多个已经停止的容器。<br>docker rm 命令不会删除正在运行的容器，如果你需要先停止容器，可以使用 docker stop 命令。</p>
+<p>语法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker rm [OPTIONS] CONTAINER [CONTAINER...]<br></code></pre></td></tr></table></figure>
+<p>CONTAINER [CONTAINER…]: 一个或多个要删除的容器的名称或 ID。<br>OPTIONS</p>
+<ul>
+<li>-f, –force: 强制删除正在运行的容器（使用 SIGKILL 信号）。</li>
+<li>-l, –link: 删除指定的连接，而不是容器本身。</li>
+<li>-v, –volumes: 删除容器挂载的卷。</li>
+</ul>
+<h4 id="3-4-1-删除单个容器"><a href="#3-4-1-删除单个容器" class="headerlink" title="3.4.1. 删除单个容器"></a>3.4.1. 删除单个容器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker rm &lt;container_id_or_name&gt;<br></code></pre></td></tr></table></figure>
+<p>你可以一次性删除多个容器，只需将容器 ID 或名称用空格分隔</p>
+<h4 id="3-4-2-删除所有已停止的容器"><a href="#3-4-2-删除所有已停止的容器" class="headerlink" title="3.4.2. 删除所有已停止的容器"></a>3.4.2. 删除所有已停止的容器</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker container prune<br>docker rm $(docker ps -a -q)<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-5-Docker-exec-命令"><a href="#3-5-Docker-exec-命令" class="headerlink" title="3.5. Docker exec 命令"></a>3.5. Docker exec 命令</h3><p>docker exec 命令用于在运行中的容器内执行一个新的命令。这对于调试、运行附加的进程或在容器内部进行管理操作非常有用。</p>
+<p>语法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec [OPTIONS] CONTAINER COMMAND [ARG...]<br></code></pre></td></tr></table></figure>
+
+<h4 id="3-5-1-在容器内运行命令"><a href="#3-5-1-在容器内运行命令" class="headerlink" title="3.5.1. 在容器内运行命令"></a>3.5.1. 在容器内运行命令</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec my_container ls /app<br></code></pre></td></tr></table></figure>
+<p>在运行中的 my_container 容器内执行 ls &#x2F;app 命令，列出 &#x2F;app 目录的内容。</p>
+<h4 id="3-5-2-以交互模式运行命令"><a href="#3-5-2-以交互模式运行命令" class="headerlink" title="3.5.2. 以交互模式运行命令"></a>3.5.2. 以交互模式运行命令</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it my_container /bin/bash<br></code></pre></td></tr></table></figure>
+<p>在运行中的 my_container 容器内启动一个交互式的 Bash shell。-i 保持标准输入打开，-t 分配一个伪终端。</p>
+<h4 id="3-5-3-在后台运行命令"><a href="#3-5-3-在后台运行命令" class="headerlink" title="3.5.3. 在后台运行命令"></a>3.5.3. 在后台运行命令</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -d my_container touch /app/newfile.txt<br></code></pre></td></tr></table></figure>
+<p>在运行中的 my_container 容器内后台执行 touch &#x2F;app&#x2F;newfile.txt 命令，创建一个新文件。</p>
+<h4 id="3-5-4-设置环境变量"><a href="#3-5-4-设置环境变量" class="headerlink" title="3.5.4. 设置环境变量"></a>3.5.4. 设置环境变量</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -e MY_ENV_VAR=my_value my_container env<br></code></pre></td></tr></table></figure>
+<p>在运行中的 my_container 容器内执行 env 命令，并设置环境变量 MY_ENV_VAR 的值为 my_value。</p>
+<h4 id="3-5-5-以指定用户身份运行命令"><a href="#3-5-5-以指定用户身份运行命令" class="headerlink" title="3.5.5. 以指定用户身份运行命令"></a>3.5.5. 以指定用户身份运行命令</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -u user123 my_container whoami<br></code></pre></td></tr></table></figure>
+<p>在运行中的 my_container 容器内以 user123 用户身份执行 whoami 命令。</p>
+<h4 id="3-5-6-指定工作目录"><a href="#3-5-6-指定工作目录" class="headerlink" title="3.5.6. 指定工作目录"></a>3.5.6. 指定工作目录</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -w /app my_container pwd<br></code></pre></td></tr></table></figure>
+<p>在运行中的 my_container 容器内以 &#x2F;app 目录为工作目录执行 pwd 命令。</p>
 
                 
               </div>
@@ -584,6 +676,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2025/06/27/%E7%AE%97%E6%B3%95/%E7%BD%91%E6%A0%BC%E5%9B%BE%EF%BC%88DFS-BFS-%E7%BB%BC%E5%90%88%E5%BA%94%E7%94%A8%EF%BC%89/" title="网格图（DFS/BFS/综合应用）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">网格图（DFS/BFS/综合应用）</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

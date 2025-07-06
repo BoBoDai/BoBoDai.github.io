@@ -19,22 +19,23 @@
   <meta name="author" content="BoBoDai">
   <meta name="keywords" content="">
   
-    <meta name="description" content="记录了qemu 9.0以上版本的安装流程">
+    <meta name="description" content="介绍如何安装ssh并通过本地链接">
 <meta property="og:type" content="article">
-<meta property="og:title" content="qemu安装">
-<meta property="og:url" content="http://example.com/2025/07/01/OS/qemu%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:title" content="本地链接虚拟机">
+<meta property="og:url" content="http://example.com/2025/07/04/OS/%E6%9C%AC%E5%9C%B0%E9%93%BE%E6%8E%A5%E8%99%9A%E6%8B%9F%E6%9C%BA/index.html">
 <meta property="og:site_name" content="Cactus Hole">
-<meta property="og:description" content="记录了qemu 9.0以上版本的安装流程">
+<meta property="og:description" content="介绍如何安装ssh并通过本地链接">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-07-01T01:07:43.000Z">
-<meta property="article:modified_time" content="2025-07-01T01:46:30.884Z">
+<meta property="article:published_time" content="2025-07-04T02:49:57.000Z">
+<meta property="article:modified_time" content="2025-07-04T02:58:47.191Z">
 <meta property="article:author" content="BoBoDai">
-<meta property="article:tag" content="qemu">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="ssh">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>qemu安装 - Cactus Hole</title>
+  <title>本地链接虚拟机 - Cactus Hole</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -204,7 +205,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="qemu安装"></span>
+            <span id="subtitle" data-typed-text="本地链接虚拟机"></span>
           
         </div>
 
@@ -215,8 +216,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-07-01 09:07" pubdate>
-          July 1, 2025 am
+        <time datetime="2025-07-04 10:49" pubdate>
+          July 4, 2025 am
         </time>
       </span>
     
@@ -227,7 +228,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          81 words
+          71 words
         
       </span>
     
@@ -275,23 +276,22 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">qemu安装</h1>
+            <h1 id="seo-header">本地链接虚拟机</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1. 环境准备"></a>1. 环境准备</h3><p>一些包的安装</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt install autoconf automake autotools-dev curl libmpc-dev libmpfr-dev libgmp-dev \<br>              gawk build-essential bison flex texinfo gperf libtool patchutils bc \<br>              zlib1g-dev libexpat-dev pkg-config  libglib2.0-dev libpixman-1-dev libsdl2-dev \<br>              git tmux python3 python3-pip ninja-build python3-venv wget<br></code></pre></td></tr></table></figure>
+                <h2 id="1-安装-SSH-服务（如-Ubuntu）"><a href="#1-安装-SSH-服务（如-Ubuntu）" class="headerlink" title="1. 安装 SSH 服务（如 Ubuntu）"></a>1. 安装 SSH 服务（如 Ubuntu）</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt update<br>sudo apt install openssh-server<br>sudo systemctl enable ssh<br>sudo systemctl start ssh<br></code></pre></td></tr></table></figure>
 
-<h3 id="2-软件包下载和解压"><a href="#2-软件包下载和解压" class="headerlink" title="2. 软件包下载和解压"></a>2. 软件包下载和解压</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget https://download.qemu.org/qemu-10.0.2.tar.xz<br></code></pre></td></tr></table></figure>
+<h2 id="2-查看-IP-地址"><a href="#2-查看-IP-地址" class="headerlink" title="2. 查看 IP 地址"></a>2. 查看 IP 地址</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ip addr  # 或 ifconfig<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">tar -xvf qemu-10.0.2.tar.xz<br></code></pre></td></tr></table></figure>
+<h2 id="3-查看-SSH-服务状态"><a href="#3-查看-SSH-服务状态" class="headerlink" title="3. 查看 SSH 服务状态"></a>3. 查看 SSH 服务状态</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo systemctl status ssh<br></code></pre></td></tr></table></figure>
 
-<h3 id="3-配置"><a href="#3-配置" class="headerlink" title="3. 配置"></a>3. 配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cd qemu-10.0.2<br></code></pre></td></tr></table></figure>
+<h2 id="4-解决冲突"><a href="#4-解决冲突" class="headerlink" title="4. 解决冲突"></a>4. 解决冲突</h2><p>如果发现</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">Offending ED25519 key <span class="hljs-keyword">in</span> <span class="hljs-regexp">/Users/</span>junbo.dai<span class="hljs-regexp">/.ssh/</span>known_hosts:<span class="hljs-number">24</span><br></code></pre></td></tr></table></figure>
 
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./configure --target-list=riscv64-softmmu,riscv64-linux-user --prefix=/home/junbo.dai/qemu --enable-slirp<br></code></pre></td></tr></table></figure>
-
-<h3 id="4-部署"><a href="#4-部署" class="headerlink" title="4. 部署"></a>4. 部署</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">make -j$(nproc)<br></code></pre></td></tr></table></figure>
+<p>说明当前ip访问过，需要手动删除指定文件的第24行，<br>或者</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sed -i &#x27;&#x27; &#x27;24d&#x27; ~/.ssh/known_hosts<br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -303,7 +303,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/qemu/" class="print-no-link">#qemu</a>
+        <a href="/tags/Linux/" class="print-no-link">#Linux</a>
+      
+        <a href="/tags/ssh/" class="print-no-link">#ssh</a>
       
     </div>
   
@@ -315,8 +317,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>qemu安装</div>
-      <div>http://example.com/2025/07/01/OS/qemu安装/</div>
+      <div>本地链接虚拟机</div>
+      <div>http://example.com/2025/07/04/OS/本地链接虚拟机/</div>
     </div>
     <div class="license-meta">
       
@@ -328,7 +330,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>July 1, 2025</div>
+          <div>July 4, 2025</div>
         </div>
       
       
@@ -360,18 +362,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/07/04/OS/%E6%9C%AC%E5%9C%B0%E9%93%BE%E6%8E%A5%E8%99%9A%E6%8B%9F%E6%9C%BA/" title="本地链接虚拟机">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">本地链接虚拟机</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/06/27/%E7%AE%97%E6%B3%95/%E7%BD%91%E6%A0%BC%E5%9B%BE%EF%BC%88DFS-BFS-%E7%BB%BC%E5%90%88%E5%BA%94%E7%94%A8%EF%BC%89/" title="网格图（DFS/BFS/综合应用）">
-                        <span class="hidden-mobile">网格图（DFS/BFS/综合应用）</span>
+                      <a href="/2025/07/01/OS/qemu%E5%AE%89%E8%A3%85/" title="qemu安装">
+                        <span class="hidden-mobile">qemu安装</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

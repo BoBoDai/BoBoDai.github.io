@@ -19,24 +19,24 @@
   <meta name="author" content="BoBoDai">
   <meta name="keywords" content="">
   
-    <meta name="description" content="记录了qemu 9.0以上版本的安装流程">
+    <meta name="description" content="记录了Hadoop的安装流程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="qemu安装">
-<meta property="og:url" content="http://example.com/2025/07/01/OS/qemu%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:title" content="Hadoop安装流程">
+<meta property="og:url" content="http://example.com/2025/07/07/%E5%A4%A7%E6%95%B0%E6%8D%AE/Hadoop%E5%AE%89%E8%A3%85%E6%B5%81%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Cactus Hole">
-<meta property="og:description" content="记录了qemu 9.0以上版本的安装流程">
+<meta property="og:description" content="记录了Hadoop的安装流程">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-07-01T01:07:43.000Z">
-<meta property="article:modified_time" content="2025-07-07T02:20:34.214Z">
+<meta property="article:published_time" content="2025-07-07T02:15:57.000Z">
+<meta property="article:modified_time" content="2025-07-07T03:12:34.351Z">
 <meta property="article:author" content="BoBoDai">
-<meta property="article:tag" content="OS">
-<meta property="article:tag" content="qemu">
 <meta property="article:tag" content="安装">
+<meta property="article:tag" content="Hadoop">
+<meta property="article:tag" content="大数据">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>qemu安装 - Cactus Hole</title>
+  <title>Hadoop安装流程 - Cactus Hole</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -206,7 +206,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="qemu安装"></span>
+            <span id="subtitle" data-typed-text="Hadoop安装流程"></span>
           
         </div>
 
@@ -217,8 +217,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-07-01 09:07" pubdate>
-          July 1, 2025 am
+        <time datetime="2025-07-07 10:15" pubdate>
+          July 7, 2025 am
         </time>
       </span>
     
@@ -229,7 +229,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          81 words
+          269 words
         
       </span>
     
@@ -240,7 +240,7 @@
         
         
         
-          1 mins
+          3 mins
         
       </span>
     
@@ -277,23 +277,64 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">qemu安装</h1>
+            <h1 id="seo-header">Hadoop安装流程</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1. 环境准备"></a>1. 环境准备</h3><p>一些包的安装</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt install autoconf automake autotools-dev curl libmpc-dev libmpfr-dev libgmp-dev \<br>              gawk build-essential bison flex texinfo gperf libtool patchutils bc \<br>              zlib1g-dev libexpat-dev pkg-config  libglib2.0-dev libpixman-1-dev libsdl2-dev \<br>              git tmux python3 python3-pip ninja-build python3-venv wget<br></code></pre></td></tr></table></figure>
+                <p>1、安装Java</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt update<br>sudo apt install openjdk-11-jdk -y<br>java -version<br></code></pre></td></tr></table></figure>
 
-<h3 id="2-软件包下载和解压"><a href="#2-软件包下载和解压" class="headerlink" title="2. 软件包下载和解压"></a>2. 软件包下载和解压</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget https://download.qemu.org/qemu-10.0.2.tar.xz<br></code></pre></td></tr></table></figure>
+<p>2、下载Hadoop并解压</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget https://archive.apache.org/dist/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz<br>tar -xvzf hadoop-3.3.6.tar.gz<br>mv hadoop-3.3.6 ~/hadoop<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">tar -xvf qemu-10.0.2.tar.xz<br></code></pre></td></tr></table></figure>
+<p>3、修改对应文件</p>
+<ul>
+<li>~&#x2F;.bashrc</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64<br>export PATH=$JAVA_HOME/bin:$PATH<br><br>export HADOOP_HOME=$HOME/hadoop<br>export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin<br></code></pre></td></tr></table></figure>
+<ul>
+<li>hadoop&#x2F;etc&#x2F;hadoop&#x2F;hadoop-env.sh</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64<br></code></pre></td></tr></table></figure>
+<ul>
+<li>hadoop&#x2F;etc&#x2F;hadoop&#x2F;core-site.xml</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell">&lt;property&gt;<br>  &lt;name&gt;fs.defaultFS&lt;/name&gt;<br>  &lt;value&gt;hdfs://localhost:9000&lt;/value&gt;<br>&lt;/property&gt;<br>&lt;property&gt;<br>  &lt;name&gt;hadoop.proxyuser.root.hosts&lt;/name&gt;<br>  &lt;value&gt;*&lt;/value&gt;<br>&lt;/property&gt;<br>&lt;property&gt;<br>  &lt;name&gt;hadoop.proxyuser.root.groups&lt;/name&gt;<br>  &lt;value&gt;*&lt;/value&gt;<br>&lt;/property&gt;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>hadoop&#x2F;etc&#x2F;hadoop&#x2F;hdfs-site.xml</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">&lt;property&gt;<br>  &lt;name&gt;dfs.replication&lt;/name&gt;<br>  &lt;value&gt;1&lt;/value&gt;<br>&lt;/property&gt;<br>&lt;property&gt;<br>  &lt;name&gt;dfs.namenode.http-address&lt;/name&gt;<br>  &lt;value&gt;localhost:50070&lt;/value&gt;<br>&lt;/property&gt;<br></code></pre></td></tr></table></figure>
 
-<h3 id="3-配置"><a href="#3-配置" class="headerlink" title="3. 配置"></a>3. 配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cd qemu-10.0.2<br></code></pre></td></tr></table></figure>
+<p>4、启动Hadoop</p>
+<ul>
+<li>格式化 HDFS（首次运行时）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hdfs namenode -format<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./configure --target-list=riscv64-softmmu,riscv64-linux-user --prefix=/home/junbo.dai/qemu --enable-slirp<br></code></pre></td></tr></table></figure>
+<ul>
+<li>启动 HDFS</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">start-dfs.sh<br></code></pre></td></tr></table></figure>
 
-<h3 id="4-部署"><a href="#4-部署" class="headerlink" title="4. 部署"></a>4. 部署</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">make -j$(nproc)<br></code></pre></td></tr></table></figure>
+<ul>
+<li>启动 YARN</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">start-yarn.sh<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>jps能查看启动的服务</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">jps<br></code></pre></td></tr></table></figure>
+
+<p>5、解决 SSH 认证失败</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">ssh-keygen -t rsa -P &quot;&quot; -f ~/.ssh/id_rsa<br>cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys<br>chmod 600 ~/.ssh/authorized_keys<br></code></pre></td></tr></table></figure>
+<ul>
+<li>测试 SSH 本机登录</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ssh localhost<br></code></pre></td></tr></table></figure>
+
+
                 
               </div>
             
@@ -305,11 +346,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/OS/" class="print-no-link">#OS</a>
-      
-        <a href="/tags/qemu/" class="print-no-link">#qemu</a>
-      
         <a href="/tags/%E5%AE%89%E8%A3%85/" class="print-no-link">#安装</a>
+      
+        <a href="/tags/Hadoop/" class="print-no-link">#Hadoop</a>
+      
+        <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" class="print-no-link">#大数据</a>
       
     </div>
   
@@ -321,8 +362,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>qemu安装</div>
-      <div>http://example.com/2025/07/01/OS/qemu安装/</div>
+      <div>Hadoop安装流程</div>
+      <div>http://example.com/2025/07/07/大数据/Hadoop安装流程/</div>
     </div>
     <div class="license-meta">
       
@@ -334,7 +375,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>July 1, 2025</div>
+          <div>July 7, 2025</div>
         </div>
       
       
@@ -366,18 +407,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/07/04/OS/%E6%9C%AC%E5%9C%B0%E9%93%BE%E6%8E%A5%E8%99%9A%E6%8B%9F%E6%9C%BA/" title="本地链接虚拟机">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">本地链接虚拟机</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/06/27/%E7%AE%97%E6%B3%95/%E7%BD%91%E6%A0%BC%E5%9B%BE%EF%BC%88DFS-BFS-%E7%BB%BC%E5%90%88%E5%BA%94%E7%94%A8%EF%BC%89/" title="网格图（DFS/BFS/综合应用）">
-                        <span class="hidden-mobile">网格图（DFS/BFS/综合应用）</span>
+                      <a href="/2025/07/04/OS/%E6%9C%AC%E5%9C%B0%E9%93%BE%E6%8E%A5%E8%99%9A%E6%8B%9F%E6%9C%BA/" title="本地链接虚拟机">
+                        <span class="hidden-mobile">本地链接虚拟机</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
